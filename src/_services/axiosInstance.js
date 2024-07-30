@@ -1,5 +1,5 @@
 import axios from "axios";
-import { store } from "@/_store";
+import { store } from "../_store";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Create an Axios instance
