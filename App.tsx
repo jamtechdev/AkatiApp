@@ -13,6 +13,7 @@ import LoginScreen from './src/screen/loginScreen';
 import {store, persistor} from './src/_store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
+import SignupScreen from './src/screen/signUpScreen';
 // import PushController from './src/_utils/pushNotification';
 
 const Stack = createNativeStackNavigator();
@@ -28,6 +29,7 @@ function App() {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <Stack.Navigator screenOptions={{headerShown: false}}>
                 <Stack.Screen name="login" component={LoginScreen} />
+                <Stack.Screen name="signup" component={SignupScreen} />
               </Stack.Navigator>
               {/* <PushController /> */}
             </TouchableWithoutFeedback>
