@@ -31,8 +31,10 @@ import {
   Profile,
 } from 'react-native-fbsdk-next';
 import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
+import {useToast} from 'react-native-toast-notifications';
 
 export default function SignupScreen({navigation}) {
+  const toast = useToast();
   const validationSchema = Yup.object().shape({
     first_name: Yup.string().required('nameRequired'),
     last_name: Yup.string().required('nameRequiredLast'),
@@ -47,6 +49,7 @@ export default function SignupScreen({navigation}) {
       .oneOf([Yup.ref('password'), null], 'confirmPasswordRequiredMatch')
       .required('confirmPasswordRequired'),
     terms: Yup.boolean().oneOf([true], 'termsRequired'),
+    language: Yup.number(),
   });
 
   const formOptions = {
@@ -62,18 +65,16 @@ export default function SignupScreen({navigation}) {
   } = useForm(formOptions);
 
   const handleFormSubmit = async data => {
-    console.log(data);
-    return;
+    setValue('birthday', Date.now());
     authService
-      .signIn(data)
+      .signUp(data)
       .then(res => {
-        dispatch(login(res.data));
-
-        toast.success('Login Successful');
+        toast.show('Sign Up Successful');
+        navigation.navigate('login');
       })
       .catch(error => {
         console.log(error);
-        toast.error('Invalid credentials');
+        toast.show('Something went wrong!');
       });
   };
 
@@ -135,7 +136,7 @@ export default function SignupScreen({navigation}) {
             placeholder="Confirm Password"
             control={control}
             errors={errors}
-            name="cpassword"
+            name="confirm_password"
             secureTextEntry={true}
           />
         </View>
@@ -146,7 +147,7 @@ export default function SignupScreen({navigation}) {
           }}>
           <Controller
             control={control}
-            name="rememberMe"
+            name="terms"
             defaultValue={false}
             render={({field: {onChange, value}}) => (
               <Checkbox
