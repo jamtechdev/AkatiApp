@@ -14,7 +14,10 @@ import {store, persistor} from './src/_store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import { ToastProvider } from 'react-native-toast-notifications';
-// import PushController from './src/_utils/pushNotification';
+import {
+  SafeAreaProvider,
+} from 'react-native-safe-area-context';
+import PushController from './src/_utils/pushNotification';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +25,9 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
         <ToastProvider>
+        <PushController />
         <NavigationContainer>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -33,10 +38,11 @@ function App() {
                 <Stack.Screen name="signup" component={SignupScreen} />
                 <Stack.Screen name="forgot" component={ForgotScreen} />
               </Stack.Navigator>
-              {/* <PushController /> */}
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
-        </NavigationContainer></ToastProvider>
+        </NavigationContainer>
+        </ToastProvider>
+      </SafeAreaProvider>
       </PersistGate>
     </Provider>
   );
