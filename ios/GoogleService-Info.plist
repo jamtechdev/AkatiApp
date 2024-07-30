@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>591314454636-05gg6a53afakif106il7arr12eu5l5ig.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.591314454636-05gg6a53afakif106il7arr12eu5l5ig</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>591314454636-gevr1pra50d2o06vf0dkbsh53f4674q7.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAmSW-CMcAJ2QC2385WOQM3kjqNeLkVmGI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>591314454636</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.akati.ebook</string>
+	<key>PROJECT_ID</key>
+	<string>akati-80d24</string>
+	<key>STORAGE_BUCKET</key>
+	<string>akati-80d24.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:591314454636:ios:3be694e059dcd9c9d23049</string>
+</dict>
+</plist>
