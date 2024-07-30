@@ -5,6 +5,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import React from 'react';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
@@ -17,8 +18,8 @@ import Divider from '../../components/Divider';
 import CustomText from '../../components/core/CustomText';
 import ContainerCenter from '../../components/ContainerCenter.js';
 import RowContainer from '../../components/RowContainer.js';
-import {yupResolver} from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import {yupResolver} from '@hookform/resolvers/Yup';
+import * as Yup from 'Yup';
 import {useForm, Controller} from 'react-hook-form';
 import Checkbox from '../../components/core/CheckBox.js';
 import {authService} from '../../_services/auth.service.js';
@@ -29,12 +30,23 @@ import {
   GraphRequestManager,
   Profile,
 } from 'react-native-fbsdk-next';
+import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
 
 export default function SignupScreen({navigation}) {
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email is invalid'),
-    password: Yup.string().required('Password is required'),
-    //   .min(8, "Password must be at least 8 characters"),
+    first_name: Yup.string().required('nameRequired'),
+    last_name: Yup.string().required('nameRequiredLast'),
+    email: Yup.string()
+      .required('emailRequired')
+      .matches(emailRegex, 'emailRequiredFormat'),
+    birthday: Yup.date().typeError('dobRequiredFormat').required('dobRequired'),
+    password: Yup.string()
+      .required('passwordRequired')
+      .matches(passwordRegex, 'passwordRequiredFormat'),
+    confirm_password: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'confirmPasswordRequiredMatch')
+      .required('confirmPasswordRequired'),
+    terms: Yup.boolean().oneOf([true], 'termsRequired'),
   });
 
   const formOptions = {
@@ -50,12 +62,10 @@ export default function SignupScreen({navigation}) {
   } = useForm(formOptions);
 
   const handleFormSubmit = async data => {
-    const modify = {
-      ...data,
-      device_token: 'teststs',
-    };
+    console.log(data);
+    return;
     authService
-      .signIn(modify)
+      .signIn(data)
       .then(res => {
         dispatch(login(res.data));
 
@@ -68,50 +78,88 @@ export default function SignupScreen({navigation}) {
   };
 
   return (
-    <ContainerCenter>
-      <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
-      <View style={{gap: 8}}>
-        <CustomText style={styles.signInHeading}>Sign Up</CustomText>
-        <CustomText style={styles.signInSubHeading}>
-          Please fill the below details
-        </CustomText>
-      </View>
-      <View style={{gap: 15, paddingTop: 20}}>
-        <Input
-          placeholder="Enter Email Address"
-          control={control}
-          errors={errors}
-          name="email"
-        />
-        <Input
-          placeholder="Enter your Password"
-          control={control}
-          errors={errors}
-          name="password"
-          secureTextEntry={true}
-        />
-      </View>
-      <RowContainer
-        style={{
-          paddingVertical: 12,
-          marginTop: 10,
-        }}>
-        <Controller
-          control={control}
-          name="rememberMe"
-          defaultValue={false}
-          render={({field: {onChange, value}}) => (
-            <Checkbox
-              label="Remember Me"
-              checked={value}
-              onChange={() => onChange(!value)}
-            />
-          )}
-        />
-        <CustomText style={styles.forgetText}> Forgot Password? </CustomText>
-      </RowContainer>
-      <Button title="Login" onPress={handleSubmit(handleFormSubmit)} />
-    </ContainerCenter>
+    <ScrollView>
+      <ContainerCenter>
+        <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
+        <View style={{gap: 8}}>
+          <CustomText style={styles.signInHeading}>Sign Up</CustomText>
+          <CustomText style={styles.signInSubHeading}>
+            Please fill the below details
+          </CustomText>
+        </View>
+        <View style={{gap: 15, paddingTop: 20}}>
+          <Input
+            placeholder="Enter First Name"
+            control={control}
+            errors={errors}
+            name="first_name"
+          />
+          <Input
+            placeholder="Enter Last Name"
+            control={control}
+            errors={errors}
+            name="last_name"
+          />
+          <Input
+            placeholder="Enter Email Address"
+            control={control}
+            errors={errors}
+            name="email"
+          />
+          <Input
+            placeholder="Enter Language"
+            control={control}
+            errors={errors}
+            name="language"
+          />
+          <Input
+            placeholder="Enter Country Name"
+            control={control}
+            errors={errors}
+            name="country"
+          />
+          <Input
+            placeholder="Enter Your Birthday"
+            control={control}
+            errors={errors}
+            name="birthday"
+          />
+          <Input
+            placeholder="Enter your Password"
+            control={control}
+            errors={errors}
+            name="password"
+            secureTextEntry={true}
+          />
+          <Input
+            placeholder="Confirm Password"
+            control={control}
+            errors={errors}
+            name="cpassword"
+            secureTextEntry={true}
+          />
+        </View>
+        <RowContainer
+          style={{
+            paddingVertical: 12,
+            marginTop: 10,
+          }}>
+          <Controller
+            control={control}
+            name="rememberMe"
+            defaultValue={false}
+            render={({field: {onChange, value}}) => (
+              <Checkbox
+                label="I agree to the terms & conditions"
+                checked={value}
+                onChange={() => onChange(!value)}
+              />
+            )}
+          />
+        </RowContainer>
+        <Button title="Sign Up" onPress={handleSubmit(handleFormSubmit)} />
+      </ContainerCenter>
+    </ScrollView>
   );
 }
 
