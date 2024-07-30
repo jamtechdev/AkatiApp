@@ -18,6 +18,7 @@ import {
   Divider,
   Checkbox,
   ContainerCenter,
+  TouchableText,
   RowContainer
 } from '../../components';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -34,8 +35,7 @@ import {
 } from 'react-native-fbsdk-next';
 import { useToast } from 'react-native-toast-notifications';
 
-export default function LoginScreen() {
-
+export default function LoginScreen({navigation}) {
   const toast = useToast()
   GoogleSignin.configure({
     androidClientId:
@@ -190,7 +190,7 @@ export default function LoginScreen() {
             />
           )}
         />
-        <CustomText style={styles.forgetText}> Forgot Password? </CustomText>
+      <TouchableText style={styles.forgetText} onPress={()=>navigation.navigate('forgot')}>Forgot Password? </TouchableText>
       </RowContainer>
       <Button title="Login" onPress={handleSubmit(handleFormSubmit)} />
       <Divider title={'OR'} />
@@ -215,7 +215,7 @@ export default function LoginScreen() {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <CustomText style={styles.forgetText}> Create an account </CustomText>
+        <TouchableText style={styles.forgetText} onPress={()=>navigation.navigate('signup')}> Create an account </TouchableText>
       </View>
     </ContainerCenter>
   );

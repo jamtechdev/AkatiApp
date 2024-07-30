@@ -1,6 +1,7 @@
 // components/index.js
 
 export { default as CustomText } from './core/CustomText';
+export { default as TouchableText } from './core/TouchableText';
 export { default as Button } from './core/Button';
 export { default as Input } from './core/Input';
 export { default as Divider } from './Divider';
