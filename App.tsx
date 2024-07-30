@@ -18,33 +18,28 @@ import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
 import PushController from './src/_utils/pushNotification';
+import AppNavigator from './src/navigation';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <SafeAreaProvider>
+    <PersistGate loading={null} persistor={persistor}>
+      <SafeAreaProvider>
         <ToastProvider>
-        <PushController />
-        <NavigationContainer>
+          <PushController />
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{flex: 1}}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <Stack.Navigator screenOptions={{headerShown: false}}>
-                <Stack.Screen name="login" component={LoginScreen} />
-                <Stack.Screen name="signup" component={SignupScreen} />
-                <Stack.Screen name="forgot" component={ForgotScreen} />
-              </Stack.Navigator>
+              <AppNavigator />
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
-        </NavigationContainer>
         </ToastProvider>
       </SafeAreaProvider>
-      </PersistGate>
-    </Provider>
+    </PersistGate>
+  </Provider>
   );
 }
 

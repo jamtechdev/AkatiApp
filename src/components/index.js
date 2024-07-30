@@ -8,5 +8,6 @@ export { default as Divider } from './Divider';
 export { default as Checkbox } from './core/CheckBox';
 export { default as ContainerCenter } from './ContainerCenter';
 export { default as RowContainer } from './RowContainer';
+export { default as CustomTabBar } from './CustomTabBar';
 
 
