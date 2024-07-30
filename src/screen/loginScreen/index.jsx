@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   View,
   Text,
@@ -41,6 +40,10 @@ export default function LoginScreen () {
     watch,
     formState: {errors},
   } = useForm(formOptions)
+
+  const onSubmit = (data) =>{
+    console.log(data)
+  }
 
   return (
     <ContainerCenter>
@@ -85,7 +88,7 @@ export default function LoginScreen () {
         />
         <CustomText style={styles.forgetText}> Forgot Password? </CustomText>
       </RowContainer>
-      <Button title='Login' onPress={() => console.log('Login pressed')} />
+      <Button title='Login' onPress={handleSubmit(onSubmit)} />
       <Divider title={'OR'} />
       <View style={{gap: 10}}>
         <Button

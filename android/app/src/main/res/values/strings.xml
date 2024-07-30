@@ -1,5 +1,3 @@
 <resources>
-    <string name="app_name">Akati</string>
-    <string name="facebook_app_id">511903923965399</string>
-    <string name="facebook_client_token">18b0e61b41a35cc033245498462f6c01</string>
+    <string name="app_name">AkatiApp</string>
 </resources>
