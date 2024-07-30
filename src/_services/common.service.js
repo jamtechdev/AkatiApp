@@ -22,7 +22,6 @@ export const commonServices = {
   favoriteComments,
   publishBook,
 };
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function getLanguage() {
   return await axiosInstance.get(`${API_URL}/languageList`);

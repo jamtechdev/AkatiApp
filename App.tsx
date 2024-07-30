@@ -13,6 +13,7 @@ import LoginScreen from './src/screen/loginScreen';
 import {store, persistor} from './src/_store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
+import { ToastProvider } from 'react-native-toast-notifications';
 // import PushController from './src/_utils/pushNotification';
 
 const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <ToastProvider>
         <NavigationContainer>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -32,7 +34,7 @@ function App() {
               {/* <PushController /> */}
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
-        </NavigationContainer>
+        </NavigationContainer></ToastProvider>
       </PersistGate>
     </Provider>
   );

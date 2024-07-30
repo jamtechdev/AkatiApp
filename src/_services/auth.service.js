@@ -1,5 +1,6 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
+import Config from "../_constant/Config";
 export const authService = {
   signIn,
   signUp,
@@ -11,7 +12,7 @@ export const authService = {
   profileDetails,
   getPublicBooks
 };
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const {API_URL} = Config
 
 async function signIn(data) {
   return await axios.post(`${API_URL}/sign-in`, data);
