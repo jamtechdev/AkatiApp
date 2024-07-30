@@ -11,16 +11,19 @@ import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import logo from '../../images/logo.png';
-import Button from '../../components/core/Button.js';
-import Input from '../../components/core/Input.js';
-import Divider from '../../components/Divider';
-import CustomText from '../../components/core/CustomText';
-import ContainerCenter from '../../components/ContainerCenter.js';
-import RowContainer from '../../components/RowContainer.js';
+import { 
+  CustomText,
+  Button,
+  Input,
+  Divider,
+  Checkbox,
+  ContainerCenter,
+  TouchableText,
+  RowContainer
+} from '../../components';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import {useForm, Controller} from 'react-hook-form';
-import Checkbox from '../../components/core/CheckBox.js';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {authService} from '../../_services/auth.service.js';
 import {
@@ -30,8 +33,10 @@ import {
   GraphRequestManager,
   Profile,
 } from 'react-native-fbsdk-next';
+import { useToast } from 'react-native-toast-notifications';
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
+  const toast = useToast()
   GoogleSignin.configure({
     androidClientId:
       '591314454636-3hvt5rv5ggf7hbvectrcvgvmjpjtsc1l.apps.googleusercontent.com',
@@ -81,16 +86,18 @@ export default function LoginScreen() {
       ...data,
       device_token: 'teststs',
     };
+    console.log(modify)
     authService
       .signIn(modify)
       .then(res => {
         dispatch(login(res.data));
-
-        toast.success('Login Successful');
+        toast.show('loggedin')
+        console.log('Login Successful');
       })
       .catch(error => {
-        console.log(error);
-        toast.error('Invalid credentials');
+        console.log(error,"network");
+        toast.show(error.message)
+     
       });
   };
 
@@ -183,7 +190,7 @@ export default function LoginScreen() {
             />
           )}
         />
-        <CustomText style={styles.forgetText}> Forgot Password? </CustomText>
+      <TouchableText style={styles.forgetText} onPress={()=>navigation.navigate('forgot')}>Forgot Password? </TouchableText>
       </RowContainer>
       <Button title="Login" onPress={handleSubmit(handleFormSubmit)} />
       <Divider title={'OR'} />
@@ -208,7 +215,7 @@ export default function LoginScreen() {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <CustomText style={styles.forgetText}> Create an account </CustomText>
+        <TouchableText style={styles.forgetText} onPress={()=>navigation.navigate('signup')}> Create an account </TouchableText>
       </View>
     </ContainerCenter>
   );
