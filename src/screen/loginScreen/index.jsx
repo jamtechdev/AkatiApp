@@ -21,8 +21,16 @@ import {yupResolver} from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import {useForm, Controller} from 'react-hook-form'
 import Checkbox from '../../components/core/CheckBox.js'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+
 
 export default function LoginScreen () {
+  GoogleSignin.configure({
+    androidClientId:
+        '591314454636-3hvt5rv5ggf7hbvectrcvgvmjpjtsc1l.apps.googleusercontent.com',
+      iosClientId:
+        '591314454636-05gg6a53afakif106il7arr12eu5l5ig.apps.googleusercontent.com',
+  })
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email is invalid'),
     password: Yup.string().required('Password is required'),
@@ -40,6 +48,19 @@ export default function LoginScreen () {
     watch,
     formState: {errors},
   } = useForm(formOptions)
+
+const handleGoogleSignin = async ()=>{
+  try {
+    await GoogleSignin.hasPlayServices({
+      showPlayServicesUpdateDialog:true
+    })
+
+    const userInfo = await GoogleSignin.signIn()
+    console.log(userInfo,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+  } catch (error) {
+    console.log(error)
+  }
+}
 
   const onSubmit = (data) =>{
     console.log(data)

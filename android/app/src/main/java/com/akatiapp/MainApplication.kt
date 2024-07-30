@@ -1,6 +1,7 @@
 package com.akatiapp
 
 import android.app.Application
+import com.akati.BuildConfig
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
