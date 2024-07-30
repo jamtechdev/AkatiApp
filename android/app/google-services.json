@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "591314454636",
+    "firebase_url": "https://akati-80d24-default-rtdb.firebaseio.com",
+    "project_id": "akati-80d24",
+    "storage_bucket": "akati-80d24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591314454636:android:3eef021e68922bbcd23049",
+        "android_client_info": {
+          "package_name": "com.akati"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591314454636-gevr1pra50d2o06vf0dkbsh53f4674q7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.akati",
+            "certificate_hash": "77fb0ce7f3c46b90d5dc15aa448328cbb5fcfddb"
+          }
+        },
+        {
+          "client_id": "591314454636-3hvt5rv5ggf7hbvectrcvgvmjpjtsc1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-FSrAUggZgs4fdomXUfJ9ACHdQz9dFC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591314454636-3hvt5rv5ggf7hbvectrcvgvmjpjtsc1l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "591314454636-05gg6a53afakif106il7arr12eu5l5ig.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.akati.ebook",
+                "app_store_id": "1633617962"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable comma-dangle */
 import { StyleSheet, Dimensions, StatusBar } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
@@ -67,6 +69,10 @@ const GlobalStyles = StyleSheet.create({
         width: 50,
         height: 50,
         marginBottom: 15
+    },
+    errorText: {
+        fontSize: 16,
+        color: Colors.secondary
     }
 
 });

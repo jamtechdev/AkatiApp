@@ -1,18 +1,31 @@
-import React from 'react';
-import { TextInput, StyleSheet } from 'react-native';
+/* eslint-disable prettier/prettier */
+import React, { useState } from 'react';
+import { Controller } from 'react-hook-form';
+import { TextInput, Text, StyleSheet } from 'react-native';
 import GlobalStyles, { Colors } from '../../_utils/GlobalStyle';
 
 
-const Input = ({ placeholder, onChangeText, secureTextEntry = false }) => {
+const Input = ({ name, control, placeholder, onChangeText, secureTextEntry = false, ...rest }) => {
     return (
-        <TextInput
-            style={GlobalStyles.inputView}
-            placeholderTextColor={Colors.darkGray}
-            placeholder={placeholder}
-            onChangeText={onChangeText}
-            secureTextEntry={secureTextEntry}
+        <Controller
+            control={control}
+            name={name}
+            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                <>
+                <TextInput
+                    style={GlobalStyles.inputView}
+                    placeholderTextColor={Colors.darkGray}
+                    placeholder={placeholder}
+                    onChangeText={onChangeText}
+                    secureTextEntry={secureTextEntry}
+                    {...rest}
+                    />
+                    {error && <Text style={GlobalStyles.errorText}>{error.message}</Text>}
+                    </>
+            )}
         />
     );
 };
+
 
 export default Input;

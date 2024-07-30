@@ -18,7 +18,30 @@ import Divider from '../../components/Divider'
 import CustomText from '../../components/core/CustomText'
 import ContainerCenter from '../../components/ContainerCenter.js'
 import RowContainer from '../../components/RowContainer.js'
+import {yupResolver} from '@hookform/resolvers/yup'
+import * as Yup from 'yup'
+import {useForm, Controller} from 'react-hook-form'
+import Checkbox from '../../components/core/CheckBox.js'
+
 export default function LoginScreen () {
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required('Email is required').email('Email is invalid'),
+    password: Yup.string().required('Password is required'),
+    //   .min(8, "Password must be at least 8 characters"),
+  })
+
+  const formOptions = {
+    resolver: yupResolver(validationSchema),
+    mode: 'onChange',
+  }
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: {errors},
+  } = useForm(formOptions)
+
   return (
     <ContainerCenter>
       <Image style={GlobalStyles.logo} source={logo} resizeMode='contain' />
@@ -31,11 +54,15 @@ export default function LoginScreen () {
       <View style={{gap: 15, paddingTop: 20}}>
         <Input
           placeholder='Enter Email Address'
-          onChangeText={e => console.log(e)}
+          control={control}
+          errors={errors}
+          name='email'
         />
         <Input
           placeholder='Enter your Password'
-          onChangeText={e => console.log(e)}
+          control={control}
+          errors={errors}
+          name='password'
           secureTextEntry={true}
         />
       </View>
@@ -44,11 +71,18 @@ export default function LoginScreen () {
           paddingVertical: 12,
           marginTop: 10,
         }}>
-        <RowContainer
-          style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-          <Icon name='checkbox' size={20} color={Colors.secondary} />
-          <CustomText style={styles.rememberText}> Remember Me </CustomText>
-        </RowContainer>
+        <Controller
+          control={control}
+          name='rememberMe'
+          defaultValue={false}
+          render={({field: {onChange, value}}) => (
+            <Checkbox
+              label='Remember Me'
+              checked={value}
+              onChange={() => onChange(!value)}
+            />
+          )}
+        />
         <CustomText style={styles.forgetText}> Forgot Password? </CustomText>
       </RowContainer>
       <Button title='Login' onPress={() => console.log('Login pressed')} />
