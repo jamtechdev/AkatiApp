@@ -5,13 +5,14 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import React from 'react';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import logo from '../../images/logo.png';
-import { 
+import {
   CustomText,
   Button,
   Input,
@@ -19,7 +20,7 @@ import {
   Checkbox,
   ContainerCenter,
   TouchableText,
-  RowContainer
+  RowContainer,
 } from '../../components';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -33,10 +34,14 @@ import {
   GraphRequestManager,
   Profile,
 } from 'react-native-fbsdk-next';
-import { useToast } from 'react-native-toast-notifications';
+import {useToast} from 'react-native-toast-notifications';
+import appleAuth, {
+  AppleButton,
+} from '@invertase/react-native-apple-authentication';
+import jwtDecode from 'jwt-decode';
 
 export default function LoginScreen({navigation}) {
-  const toast = useToast()
+  const toast = useToast();
   GoogleSignin.configure({
     androidClientId:
       '591314454636-3hvt5rv5ggf7hbvectrcvgvmjpjtsc1l.apps.googleusercontent.com',
@@ -74,7 +79,7 @@ export default function LoginScreen({navigation}) {
         last_name: user.familyName,
         avatar: user.photo,
       };
-      console.log(data)
+      console.log(data);
       handleSocialLogin(data);
     } catch (error) {
       console.log(error);
@@ -86,18 +91,17 @@ export default function LoginScreen({navigation}) {
       ...data,
       device_token: 'teststs',
     };
-    console.log(modify)
+    console.log(modify);
     authService
       .signIn(modify)
       .then(res => {
         dispatch(login(res.data));
-        toast.show('loggedin')
+        toast.show('loggedin');
         console.log('Login Successful');
       })
       .catch(error => {
-        console.log(error,"network");
-        toast.show(error.message)
-     
+        console.log(error, 'network');
+        toast.show(error.message);
       });
   };
 
@@ -122,14 +126,14 @@ export default function LoginScreen({navigation}) {
           console.log('Login cancelled');
         } else {
           console.log(result);
-          // if (Platform.OS == 'android') {
-          //   console.log('android')
-          //   AccessToken.getCurrentAccessToken().then((data) => {
-          //     const { accessToken } = data
-          //     this.initUser(accessToken)
-          //   })
-          //   return
-          // }
+          if (Platform.OS == 'android') {
+            console.log('android')
+            AccessToken.getCurrentAccessToken().then((data) => {
+              const { accessToken } = data
+              initUser(accessToken)
+            })
+            return
+          }
           Profile.getCurrentProfile().then(function (currentProfile) {
             if (currentProfile) {
               console.log('The current logged user is: ', currentProfile);
@@ -141,12 +145,60 @@ export default function LoginScreen({navigation}) {
                 avatar: currentProfile.imageURL,
               };
               console.log('data sending in API', data);
-
             }
           });
         }
       },
     );
+  };
+  initUser = (token) => {
+    fetch('https://graph.facebook.com/v20.0/me?fields=id%2Cemail%2Cfirst_name%2Clast_name%2Cpicture&access_token=' + token)
+      .then((response) => {
+        response.json().then((currentProfile) => {
+          console.log("facebook currentProfile", currentProfile);
+          const data = {
+            fb_id: currentProfile.id,
+            email: currentProfile.email,
+            first_name: currentProfile.first_name,
+            last_name: currentProfile.last_name,
+            avatar: currentProfile.picture.data.url,
+          };
+        handleSocialLogin(data)
+        })
+      })
+      .catch(() => {
+        console.log('ERROR GETTING DATA FROM FACEBOOK')
+      })
+  }
+
+  appleAuthHandler = async () => {
+    // performs login request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+
+    console.log('appleAuthRequestResponse', appleAuthRequestResponse);
+
+    const credentialState = await appleAuth.getCredentialStateForUser(
+      appleAuthRequestResponse.user,
+    );
+
+    console.log('credentialState', credentialState);
+    if (credentialState === appleAuth.State.AUTHORIZED) {
+      const {email} = jwtDecode(
+        String(appleAuthRequestResponse?.identityToken),
+      );
+      let data = {
+        apple_id: String(appleAuthRequestResponse?.identityToken),
+        email: email,
+        first_name: appleAuthRequestResponse?.fullName?.givenName ?? 'Akati',
+        last_name: appleAuthRequestResponse?.fullName?.familyName ?? 'App',
+        avatar: '',
+      };
+      console.log('data from google ', data);
+      handleSocialLogin(data)
+    }
   };
 
   return (
@@ -190,7 +242,11 @@ export default function LoginScreen({navigation}) {
             />
           )}
         />
-      <TouchableText style={styles.forgetText} onPress={()=>navigation.navigate('forgot')}>Forgot Password? </TouchableText>
+        <TouchableText
+          style={styles.forgetText}
+          onPress={() => navigation.navigate('forgot')}>
+          Forgot Password?{' '}
+        </TouchableText>
       </RowContainer>
       <Button title="Login" onPress={handleSubmit(handleFormSubmit)} />
       <Divider title={'OR'} />
@@ -207,6 +263,14 @@ export default function LoginScreen({navigation}) {
           style={{backgroundColor: '#5890ff'}}
           gradient={false}
         />
+        {Platform.OS == 'ios' && (
+          <Button
+            title="Sign In With Apple"
+            onPress={appleAuthHandler}
+            style={{backgroundColor: '#666'}}
+            gradient={false}
+          />
+        )}
       </View>
       <View
         style={{
@@ -215,7 +279,12 @@ export default function LoginScreen({navigation}) {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableText style={styles.forgetText} onPress={()=>navigation.navigate('signup')}> Create an account </TouchableText>
+        <TouchableText
+          style={styles.forgetText}
+          onPress={() => navigation.navigate('Main')}>
+          {' '}
+          Create an account{' '}
+        </TouchableText>
       </View>
     </ContainerCenter>
   );

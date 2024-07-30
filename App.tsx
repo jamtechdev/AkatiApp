@@ -14,31 +14,32 @@ import {store, persistor} from './src/_store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import { ToastProvider } from 'react-native-toast-notifications';
-// import PushController from './src/_utils/pushNotification';
+import {
+  SafeAreaProvider,
+} from 'react-native-safe-area-context';
+import PushController from './src/_utils/pushNotification';
+import AppNavigator from './src/navigation';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+    <PersistGate loading={null} persistor={persistor}>
+      <SafeAreaProvider>
         <ToastProvider>
-        <NavigationContainer>
+          <PushController />
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{flex: 1}}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <Stack.Navigator screenOptions={{headerShown: false}}>
-                <Stack.Screen name="login" component={LoginScreen} />
-                <Stack.Screen name="signup" component={SignupScreen} />
-                <Stack.Screen name="forgot" component={ForgotScreen} />
-              </Stack.Navigator>
-              {/* <PushController /> */}
+              <AppNavigator />
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
-        </NavigationContainer></ToastProvider>
-      </PersistGate>
-    </Provider>
+        </ToastProvider>
+      </SafeAreaProvider>
+    </PersistGate>
+  </Provider>
   );
 }
 
