@@ -1,17 +1,23 @@
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet, Modal } from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Modal,
+  Image,
+  Text,
+} from 'react-native';
 
-const Loader = ({ visible }) => (
+const Loader = ({visible}) => (
   <Modal
     transparent={true}
     animationType="none"
     visible={visible}
     onRequestClose={() => {}}
-    style={{ zIndex : 999999999999}}
-  >
+    style={{zIndex: 999999999999}}>
     <View style={styles.modalBackground}>
       <View style={styles.activityIndicatorWrapper}>
-        <ActivityIndicator animating={visible} size="large" color="#0000ff" />
+        <Image source={require('../../images/page-loader.gif')} />
       </View>
     </View>
   </Modal>
@@ -22,10 +28,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   activityIndicatorWrapper: {
-    backgroundColor: '#FFFFFF',
+    // backgroundColor: '#FFFFFF',
     height: 100,
     width: 100,
     borderRadius: 10,

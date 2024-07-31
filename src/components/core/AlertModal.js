@@ -20,13 +20,21 @@ const AlertModal = ({visible, image, title, description, onCancel, onOkay}) => {
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           {image && <Image source={image} style={styles.image} />}
-          <CustomText style={styles.title}>{title || ''}</CustomText>
+          <CustomText style={styles.title}>{title || 'Alert'}</CustomText>
           <CustomText style={styles.description}>
             {description || ''}
           </CustomText>
           <View style={styles.buttonContainer}>
-            {onOkay && <Button title={'Okay'} onPress={onOkay} />}
-            {onCancel && <Button title={'Cancel'} onPress={onCancel} />}
+            {onOkay && (
+              <Button style={styles.button} title={'Okay'} onPress={onOkay} />
+            )}
+            {onCancel && (
+              <Button
+                style={styles.button}
+                title={'Cancel'}
+                onPress={onCancel}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -40,14 +48,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
   },
   modalView: {
-    width: '80%',
+    width: '90%',
     margin: 20,
     backgroundColor: Colors.primary,
     borderRadius: 20,
-    padding: 35,
+    padding: 30,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -76,15 +84,17 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     width: '100%',
+    gap: 10,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+    borderRadius: 50,
+    paddingVertical: 10,
+    paddingHorizontal: 50,
     backgroundColor: '#2196F3',
-    marginHorizontal: 10,
+    width: '100%',
+    display: 'flex',
   },
   buttonText: {
     color: 'white',

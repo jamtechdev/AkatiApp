@@ -178,12 +178,15 @@ export default function SignupScreen({navigation}) {
           </TouchableText>
         </View>
         <AlertModal
+          // title={'Modal'}
+          // image={require('../../images/akati-logo.png')}
           visible={modalVisible}
           description="Check your mail Id. We have sent you an email to verify your mail."
           onOkay={() => {
             setModalVisible(false);
             navigation.navigate('login');
           }}
+          // onCancel={() => console.log('canel')}
         />
       </ContainerCenter>
     </ScrollView>
