@@ -13,7 +13,6 @@ import {ForgotScreen, LoginScreen, SignupScreen} from './src/screen';
 import {store, persistor} from './src/_store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
-import { ToastProvider } from 'react-native-toast-notifications';
 import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
@@ -27,7 +26,6 @@ function App() {
     <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <SafeAreaProvider>
-        <ToastProvider>
           <PushController />
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -36,7 +34,6 @@ function App() {
               <AppNavigator />
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
-        </ToastProvider>
       </SafeAreaProvider>
     </PersistGate>
   </Provider>
