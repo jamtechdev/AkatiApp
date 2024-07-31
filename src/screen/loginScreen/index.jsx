@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,6 +21,7 @@ import {
   ContainerCenter,
   TouchableText,
   RowContainer,
+  AlertModal,
 } from '../../components';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
