@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -31,25 +31,30 @@ import {
   Profile,
 } from 'react-native-fbsdk-next';
 import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
-import {useToast} from 'react-native-toast-notifications';
-import {TouchableText} from '../../components/index.js';
+import {AlertModal, TouchableText} from '../../components/index.js';
 
 export default function SignupScreen({navigation}) {
-  const toast = useToast();
+  const [modalVisible, setModalVisible] = useState(false);
+
   const validationSchema = Yup.object().shape({
-    first_name: Yup.string().required('nameRequired'),
-    last_name: Yup.string().required('nameRequiredLast'),
+    first_name: Yup.string().required('First Name Required'),
+    last_name: Yup.string().required('Last Name Required'),
     email: Yup.string()
-      .required('emailRequired')
-      .matches(emailRegex, 'emailRequiredFormat'),
-    birthday: Yup.date().typeError('dobRequiredFormat').required('dobRequired'),
+      .required('Email Required')
+      .matches(emailRegex, 'Enter a valid email'),
+    birthday: Yup.date()
+      .typeError('Follow (YYYY-MM-DD) format')
+      .required('DOB Required'),
     password: Yup.string()
-      .required('passwordRequired')
-      .matches(passwordRegex, 'passwordRequiredFormat'),
+      .required('Password Required')
+      .matches(
+        passwordRegex,
+        'Password should be 8 characters contains Upper, Lower Case, Number and Special Character',
+      ),
     confirm_password: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'confirmPasswordRequiredMatch')
-      .required('confirmPasswordRequired'),
-    terms: Yup.boolean().oneOf([true], 'termsRequired'),
+      .oneOf([Yup.ref('password'), null], 'Must same as passwprd')
+      .required('Confirm Password Required'),
+    terms: Yup.boolean().oneOf([true], 'Terms Required'),
     language: Yup.number(),
   });
 
@@ -66,16 +71,15 @@ export default function SignupScreen({navigation}) {
   } = useForm(formOptions);
 
   const handleFormSubmit = async data => {
-    setValue('birthday', Date.now());
+    console.log(data);
     authService
       .signUp(data)
       .then(res => {
-        toast.show('Sign Up Successful');
-        navigation.navigate('login');
+        setModalVisible(true);
+        console.log(res);
       })
       .catch(error => {
-        console.log(error);
-        toast.show('Something went wrong!');
+        console.log(error.message);
       });
   };
 
@@ -173,6 +177,14 @@ export default function SignupScreen({navigation}) {
             Already account? Sign in
           </TouchableText>
         </View>
+        <AlertModal
+          visible={modalVisible}
+          description="Check your mail Id. We have sent you an email to verify your mail."
+          onOkay={() => {
+            setModalVisible(false);
+            navigation.navigate('login');
+          }}
+        />
       </ContainerCenter>
     </ScrollView>
   );
