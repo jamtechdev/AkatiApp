@@ -39,8 +39,11 @@ import appleAuth, {
   AppleButton,
 } from '@invertase/react-native-apple-authentication';
 import jwtDecode from 'jwt-decode';
+import {useDispatch} from 'react-redux';
+import {login} from '../../_store/_reducers/auth.js';
 
 export default function LoginScreen({navigation}) {
+  const dispatch = useDispatch();
   const toast = useToast();
   GoogleSignin.configure({
     androidClientId:
@@ -91,13 +94,13 @@ export default function LoginScreen({navigation}) {
       ...data,
       device_token: 'teststs',
     };
-    console.log(modify);
     authService
       .signIn(modify)
       .then(res => {
         dispatch(login(res.data));
-        toast.show('loggedin');
+        toast.show('Login Successful');
         console.log('Login Successful');
+        navigation.navigate('Main');
       })
       .catch(error => {
         console.log(error, 'network');
@@ -127,12 +130,12 @@ export default function LoginScreen({navigation}) {
         } else {
           console.log(result);
           if (Platform.OS == 'android') {
-            console.log('android')
-            AccessToken.getCurrentAccessToken().then((data) => {
-              const { accessToken } = data
-              initUser(accessToken)
-            })
-            return
+            console.log('android');
+            AccessToken.getCurrentAccessToken().then(data => {
+              const {accessToken} = data;
+              initUser(accessToken);
+            });
+            return;
           }
           Profile.getCurrentProfile().then(function (currentProfile) {
             if (currentProfile) {
@@ -151,11 +154,14 @@ export default function LoginScreen({navigation}) {
       },
     );
   };
-  initUser = (token) => {
-    fetch('https://graph.facebook.com/v20.0/me?fields=id%2Cemail%2Cfirst_name%2Clast_name%2Cpicture&access_token=' + token)
-      .then((response) => {
-        response.json().then((currentProfile) => {
-          console.log("facebook currentProfile", currentProfile);
+  initUser = token => {
+    fetch(
+      'https://graph.facebook.com/v20.0/me?fields=id%2Cemail%2Cfirst_name%2Clast_name%2Cpicture&access_token=' +
+        token,
+    )
+      .then(response => {
+        response.json().then(currentProfile => {
+          console.log('facebook currentProfile', currentProfile);
           const data = {
             fb_id: currentProfile.id,
             email: currentProfile.email,
@@ -163,13 +169,13 @@ export default function LoginScreen({navigation}) {
             last_name: currentProfile.last_name,
             avatar: currentProfile.picture.data.url,
           };
-        handleSocialLogin(data)
-        })
+          handleSocialLogin(data);
+        });
       })
       .catch(() => {
-        console.log('ERROR GETTING DATA FROM FACEBOOK')
-      })
-  }
+        console.log('ERROR GETTING DATA FROM FACEBOOK');
+      });
+  };
 
   appleAuthHandler = async () => {
     // performs login request
@@ -197,7 +203,7 @@ export default function LoginScreen({navigation}) {
         avatar: '',
       };
       console.log('data from google ', data);
-      handleSocialLogin(data)
+      handleSocialLogin(data);
     }
   };
 
@@ -250,27 +256,27 @@ export default function LoginScreen({navigation}) {
       </RowContainer>
       <Button title="Login" onPress={handleSubmit(handleFormSubmit)} />
       <Divider title={'OR'} />
-      <View style={{gap: 10}}>
+      <View style={{gap: 20, flexDirection: 'row', justifyContent: 'center'}}>
         <Button
-          title="Sign In With Google"
+          title={<Icon size={25} name={'logo-google'} />}
           onPress={handleGoogleSignin}
-          style={{backgroundColor: '#ea4335'}}
+          style={{backgroundColor: '#ea4335', width: 60, height: 60}}
           gradient={false}
         />
         <Button
-          title="Sign In With Facebook"
+          title={<Icon size={25} name={'logo-facebook'} />}
           onPress={handleFbSignin}
-          style={{backgroundColor: '#5890ff'}}
+          style={{backgroundColor: '#5890ff', width: 60, height: 60}}
           gradient={false}
         />
-        {Platform.OS == 'ios' && (
-          <Button
-            title="Sign In With Apple"
-            onPress={appleAuthHandler}
-            style={{backgroundColor: '#666'}}
-            gradient={false}
-          />
-        )}
+        {/* {Platform.OS == 'ios' && ( */}
+        <Button
+          title={<Icon size={25} name={'logo-apple'} />}
+          onPress={appleAuthHandler}
+          style={{backgroundColor: '#666', width: 60, height: 60}}
+          gradient={false}
+        />
+        {/* )} */}
       </View>
       <View
         style={{
@@ -281,7 +287,7 @@ export default function LoginScreen({navigation}) {
         }}>
         <TouchableText
           style={styles.forgetText}
-          onPress={() => navigation.navigate('Main')}>
+          onPress={() => navigation.navigate('signup')}>
           {' '}
           Create an account{' '}
         </TouchableText>

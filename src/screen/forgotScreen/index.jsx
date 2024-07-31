@@ -1,39 +1,29 @@
+import * as Yup from 'yup';
+import React, {useState} from 'react';
+import {useForm} from 'react-hook-form';
+import logo from '../../images/logo.png';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {useToast} from 'react-native-toast-notifications';
+import {authService} from '../../_services/auth.service.js';
 import {
   View,
-  Text,
   StyleSheet,
   Image,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
-import Icon from 'react-native-vector-icons/Ionicons';
-import LinearGradient from 'react-native-linear-gradient';
-import logo from '../../images/logo.png';
-import Button from '../../components/core/Button.js';
-import Input from '../../components/core/Input.js';
-import Divider from '../../components/Divider.jsx';
-import CustomText from '../../components/core/CustomText.jsx';
-import ContainerCenter from '../../components/ContainerCenter.js';
-import RowContainer from '../../components/RowContainer.js';
-import {yupResolver} from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import {useForm, Controller} from 'react-hook-form';
-import Checkbox from '../../components/core/CheckBox.js';
-import {authService} from '../../_services/auth.service.js';
-import {
-  LoginManager,
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-  Profile,
-} from 'react-native-fbsdk-next';
 import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
-import {useToast} from 'react-native-toast-notifications';
+import {ContainerCenter, CustomText, Button, Input} from '../../components';
+import BackButton from '../../components/core/BackButton.js';
 
 export default function ForgotScreen({navigation}) {
   const toast = useToast();
+  const [otp, setOtp] = useState('');
+  const [mail, setMail] = useState('');
+  const [isSent, setIsSent] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+
   const validationSchema = Yup.object().shape({
     password: Yup.string()
       .required('newPasswordRequired')
@@ -55,26 +45,6 @@ export default function ForgotScreen({navigation}) {
     formState: {errors},
   } = useForm(formOptions);
 
-  const [isSent, setIsSent] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [mail, setMail] = useState('');
-  const [otp, setOtp] = useState('');
-  const handleFormSubmit = async data => {
-    const modify = {
-      ...data,
-      device_token: 'teststs',
-    };
-    authService
-      .signIn(modify)
-      .then(res => {
-        dispatch(login(res.data));
-
-        toast.success('Login Successful');
-      })
-      .catch(error => {
-        toast.error('Invalid credentials');
-      });
-  };
   const handleSendOtp = () => {
     if (emailRegex.test(mail) === false) {
       toast.show('Please enter a valid email');
@@ -136,11 +106,19 @@ export default function ForgotScreen({navigation}) {
         toast.show(error.message);
       });
   };
+
   return (
     <ContainerCenter>
+      <TouchableOpacity
+        style={{
+          marginVertical: 20,
+        }}
+        onPress={() => navigation.navigate('login')}>
+        <BackButton />
+      </TouchableOpacity>
       <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
       <View style={{gap: 8}}>
-        <CustomText style={styles.signInHeading}>Forgot</CustomText>
+        <CustomText style={styles.signInHeading}>Forgot Password</CustomText>
         <CustomText style={styles.signInSubHeading}>
           Please fill the below details
         </CustomText>
@@ -209,15 +187,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 200,
   },
-  rememberText: {
-    fontSize: 16,
-    color: Colors.gray,
-    fontWeight: 500,
-  },
-  forgetText: {
-    fontSize: 16,
-    color: Colors.gray,
-    fontWeight: 500,
-    textDecorationLine: 'underline',
+  backButton: {
+    width: 150,
+    marginBottom: 10,
+    padding: 0,
   },
 });

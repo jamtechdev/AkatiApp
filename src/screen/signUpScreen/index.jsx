@@ -32,6 +32,7 @@ import {
 } from 'react-native-fbsdk-next';
 import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
 import {useToast} from 'react-native-toast-notifications';
+import {TouchableText} from '../../components/index.js';
 
 export default function SignupScreen({navigation}) {
   const toast = useToast();
@@ -159,6 +160,19 @@ export default function SignupScreen({navigation}) {
           />
         </RowContainer>
         <Button title="Sign Up" onPress={handleSubmit(handleFormSubmit)} />
+        <View
+          style={{
+            marginVertical: 25,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <TouchableText
+            style={styles.forgetText}
+            onPress={() => navigation.navigate('login')}>
+            Already account? Sign in
+          </TouchableText>
+        </View>
       </ContainerCenter>
     </ScrollView>
   );
