@@ -7,8 +7,9 @@ const useToast = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [toastDescription, setToastDescription] = useState('');
   const [toastDuration, setToastDuration] = useState(3000);
+  const [type, setType] = useState('');
 
-  const showToast = (message, description = '', duration = 3000) => {
+  const showToast = (message, type, description = '', duration = 3000) => {
     setToastMessage(message);
     setToastDescription(description);
     setToastDuration(duration);
@@ -16,6 +17,7 @@ const useToast = () => {
     setTimeout(() => {
       setToastVisible(false);
     }, duration);
+    setType(type);
   };
 
   const ToastComponent = (
@@ -25,6 +27,7 @@ const useToast = () => {
       description={toastDescription}
       duration={toastDuration}
       onHide={() => setToastVisible(false)}
+      type={type}
     />
   );
 

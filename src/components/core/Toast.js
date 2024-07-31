@@ -1,8 +1,17 @@
 // Toast.js
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Animated, StyleSheet } from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {View, Text, Animated, StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {Colors} from '../../_utils/GlobalStyle';
 
-const Toast = ({ visible, message, description, duration = 3000, onHide }) => {
+const Toast = ({
+  visible,
+  message,
+  description,
+  duration = 3000,
+  onHide,
+  type = 'success',
+}) => {
   const [show, setShow] = useState(visible);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -31,9 +40,30 @@ const Toast = ({ visible, message, description, duration = 3000, onHide }) => {
   if (!show) return null;
 
   return (
-    <Animated.View style={[styles.toastContainer, { opacity: fadeAnim }]}>
-      <Text style={styles.toastMessage}>{message}</Text>
-      {description && ( <Text style={styles.toastMessage}>{description}</Text>)}
+    <Animated.View
+      style={[
+        styles.toastContainer,
+        {
+          opacity: fadeAnim,
+          backgroundColor:
+            type == 'success'
+              ? Colors.success
+              : type == 'info'
+              ? Colors.info
+              : Colors.danger,
+        },
+      ]}>
+      <View style={styles.toastMessage}>
+        {type == 'success' && (
+          <Icon size={30} name={'checkmark-circle-outline'} />
+        )}
+        {type == 'info' && <Icon size={30} name={'close-circle-outline'} />}
+        {type == 'error' && (
+          <Icon size={30} name={'information-circle-outline'} />
+        )}
+        <Text>{message}</Text>
+      </View>
+      {description && <Text style={styles.toastMessage}>{description}</Text>}
     </Animated.View>
   );
 };
@@ -41,17 +71,25 @@ const Toast = ({ visible, message, description, duration = 3000, onHide }) => {
 const styles = StyleSheet.create({
   toastContainer: {
     position: 'absolute',
-    bottom: 50,
-    left: '10%',
-    right: '10%',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    padding: 10,
-    borderRadius: 10,
+    top: 0,
+    left: 0,
+    right: 0,
+    width: '100%',
+    margin: 'auto',
+
+    padding: 5,
     alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 9999999,
   },
   toastMessage: {
     color: 'white',
-    textAlign: 'center',
+    textAlign: 'left',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    gap: 5,
   },
 });
 

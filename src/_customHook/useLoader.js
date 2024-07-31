@@ -1,5 +1,5 @@
 // src/_customHook/useLoader.js
-import { useState } from 'react';
+import {useState} from 'react';
 import {Loader} from '../components';
 
 const useLoader = () => {
@@ -14,4 +14,3 @@ const useLoader = () => {
 };
 
 export default useLoader;
-
