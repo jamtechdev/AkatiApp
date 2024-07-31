@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,6 +21,7 @@ import {
   ContainerCenter,
   TouchableText,
   RowContainer,
+  AlertModal,
 } from '../../components';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -41,6 +42,9 @@ import appleAuth, {
 import jwtDecode from 'jwt-decode';
 
 export default function LoginScreen({navigation}) {
+
+  const [modalVisible, setModalVisible] = useState(false);
+
   const toast = useToast();
   GoogleSignin.configure({
     androidClientId:
@@ -281,11 +285,22 @@ export default function LoginScreen({navigation}) {
         }}>
         <TouchableText
           style={styles.forgetText}
-          onPress={() => navigation.navigate('Main')}>
+          onPress={() => navigation.navigate('signup')}>
           {' '}
           Create an account{' '}
         </TouchableText>
       </View>
+      <View style={{ marginVertical: 20 }}>
+      <Button title="Show Alert" onPress={() => setModalVisible(true)} />
+      <AlertModal
+        visible={modalVisible}
+        // image={logo} // Optional: Pass an image source
+        title="Custom Title"
+        description="This is a custom description"
+        onOkay={()=> console.log('okay click')}
+        onCancel={()=> setModalVisible(false)} 
+      />
+    </View>
     </ContainerCenter>
   );
 }
