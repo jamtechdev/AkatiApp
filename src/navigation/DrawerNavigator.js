@@ -9,7 +9,7 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   return (
-    <Drawer.Navigator screenOptions={{ headerShown: false, drawerPosition:'right', drawerType:'front' }}  drawerContent={props => <DrawerContent {...props} />}>
+    <Drawer.Navigator screenOptions={{ headerShown: false, drawerPosition:'left', drawerType:'front' }}  drawerContent={props => <DrawerContent {...props} />}>
     <Drawer.Screen name="HomeTabs" component={TabNavigator} />
     <Drawer.Screen name="Settings" component={SettingsScreen} />
     <Drawer.Screen name="Profile" component={ReviewScreen} />

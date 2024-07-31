@@ -7,7 +7,7 @@ const CustomHeader = ({ title }) => {
     <View style={styles.header}>
       <Text style={styles.title}>{title}</Text>
       <Ionicons
-                name={'search'}
+                name={'notifications'}
                 size={22}
                 color={'white'}
               />

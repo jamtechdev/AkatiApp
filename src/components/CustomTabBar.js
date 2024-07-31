@@ -30,7 +30,7 @@ const CustomTabBar = ({state, descriptors, navigation,}) => {
           });
         };
 
-        const iconName = route.name === 'Library' ? 'library' : route.name == 'Home' ? 'home' : 'menu';
+        const iconName = route.name === 'Library' ? 'library' : route.name == 'Home' ? 'home' : 'search';
  
         return (
           <TouchableOpacity
