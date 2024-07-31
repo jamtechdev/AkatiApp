@@ -9,9 +9,9 @@ import GlobalStyles, { Colors } from '../_utils/GlobalStyle';
 const RowContainer = ({ children, style }) => {
     return (
         <View
-            style={[{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+            style={[  GlobalStyles.globalContainer,{
+                backgroundColor: Colors.primary,
+                paddingTop :10,
             }, style]}>
                 {children}
         </View>
