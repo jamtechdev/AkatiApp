@@ -1,26 +1,32 @@
 import React from 'react';
-import { View, Text, Modal, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Colors } from '../../_utils/GlobalStyle';
-import { Button, CustomText } from '../../components';
+import {
+  View,
+  Text,
+  Modal,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import {Colors} from '../../_utils/GlobalStyle';
+import {Button, CustomText} from '../../components';
 
-const AlertModal = ({ visible, image, title, description, onCancel, onOkay }) => {
+const AlertModal = ({visible, image, title, description, onCancel, onOkay}) => {
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={visible}
-      onRequestClose={onCancel}
-    >
+      onRequestClose={onCancel}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           {image && <Image source={image} style={styles.image} />}
-          <CustomText style={styles.title}>{title || "Default Title"}</CustomText>
-          <CustomText style={styles.description}>{description || "Default description"}</CustomText>
+          <CustomText style={styles.title}>{title || ''}</CustomText>
+          <CustomText style={styles.description}>
+            {description || ''}
+          </CustomText>
           <View style={styles.buttonContainer}>
-            {onOkay && (
-            <Button title={'Okay'} onPress={onOkay} />
-            )}
-              <Button title={onOkay ? "Cancel" : "Close"} onPress={onCancel} />
+            {onOkay && <Button title={'Okay'} onPress={onOkay} />}
+            {onCancel && <Button title={'Cancel'} onPress={onCancel} />}
           </View>
         </View>
       </View>

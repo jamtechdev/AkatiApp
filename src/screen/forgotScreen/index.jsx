@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import logo from '../../images/logo.png';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useToast} from 'react-native-toast-notifications';
 import {authService} from '../../_services/auth.service.js';
 import {
   View,
@@ -16,14 +15,17 @@ import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
 import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
 import {ContainerCenter, CustomText, Button, Input} from '../../components';
 import BackButton from '../../components/core/BackButton.js';
+import {useLoader, useToast} from '../../_customHook';
 
 export default function ForgotScreen({navigation}) {
-  const toast = useToast();
   const [otp, setOtp] = useState('');
   const [mail, setMail] = useState('');
   const [isSent, setIsSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-
+  const [isValid, setIsValid] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [showToast, ToastComponent] = useToast();
+  const [showLoader, hideLoader, LoaderComponent] = useLoader();
   const validationSchema = Yup.object().shape({
     password: Yup.string()
       .required('newPasswordRequired')
@@ -46,26 +48,32 @@ export default function ForgotScreen({navigation}) {
   } = useForm(formOptions);
 
   const handleSendOtp = () => {
+    showLoader();
     if (emailRegex.test(mail) === false) {
-      toast.show('Please enter a valid email');
+      showToast('Please enter a valid email.');
+      hideLoader();
     } else {
       authService
         .sendOtp({email: mail})
         .then(res => {
           if (res.data.status) {
-            toast.show('OTP sent successfully.');
             setIsSent(true);
+            showToast('OTP Sent on your mail.');
           } else {
-            toast.show(res.data.email[0]);
+            console.log(res.data.email[0]);
+            showToast(res.data.email[0]);
           }
         })
         .catch(error => {
-          toast.show(error?.response?.data?.email[0]);
-        });
+          console.log(error?.response?.data?.email[0]);
+          showToast(error?.response?.data?.email[0]);
+        })
+        .finally(() => hideLoader());
     }
   };
 
   const handleVerifyOtp = code => {
+    showLoader();
     const data = {
       email: mail,
       otp: code,
@@ -75,21 +83,27 @@ export default function ForgotScreen({navigation}) {
         .verifyOtp(data)
         .then(res => {
           if (res.data.success) {
-            toast.show('OTP verifed.');
             setIsVerified(true);
+            showToast('OTP Verified.');
           } else {
-            toast.show(res.data?.message);
+            console.log(res.data?.message);
+            showToast(res.data?.message);
           }
         })
         .catch(error => {
-          toast.show(error.message);
-        });
+          console.log(error.message);
+          showToast(error.message);
+        })
+        .finally(() => hideLoader());
     } else {
-      toast.show('Invalid OTP entered!');
+      console.log('Invalid OTP entered!');
+      showToast('Invalid OTP entered!');
+      hideLoader();
     }
   };
 
   const handlePasswordChange = data => {
+    showLoader();
     const formData = {
       email: mail,
       password: data.confirm_password,
@@ -98,13 +112,15 @@ export default function ForgotScreen({navigation}) {
       .resetPassword(formData)
       .then(res => {
         if (res.data.success) {
-          toast.show('Password changed successfully!');
+          showToast('Password Changed Successfully');
           navigation.navigate('login');
         }
       })
       .catch(error => {
-        toast.show(error.message);
-      });
+        console.log(error.message);
+        showToast(error.message);
+      })
+      .finally(() => hideLoader());
   };
 
   return (
@@ -133,7 +149,7 @@ export default function ForgotScreen({navigation}) {
             value={mail}
             secureTextEntry={false}
           />
-          <Button title="Send OTP" onPress={handleSendOtp} disabled={isSent} />
+          <Button title="Send OTP" onPress={handleSendOtp} />
         </View>
       ) : !isVerified ? (
         <View style={{gap: 15, paddingTop: 25}}>
@@ -145,11 +161,7 @@ export default function ForgotScreen({navigation}) {
             value={otp}
             secureTextEntry={false}
           />
-          <Button
-            title="Verify OTP"
-            onPress={() => handleVerifyOtp(otp)}
-            disabled={isSent}
-          />
+          <Button title="Verify OTP" onPress={() => handleVerifyOtp(otp)} />
         </View>
       ) : (
         <View style={{gap: 15, paddingTop: 25}}>
@@ -170,10 +182,11 @@ export default function ForgotScreen({navigation}) {
           <Button
             title="Change Password"
             onPress={handleSubmit(handlePasswordChange)}
-            disabled={isSent}
           />
         </View>
       )}
+      {ToastComponent}
+      {LoaderComponent}
     </ContainerCenter>
   );
 }
