@@ -16,5 +16,6 @@ export { default as ContainerCenter } from './ContainerCenter';
 export { default as RowContainer } from './RowContainer';
 export { default as CustomTabBar } from './CustomTabBar';
 export { default as CustomHeader } from './CustomHeader';
+export { default as DrawerContent } from './DrawerContent';
 
 
