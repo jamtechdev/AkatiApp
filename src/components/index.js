@@ -17,5 +17,6 @@ export { default as RowContainer } from './RowContainer';
 export { default as CustomTabBar } from './CustomTabBar';
 export { default as CustomHeader } from './CustomHeader';
 export { default as DrawerContent } from './DrawerContent';
-
+export {default as TextBadge} from './core/Badge'
+export {default as SkeletonLoader} from './SkeletonLoader'
 
