@@ -9,7 +9,7 @@ const ContainerCenter = ({children}) => {
     <View
       style={[
         GlobalStyles.globalContainer,
-        {alignItems: 'center', justifyContent: 'center'},
+        {alignItems: 'center', justifyContent: 'center',},
       ]}>
       <View style={{width: '100%'}}>{children}</View>
     </View>

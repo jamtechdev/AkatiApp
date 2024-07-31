@@ -35,17 +35,19 @@ import {
   GraphRequestManager,
   Profile,
 } from 'react-native-fbsdk-next';
-import {useToast} from 'react-native-toast-notifications';
 import appleAuth, {
   AppleButton,
 } from '@invertase/react-native-apple-authentication';
 import jwtDecode from 'jwt-decode';
 import {useDispatch} from 'react-redux';
 import {login} from '../../_store/_reducers/auth.js';
+import {useLoader, useToast} from '../../_customHook';
 
 export default function LoginScreen({navigation}) {
+  const [showToast, ToastComponent] = useToast();
+  const [showLoader, hideLoader, LoaderComponent] = useLoader();
+
   const dispatch = useDispatch();
-  const toast = useToast();
   GoogleSignin.configure({
     androidClientId:
       '591314454636-3hvt5rv5ggf7hbvectrcvgvmjpjtsc1l.apps.googleusercontent.com',
@@ -99,13 +101,11 @@ export default function LoginScreen({navigation}) {
       .signIn(modify)
       .then(res => {
         dispatch(login(res.data));
-        toast.show('Login Successful');
-        console.log('Login Successful');
         navigation.navigate('Main');
       })
       .catch(error => {
         console.log(error, 'network');
-        toast.show(error.message);
+        showToast(error.message);
       });
   };
 
@@ -114,8 +114,7 @@ export default function LoginScreen({navigation}) {
       .socialAuth(data)
       .then(response => {
         dispatch(login(response.data));
-        console.log(response);
-        // toast.success("Login Successful");
+        navigation.navigate('Main');
       })
       .catch(err => {
         console.log(err);
@@ -270,14 +269,14 @@ export default function LoginScreen({navigation}) {
           style={{backgroundColor: '#5890ff', width: 60, height: 60}}
           gradient={false}
         />
-        {/* {Platform.OS == 'ios' && ( */}
+        {Platform.OS == 'ios' && (
         <Button
           title={<Icon size={25} name={'logo-apple'} />}
           onPress={appleAuthHandler}
           style={{backgroundColor: '#666', width: 60, height: 60}}
           gradient={false}
         />
-        {/* )} */}
+        )}
       </View>
       <View
         style={{
@@ -293,6 +292,8 @@ export default function LoginScreen({navigation}) {
           Create an account{' '}
         </TouchableText>
       </View>
+      {LoaderComponent}
+      {ToastComponent}
     </ContainerCenter>
   );
 }

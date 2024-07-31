@@ -2,88 +2,116 @@
 import React from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Colors} from '../_utils/GlobalStyle';
 
 const CustomTabBar = ({state, descriptors, navigation}) => {
+  const handleMore = () => {
+    console.log('first more click');
+  };
   return (
-    <View style={styles.tabBar}>
-      {state.routes.map((route, index) => {
-        const {options} = descriptors[route.key];
-        const isFocused = state.index === index;
+    <View style={styles.tabContainer}>
+      <View style={styles.tabBar}>
+        {state.routes.map((route, index) => {
+          const {options} = descriptors[route.key];
+          const isFocused = state.index === index;
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-          });
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+            });
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
-          }
-        };
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
 
-        const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-        };
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            });
+          };
 
-        const iconName = route.name === 'Library' ? 'ios-library' : 'ios-search';
+          const iconName = route.name === 'Library' ? 'library' : 'home';
 
-        return (
-          <TouchableOpacity
-            key={index}
-            accessibilityRole="button"
-            accessibilityState={isFocused ? {selected: true} : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
-            onPress={onPress}
-            onLongPress={onLongPress}
-            style={styles.tab}
-          >
-            <View style={isFocused ? styles.activeTab : styles.inactiveTab}>
-              <Ionicons
-                name={iconName}
-                size={24}
-                color={isFocused ? 'white' : 'gray'}
-              />
-              {isFocused && (
+          return (
+            <TouchableOpacity
+              key={index}
+              accessibilityRole="button"
+              accessibilityState={isFocused ? {selected: true} : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              testID={options.tabBarTestID}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              style={styles.tab}>
+              <View style={isFocused ? styles.activeTab : styles.inactiveTab}>
+                <Ionicons
+                  name={iconName}
+                  size={22}
+                  color={isFocused ? 'white' : 'gray'}
+                />
+                {/* {isFocused && (
                 <Text style={styles.activeLabel}>
                   {route.name}
                 </Text>
-              )}
-            </View>
-          </TouchableOpacity>
-        );
-      })}
+              )} */}
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+        <TouchableOpacity
+          key={'more-1'}
+          accessibilityRole="button"
+          onPress={handleMore}
+          style={styles.tab}>
+          <View style={styles.inactiveTab}>
+            <Ionicons name={'menu'} size={22} color={'gray'} />
+            {/* {isFocused && (
+                <Text style={styles.activeLabel}>
+                  {route.name}
+                </Text>
+              )} */}
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  tabContainer: {
+    backgroundColor: Colors.primary,
+  },
   tabBar: {
     flexDirection: 'row',
-    backgroundColor: 'transparent',  // Ensure the tab bar is transparent
+    backgroundColor: Colors.tertiary, // Ensure the tab bar is transparent
     height: 70,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    borderTopWidth: 0,  // Remove border if not needed
+    borderTopWidth: 0, // Remove border if not needed
+    // margin:10,
+    borderRadius: 50,
+    width: '90%',
+    marginHorizontal: 'auto',
   },
   tab: {
-    flex: 1,
+    paddingHorizontal: 10,
+  },
+  inactiveTab: {
+    height: 40,
+    width: 40,
+    borderRadius: 50, // Increased radius for circular effect
     alignItems: 'center',
     justifyContent: 'center',
   },
   activeTab: {
-    backgroundColor: 'tomato',  // Background color for the active tab
-    borderRadius: 50,  // Increased radius for circular effect
-    padding: 10,
+    backgroundColor: Colors.secondary, // Background color for the active tab
+    borderRadius: 50, // Increased radius for circular effect
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  inactiveTab: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: 40,
+    width: 40,
   },
   activeLabel: {
     color: 'white',

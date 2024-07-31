@@ -2,16 +2,27 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LibraryScreen, DiscoverScreen} from '../screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {CustomTabBar} from '../components';
+import {CustomHeader, CustomTabBar} from '../components';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator tabBar={props => <CustomTabBar {...props} />}>
-      <Tab.Screen name="Home" component={LibraryScreen} />
-      <Tab.Screen name="Library" component={LibraryScreen} />
-      <Tab.Screen name="More" component={DiscoverScreen} />
+    <Tab.Navigator tabBar={props => <CustomTabBar {...props} />} >
+      <Tab.Screen 
+      name="Home" 
+      component={DiscoverScreen}
+      options={{
+          header: () => <CustomHeader title="Library" />,
+        }}
+      />
+      <Tab.Screen 
+      name="Library"
+      component={LibraryScreen} 
+         options={{
+          header: () => <CustomHeader title="Library" />,
+        }}
+      />
     </Tab.Navigator>
   );
 };
