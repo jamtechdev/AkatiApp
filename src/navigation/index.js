@@ -6,7 +6,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import StackNavigator from './StackNavigator';
 import TabNavigator from './TabNavigator';
 import {StatusBar} from 'react-native';
-import {DrawerContent} from '../components';
+import {CustomHeader, DrawerContent} from '../components';
 import DrawerNavigator from './DrawerNavigator';
 import {TermsScreen} from '../screen';
 import {useSelector} from 'react-redux';
@@ -19,10 +19,14 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        screenOptions={{headerShown: false}}
+       screenOptions={({ navigation, route }) => ({
+        header: () => <CustomHeader title={route.name} navigation={navigation} showBack={true} />,
+      })}
         initialRouteName={loggedIn && token ? 'Main' : 'Auth'}>
-        <Stack.Screen name="Auth" component={StackNavigator} />
-        <Stack.Screen name="Main" component={DrawerNavigator} />
+        <Stack.Screen name="Auth" component={StackNavigator} 
+          options={{ headerShown : false}}
+        />
+        <Stack.Screen name="Main" component={DrawerNavigator} options={{ headerShown : false}} />
         <Stack.Screen name="Terms" component={TermsScreen} />
       </Stack.Navigator>
     </NavigationContainer>

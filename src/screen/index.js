@@ -7,3 +7,4 @@ export {default as ReviewScreen} from './reviewScreen';
 export {default as SettingsScreen} from './settingScreen';
 export {default as SearchScreen} from './searchScreen';
 export {default as TermsScreen} from './termsScreen';
+export {default as LanguageScreen} from './languageScreen';

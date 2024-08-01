@@ -16,7 +16,7 @@ export default function SettingScreen({navigation}) {
         </TouchableText>
         <TouchableText
           style={styles.text}
-          onPress={() => navigation.navigate('terms')}>
+          onPress={() => navigation.navigate('Terms')}>
           Terms & Conditions
         </TouchableText>
         <TouchableText

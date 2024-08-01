@@ -1,7 +1,7 @@
 // src/navigation/DrawerNavigator.js
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { SettingsScreen, ReviewScreen, SearchScreen } from '../screen'; // Add your drawer screens here
+import { SettingsScreen, ReviewScreen, SearchScreen, LanguageScreen } from '../screen'; // Add your drawer screens here
 import { DrawerContent, CustomHeader } from '../components';
 import TabNavigator from './TabNavigator';
 
@@ -11,7 +11,7 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       screenOptions={({ navigation, route }) => ({
-        header: () => <CustomHeader title={route.name} navigation={navigation} />,
+        header: () => <CustomHeader title={route.name} navigation={navigation} hideDrawer={true} />,
         drawerPosition: 'left',
         drawerType: 'front',
       })}
@@ -26,6 +26,7 @@ const DrawerNavigator = () => {
       />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="Review" component={ReviewScreen} />
+      <Drawer.Screen name="Language" component={LanguageScreen} />
     </Drawer.Navigator>
   );
 };

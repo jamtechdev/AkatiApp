@@ -2,9 +2,12 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Colors} from '../_utils/GlobalStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-const CustomHeader = ({title, hideDrawer = true, navigation}) => {
+const CustomHeader = ({title, hideDrawer,showBack, navigation}) => {
   return (
     <View style={styles.header}>
+    {showBack && (
+      <Ionicons name={'arrow-back'} size={22} color={'white'} onPress={()=> navigation.goBack()} />
+    )}
       {hideDrawer && (
       <Ionicons name={'menu'} size={22} color={'white'} onPress={()=> navigation.toggleDrawer()} />
       )}

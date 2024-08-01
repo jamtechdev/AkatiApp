@@ -38,6 +38,11 @@ const DrawerContent = props => {
         labelStyle={{color: Colors.white}}
         onPress={() => props.navigation.navigate('Review')}
       />
+                <DrawerItem
+        label='Language'
+        labelStyle={{color: Colors.white}}
+        onPress={() => props.navigation.navigate('Language')}
+      />
           {/* <DrawerItem
         label='Logout'
         labelStyle={{color: Colors.white}}
