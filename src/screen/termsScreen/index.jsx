@@ -1,10 +1,10 @@
 import React from 'react';
-import {CustomHeader, RowContainer} from '../../components';
+import {CustomHeader, HeadingText, RowContainer} from '../../components';
 
 function TermsScreen() {
   return (
     <RowContainer>
-      <CustomHeader>Terms & Conditions</CustomHeader>
+      <HeadingText>Terms & Conditions</HeadingText>
     </RowContainer>
   );
 }

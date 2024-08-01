@@ -7,6 +7,7 @@ import TabNavigator from './TabNavigator';
 import {StatusBar} from 'react-native';
 import {DrawerContent} from '../components';
 import DrawerNavigator from './DrawerNavigator';
+import {TermsScreen} from '../screen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -19,6 +20,7 @@ const AppNavigator = () => {
         initialRouteName="Main">
         <Stack.Screen name="Auth" component={StackNavigator} />
         <Stack.Screen name="Main" component={DrawerNavigator} />
+        <Stack.Screen name="Terms" component={TermsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
