@@ -1,7 +1,7 @@
 // src/navigation/DrawerNavigator.js
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {SettingsScreen, ReviewScreen} from '../screen'; // Add your drawer screens here
+import {SettingsScreen, ReviewScreen, SearchScreen} from '../screen'; // Add your drawer screens here
 import {DrawerContent} from '../components';
 import TabNavigator from './TabNavigator';
 
@@ -17,9 +17,9 @@ const DrawerNavigator = () => {
     // }}
     // drawerContent={props => <DrawerContent {...props} />}
     >
-      {/* <Drawer.Screen name="HomeTabs" component={TabNavigator} /> */}
+      <Drawer.Screen name="Search" component={SearchScreen} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
-      <Drawer.Screen name="Profile" component={ReviewScreen} />
+      <Drawer.Screen name="Review" component={ReviewScreen} />
     </Drawer.Navigator>
   );
 };
