@@ -13,6 +13,7 @@ export { default as CircleCard } from './core/CircleCard';
 export { default as Checkbox } from './core/CheckBox';
 export {default as TextBadge} from './core/Badge'
 export { default as HorizontalScrollView } from './core/HorizontalScrollView'
+export { default as VerticalScrollView } from './core/VerticalScrollView'
 
 
 export { default as Divider } from './Divider';

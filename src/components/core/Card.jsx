@@ -1,15 +1,21 @@
 // Card.js
-import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import {Colors} from '../../_utils/GlobalStyle';
-import LinearGradient from 'react-native-linear-gradient';
+import React from 'react'
+import {View, Text, StyleSheet} from 'react-native'
+import FastImage from 'react-native-fast-image'
+import LinearGradient from 'react-native-linear-gradient'
+import {Colors} from '../../_utils/GlobalStyle'
+import {IMAGE_API_URL} from '../../_constant'
 
 const Card = ({item}) => {
   return (
     <View style={styles.card}>
       <View style={styles.cardImage}>
-        {item.image && (
-          <Image source={{uri: item.image}} style={styles.image} />
+        {item.cover_image && (
+          <FastImage
+            source={{uri: IMAGE_API_URL + item.cover_image}}
+            style={styles.image}
+            resizeMode={FastImage.resizeMode.cover}
+          />
         )}
       </View>
       <LinearGradient
@@ -17,46 +23,43 @@ const Card = ({item}) => {
         start={{x: 0, y: 0}}
         end={{x: 0, y: 1}}
         style={styles.cardContent}>
-      <View >
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.description}>{item.description}</Text>
+        <View>
+          <Text style={styles.title}>{item?.BookDetails?.title}</Text>
+          <Text style={styles.description} numberOfLines={2}>
+            {item?.BookDetails?.description}
+          </Text>
         </View>
       </LinearGradient>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   card: {
     marginRight: 10,
-    width:180,
-    height:250,
-    borderRadius:20
+    width: 180,
+    height: 250,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   cardImage: {
     width: '100%',
     height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   image: {
-    width: "100%",
-    height: "100%",
-    objectFit:"cover",
-    borderRadius:10
+    width: '100%',
+    height: '100%',
   },
-  cardContent:{
-    position:"absolute",
-    bottom:0,
-    left:0,
-    right:0,
-    top:0,
-    margin:"auto",
-    padding:8,
-    borderRadius:10,
-    width:"100%",
-    height:"100%",
-    justifyContent:"flex-end",
+  cardContent: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 8,
+    borderRadius: 10,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'flex-end',
   },
   title: {
     fontSize: 18,
@@ -64,10 +67,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: Colors.white,
   },
-  description:{
-    fontSize:14,
-    color:Colors.gray
-  }
-});
+  description: {
+    fontSize: 14,
+    color: Colors.gray,
+    // Ensure text is truncated properly
+    overflow: 'hidden',
+  },
+})
 
 export default Card
