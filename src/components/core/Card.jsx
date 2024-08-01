@@ -7,20 +7,20 @@ import LinearGradient from 'react-native-linear-gradient';
 const Card = ({item}) => {
   return (
     <View style={styles.card}>
-          <View style={styles.cardImage}>
+      <View style={styles.cardImage}>
         {item.image && (
           <Image source={{uri: item.image}} style={styles.image} />
         )}
       </View>
-       <LinearGradient
-          colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 1)']}
-          start={{x: 0, y: 0}}
-          end={{x: 0, y: 1}}
-          style={styles.cardContent}>
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 1)']}
+        start={{x: 0, y: 0}}
+        end={{x: 0, y: 1}}
+        style={styles.cardContent}>
       <View >
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-      </View>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.description}>{item.description}</Text>
+        </View>
       </LinearGradient>
     </View>
   );
@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
     borderRadius:20
   },
   cardImage: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -58,11 +58,11 @@ const styles = StyleSheet.create({
     height:"100%",
     justifyContent:"flex-end",
   },
-  title:{
-    fontSize:18,
-    fontWeight:700,
-    marginBottom:5,
-    color:Colors.white,
+  title: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 5,
+    color: Colors.white,
   },
   description:{
     fontSize:14,
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Card;
+export default Card

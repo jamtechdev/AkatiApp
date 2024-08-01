@@ -5,8 +5,8 @@ import {
   HeadingText,
   RowContainer,
   SkeletonLoader,
+  HorizontalScrollView,
 } from '../../components';
-import HorizontalScrollView from '../../components/core/HorizontalScrollView';
 
 export default function DiscoverScreen() {
   const data = [
@@ -35,14 +35,6 @@ export default function DiscoverScreen() {
       image: 'https://via.placeholder.com/150',
     },
   ];
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate a network request
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000); // 3 seconds
-  }, []);
 
   return (
     <RowContainer>
@@ -51,15 +43,6 @@ export default function DiscoverScreen() {
           <HeadingText>From Your Library </HeadingText>
           <HorizontalScrollView data={data} isCircle={true} />
         </View>
-        <SkeletonLoader isLoading={loading}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-         
-            <View style={{marginLeft: 16}}>
-              <Text style={{fontSize: 18, fontWeight: 'bold'}}>John Doe</Text>
-              <Text>Example text here</Text>
-            </View>
-          </View>
-        </SkeletonLoader>
         <View>
           <HeadingText>New In Akati </HeadingText>
           <HorizontalScrollView data={data} />

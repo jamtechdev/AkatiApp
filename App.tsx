@@ -18,8 +18,6 @@ import PushController from './src/_utils/pushNotification';
 import AppNavigator from './src/navigation';
 import {Colors} from './src/_utils/GlobalStyle';
 
-const Stack = createNativeStackNavigator();
-
 function App() {
   return (
     <Provider store={store}>
