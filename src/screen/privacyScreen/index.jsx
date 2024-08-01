@@ -1,40 +1,34 @@
 import React, {useEffect, useState} from 'react';
-import {
-  CustomHeader,
-  CustomText,
-  HeadingText,
-  RowContainer,
-} from '../../components';
-import {commonServices} from '../../_services/common.service';
+import {CustomText, HeadingText, RowContainer} from '../../components';
 import {ScrollView} from 'react-native';
+import {commonServices} from '../../_services/common.service';
 import {useLoader} from '../../_customHook';
 
-function TermsScreen() {
+function PrivacyScreen() {
   const [showLoader, hideLoader, LoaderComponent] = useLoader();
-  const [terms, setTerms] = useState({});
+  const [policy, setPolicy] = useState({});
 
   useEffect(() => {
     showLoader();
     commonServices
-      .getTermsConditions()
+      .getPrivacyPolicy()
       .then(res => {
-        setTerms(res.data.result);
+        setPolicy(res.data.result);
       })
       .catch(error => {
         console.log(error);
       })
       .finally(() => hideLoader());
   }, []);
-
   return (
     <RowContainer>
-      <HeadingText>Terms & Conditions</HeadingText>
+      <HeadingText>Privacy & Policy</HeadingText>
       <ScrollView>
-        <CustomText style={{padding: 5}}>{terms?.content}</CustomText>
+        <CustomText style={{padding: 5}}>{policy?.content}</CustomText>
         {LoaderComponent}
       </ScrollView>
     </RowContainer>
   );
 }
 
-export default TermsScreen;
+export default PrivacyScreen;
