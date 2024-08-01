@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // src/components/DrawerContent.js
 import React from 'react'
 import {View, Text, StyleSheet, Image} from 'react-native'
@@ -21,7 +22,12 @@ const DrawerContent = props => {
         />
         <Text style={styles.drawerTitle}>My App</Text>
       </View>
-
+        <DrawerItem
+        label='Discover'
+        labelStyle={{color: Colors.white}}
+        onPress={() => props.navigation.navigate('Discover')}
+      />
+          
       <DrawerItem
         label='Settings'
         labelStyle={{color: Colors.white}}

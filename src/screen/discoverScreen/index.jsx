@@ -36,9 +36,6 @@ export default function DiscoverScreen() {
       image: 'https://via.placeholder.com/150',
     },
   ];
-const handleRatingChange = newRating => {
-  console.log('New Rating:', newRating)
-}
 
   return (
     <RowContainer>
@@ -52,7 +49,6 @@ const handleRatingChange = newRating => {
           <HorizontalScrollView data={data} />
         </View>
         <View>
-            <CustomStarRating totalStars={5} onRatingChange={handleRatingChange} />
           <HeadingText>Must Read </HeadingText>
           <HorizontalScrollView data={data} />
         </View>

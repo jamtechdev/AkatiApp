@@ -18,7 +18,7 @@ const DrawerNavigator = () => {
       drawerContent={props => <DrawerContent {...props} />}
     >
       <Drawer.Screen
-        name="HomeTabs"
+        name="Discover"
         component={TabNavigator}
         options={() => ({
           headerShown: false,
