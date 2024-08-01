@@ -4,9 +4,10 @@ import {
   StyleSheet,
   ProgressBarAndroidComponent,
   Animated,
+  TextInput,
 } from 'react-native';
 import React, {useEffect, useRef} from 'react';
-import {CustomText, HeadingText, RowContainer} from '../../components';
+import {Button, CustomText, HeadingText, RowContainer} from '../../components';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../_utils/GlobalStyle';
@@ -42,11 +43,35 @@ export default function ReviewScreen() {
             <CustomText style={styles.rateText}>Based on 14 ratings</CustomText>
           </View>
         </View>
-        <View style={styles.containerAni}>
-          <CustomText>1 Star</CustomText>
-          <Animated.View style={[styles.bar, {width: width}]} />
-          <CustomText>1</CustomText>
+        {stars.map((star, index) => (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 15,
+            }}
+            key={index}>
+            <CustomText>1 Star</CustomText>
+            <View style={styles.containerAni}>
+              <Animated.View style={[styles.bar, {width: width}]} />
+            </View>
+            <CustomText>1</CustomText>
+          </View>
+        ))}
+        <HeadingText>Add Review</HeadingText>
+        <View>
+          <View style={[styles.starView, {margin: 5}]}>
+            {stars.map((star, index) => (
+              <Icon key={index} name={star} size={25} />
+            ))}
+          </View>
+          <TextInput
+            multiline
+            style={styles.reviewText}
+            placeholder="Enter your review here..."></TextInput>
         </View>
+        <Button title={'Submit'} style={{width: '40%'}} />
       </ScrollView>
     </RowContainer>
   );
@@ -74,7 +99,15 @@ const styles = StyleSheet.create({
   },
   bar: {
     height: '100%',
-    backgroundColor: 'blue',
+    backgroundColor: Colors.secondary,
     borderRadius: 5,
+  },
+  reviewText: {
+    backgroundColor: Colors.tertiary,
+    borderRadius: 8,
+    width: '80%',
+    height: 100,
+    paddingHorizontal: 10,
+    marginVertical: 5,
   },
 });
