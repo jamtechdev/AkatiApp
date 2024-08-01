@@ -10,13 +10,16 @@ export { default as Toast } from './core/Toast';
 export { default as Loader } from './core/Loader';
 export { default as Card } from './core/Card';
 export { default as CircleCard } from './core/CircleCard';
-export { default as Divider } from './Divider';
 export { default as Checkbox } from './core/CheckBox';
+export {default as TextBadge} from './core/Badge'
+export { default as HorizontalScrollView } from './core/HorizontalScrollView'
+
+
+export { default as Divider } from './Divider';
 export { default as ContainerCenter } from './ContainerCenter';
 export { default as RowContainer } from './RowContainer';
 export { default as CustomTabBar } from './CustomTabBar';
 export { default as CustomHeader } from './CustomHeader';
 export { default as DrawerContent } from './DrawerContent';
-export {default as TextBadge} from './core/Badge'
 export {default as SkeletonLoader} from './SkeletonLoader'
 
