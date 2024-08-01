@@ -104,7 +104,7 @@ export default function LoginScreen({navigation}) {
       })
       .catch(error => {
         console.log(error, 'network');
-        showToast(error.message);
+        showToast(error.message, 'error');
       });
   };
 
@@ -269,12 +269,12 @@ export default function LoginScreen({navigation}) {
           gradient={false}
         />
         {Platform.OS == 'ios' && (
-        <Button
-          title={<Icon size={25} name={'logo-apple'} />}
-          onPress={appleAuthHandler}
-          style={{backgroundColor: '#666', width: 60, height: 60}}
-          gradient={false}
-        />
+          <Button
+            title={<Icon size={25} name={'logo-apple'} />}
+            onPress={appleAuthHandler}
+            style={{backgroundColor: '#666', width: 60, height: 60}}
+            gradient={false}
+          />
         )}
       </View>
       <View

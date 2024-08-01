@@ -9,7 +9,7 @@ import {
 } from '@react-navigation/drawer';
 import logo from '../images/logo.png';
 import {Colors} from '../_utils/GlobalStyle';
-import {CustomDrawerItem} from '../components';
+import {AlertModal, CustomDrawerItem} from '../components';
 import { useDispatch } from 'react-redux';
 import { logout } from '../_store/_reducers/auth';
 
@@ -20,6 +20,8 @@ const DrawerContent = props => {
 
   const logoutAction = async () => {
     dispatch(logout());
+    toggleModel()
+    props.navigation.navigate('Auth')
   };
 
   const handleShare = () => {
@@ -76,6 +78,16 @@ const DrawerContent = props => {
         icon={'logout'}
         isActive
         onPress={toggleModel}
+      />
+       <AlertModal
+        visible={show}
+        image={logo}
+        title={'Alert?'}
+        description={
+          'Are you sure you want to logout! '
+        }
+        onOkay={logoutAction}
+        onCancel={toggleModel}
       />
     </DrawerContentScrollView>
   );
