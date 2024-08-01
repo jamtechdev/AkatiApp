@@ -9,3 +9,5 @@ export {default as SearchScreen} from './searchScreen';
 export {default as TermsScreen} from './termsScreen';
 export {default as LanguageScreen} from './languageScreen';
 export {default as PrivacyScreen} from './privacyScreen';
+export {default as RechargeHistoryScreen} from './rechargeHistoryScreen';
+export {default as RechargeScreen} from './rechargeScreen';

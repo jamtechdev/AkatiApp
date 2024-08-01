@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {
   AlertModal,
   CustomText,
+  HeadingText,
   RowContainer,
   TouchableText,
 } from '../../components';
@@ -10,10 +11,10 @@ import {Colors} from '../../_utils/GlobalStyle';
 import {commonServices} from '../../_services/common.service';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../../_store/_reducers/auth';
-import { useAppContext } from '../../_customContext/AppProvider';
+import {useAppContext} from '../../_customContext/AppProvider';
 
 export default function SettingScreen({navigation}) {
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showToast, showLoader, hideLoader} = useAppContext();
   const {email} = useSelector(getAuth);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -31,6 +32,9 @@ export default function SettingScreen({navigation}) {
   };
   return (
     <RowContainer>
+      <View style={{paddingBottom: 20}}>
+        <HeadingText>Settings </HeadingText>
+      </View>
       <View>
         <TouchableText
           style={styles.text}

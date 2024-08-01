@@ -41,10 +41,10 @@ import appleAuth, {
 import jwtDecode from 'jwt-decode';
 import {useDispatch} from 'react-redux';
 import {login} from '../../_store/_reducers/auth.js';
-import { useAppContext } from '../../_customContext/AppProvider.js';
+import {useAppContext} from '../../_customContext/AppProvider.js';
 
 export default function LoginScreen({navigation}) {
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showToast, showLoader, hideLoader} = useAppContext();
 
   const dispatch = useDispatch();
   GoogleSignin.configure({
@@ -230,8 +230,10 @@ export default function LoginScreen({navigation}) {
           secureTextEntry={true}
         />
       </View>
-      <RowContainer
+      <View
         style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           paddingVertical: 12,
           marginTop: 10,
         }}>
@@ -252,7 +254,7 @@ export default function LoginScreen({navigation}) {
           onPress={() => navigation.navigate('forgot')}>
           Forgot Password?{' '}
         </TouchableText>
-      </RowContainer>
+      </View>
       <Button title="Login" onPress={handleSubmit(handleFormSubmit)} />
       <Divider title={'OR'} />
       <View style={{gap: 20, flexDirection: 'row', justifyContent: 'center'}}>
