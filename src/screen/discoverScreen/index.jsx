@@ -1,5 +1,5 @@
 import {View, Text, ScrollView} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   CustomText,
   HeadingText,

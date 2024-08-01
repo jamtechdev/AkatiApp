@@ -1,17 +1,36 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
-import {ContainerCenter, CustomText, RowContainer} from '../../components';
+import {CustomText, RowContainer, TouchableText} from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
+import {useToast} from '../../_customHook';
 
-export default function SettingScreen() {
+export default function SettingScreen({navigation}) {
+  const [showToast, ToastComponent] = useToast();
   return (
     <RowContainer>
       <View>
-        <CustomText style={styles.text}>Check For Updates</CustomText>
-        <CustomText style={styles.text}>Terms & Conditions</CustomText>
-        <CustomText style={styles.text}>Privacy & Policy</CustomText>
-        <CustomText style={styles.text}>Delete Account</CustomText>
+        <TouchableText
+          style={styles.text}
+          onPress={() => showToast('Already Updated', 'info')}>
+          Check For Updates
+        </TouchableText>
+        <TouchableText
+          style={styles.text}
+          onPress={() => navigation.navigate('terms')}>
+          Terms & Conditions
+        </TouchableText>
+        <TouchableText
+          style={styles.text}
+          onPress={() => navigation.navigate('')}>
+          Privacy & Policy
+        </TouchableText>
+        <TouchableText
+          style={styles.text}
+          onPress={() => navigation.navigate('')}>
+          Delete Account
+        </TouchableText>
       </View>
+      {ToastComponent}
     </RowContainer>
   );
 }
