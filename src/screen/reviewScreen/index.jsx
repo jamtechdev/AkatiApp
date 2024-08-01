@@ -18,14 +18,16 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../_utils/GlobalStyle';
 import {commonServices} from '../../_services/common.service';
-import { useAppContext } from '../../_customContext/AppProvider';
+import {useAppContext} from '../../_customContext/AppProvider';
+
 export default function ReviewScreen() {
   const stars = Array(5).fill('star-outline');
   const width = useRef(new Animated.Value(0)).current;
   const [reviews, setReviews] = useState('');
   const [starCount, setStarCount] = useState(0);
   const [ratingDetails, setRatingDetails] = useState();
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showToast, showLoader, hideLoader} = useAppContext();
+
   useEffect(() => {
     getAppReviews();
     Animated.timing(width, {
@@ -162,7 +164,12 @@ export default function ReviewScreen() {
           })}
 
         <HeadingText>Add Review</HeadingText>
-        <View>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 15,
+          }}>
           <View style={[styles.starView, {margin: 5}]}>
             <CustomStarRating
               onRatingChange={handleRatingChange}
@@ -177,11 +184,7 @@ export default function ReviewScreen() {
             value={reviews}
           />
         </View>
-        <Button
-          title={'Submit'}
-          style={{width: '40%'}}
-          onPress={handlePostReview}
-        />
+        <Button title={'Submit'} onPress={handlePostReview} />
       </ScrollView>
     </RowContainer>
   );
