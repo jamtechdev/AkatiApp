@@ -49,4 +49,5 @@ const authSlice = createSlice({
 });
 export const { login, logout, languageSet, updateCoins } = authSlice.actions;
 export const getAuth = (state) => state?.auth;
+export const getLanguage = (state) => state?.auth.language;
 export default authSlice.reducer;

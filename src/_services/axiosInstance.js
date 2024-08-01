@@ -1,7 +1,6 @@
 import axios from 'axios';
 import {store} from '../_store';
-import Config from '../_constant/Config';
-const {API_URL} = Config;
+import { API_URL } from '../_constant';
 
 // Create an Axios instance
 const axiosInstance = axios.create({

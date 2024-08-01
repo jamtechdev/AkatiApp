@@ -2,10 +2,10 @@ import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {CustomText, RowContainer, TouchableText} from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
-import {useToast} from '../../_customHook';
+import { useAppContext } from '../../_customContext/AppProvider';
 
 export default function SettingScreen({navigation}) {
-  const [showToast, ToastComponent] = useToast();
+  const { showToast, showLoader, hideLoader } = useAppContext();
   return (
     <RowContainer>
       <View>
@@ -30,7 +30,6 @@ export default function SettingScreen({navigation}) {
           Delete Account
         </TouchableText>
       </View>
-      {ToastComponent}
     </RowContainer>
   );
 }

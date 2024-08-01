@@ -14,9 +14,9 @@ import {store, persistor} from './src/_store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import PushController from './src/_utils/pushNotification';
 import AppNavigator from './src/navigation';
 import {Colors} from './src/_utils/GlobalStyle';
+import { AppProvider } from './src/_customContext/AppProvider';
 
 function App() {
   return (
@@ -24,12 +24,13 @@ function App() {
       <PersistGate loading={null} persistor={persistor}>
         <SafeAreaProvider>
           <SafeAreaView style={{flex: 1, backgroundColor: Colors.secondary}}>
-            <PushController />
             <KeyboardAvoidingView
               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
               style={{flex: 1}}>
               <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <AppProvider>
                 <AppNavigator />
+                </AppProvider>
               </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
           </SafeAreaView>

@@ -41,11 +41,10 @@ import appleAuth, {
 import jwtDecode from 'jwt-decode';
 import {useDispatch} from 'react-redux';
 import {login} from '../../_store/_reducers/auth.js';
-import {useLoader, useToast} from '../../_customHook';
+import { useAppContext } from '../../_customContext/AppProvider.js';
 
 export default function LoginScreen({navigation}) {
-  const [showToast, ToastComponent] = useToast();
-  const [showLoader, hideLoader, LoaderComponent] = useLoader();
+  const { showToast, showLoader, hideLoader } = useAppContext();
 
   const dispatch = useDispatch();
   GoogleSignin.configure({
@@ -292,8 +291,6 @@ export default function LoginScreen({navigation}) {
           Create an account{' '}
         </TouchableText>
       </View>
-      {LoaderComponent}
-      {ToastComponent}
     </ContainerCenter>
   );
 }

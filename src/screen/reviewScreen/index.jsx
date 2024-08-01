@@ -17,15 +17,15 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../_utils/GlobalStyle';
-import {useToast} from '../../_customHook';
 import {commonServices} from '../../_services/common.service';
+import { useAppContext } from '../../_customContext/AppProvider';
 export default function ReviewScreen() {
   const stars = Array(5).fill('star-outline');
   const width = useRef(new Animated.Value(0)).current;
   const [reviews, setReviews] = useState('');
   const [starCount, setStarCount] = useState(0);
   const [ratingDetails, setRatingDetails] = useState();
-  const [showToast, ToastComponent] = useToast();
+  const { showToast, showLoader, hideLoader } = useAppContext();
   useEffect(() => {
     getAppReviews();
     Animated.timing(width, {
@@ -182,7 +182,6 @@ export default function ReviewScreen() {
           style={{width: '40%'}}
           onPress={handlePostReview}
         />
-        {ToastComponent}
       </ScrollView>
     </RowContainer>
   );

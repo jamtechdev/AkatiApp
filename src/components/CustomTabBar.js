@@ -1,7 +1,7 @@
 // src/components/CustomTabBar.js
 import React from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, Platform} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/MaterialIcons';
 import { Colors } from '../_utils/GlobalStyle';
 
 const CustomTabBar = ({state, descriptors, navigation,}) => {
@@ -30,7 +30,7 @@ const CustomTabBar = ({state, descriptors, navigation,}) => {
           });
         };
 
-        const iconName = route.name === 'Library' ? 'library' : route.name == 'Home' ? 'home' : 'search';
+        const iconName = route.name === 'Library' ? 'menu-book' : route.name == 'Home' ? 'home' : 'search';
  
         return (
           <TouchableOpacity

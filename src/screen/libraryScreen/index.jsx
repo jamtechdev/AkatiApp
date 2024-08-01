@@ -11,25 +11,31 @@ import {
 } from '../../components'
 import {Colors} from '../../_utils/GlobalStyle'
 import {booksService} from '../../_services/book.service'
-import {useToast} from '../../_customHook'
+import { getLanguage } from '../../_store/_reducers/auth'
+import { useSelector } from 'react-redux'
+import { useAppContext } from '../../_customContext/AppProvider'
 
 export default function LibraryScreen () {
-  const [showToast, ToastComponent] = useToast()
+  const { showToast, showLoader, hideLoader } = useAppContext();
+  const language = useSelector(getLanguage);
   const [libraryBooks, setLibraryBooks] = useState()
   const [editMode, setEditMode] = useState(false)
   const [selectedBooks, setSelectedBooks] = useState({})
   const [allSelected, setAllSelected] = useState(false)
 
   useEffect(() => {
+    fetchLibraryBook()
+  }, [language])
+  const fetchLibraryBook = ()=>{
     booksService
-      .getLibraryBooks()
-      .then(res => {
-        setLibraryBooks(res.data.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [])
+    .getLibraryBooks()
+    .then(res => {
+      setLibraryBooks(res.data.data)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
 
   const handleEdit = () => {
     setEditMode(!editMode)
@@ -118,6 +124,9 @@ export default function LibraryScreen () {
           </>
         )}
       </View>
+      {libraryBooks?.length == 0 && (
+         <CustomText>No data found  </CustomText>
+        )}
       <FlatList
         data={libraryBooks}
         renderItem={renderItem}
@@ -125,8 +134,7 @@ export default function LibraryScreen () {
         numColumns={2}
         showsVerticalScrollIndicator={false}
         columnWrapperStyle={styles.row}
-      />
-      {ToastComponent}
+      /> 
     </RowContainer>
   )
 }

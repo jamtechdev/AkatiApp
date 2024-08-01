@@ -15,7 +15,7 @@ import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
 import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
 import {ContainerCenter, CustomText, Button, Input} from '../../components';
 import BackButton from '../../components/core/BackButton.js';
-import {useLoader, useToast} from '../../_customHook';
+import { useAppContext } from '../../_customContext/AppProvider.js';
 
 export default function ForgotScreen({navigation}) {
   const [otp, setOtp] = useState('');
@@ -24,8 +24,7 @@ export default function ForgotScreen({navigation}) {
   const [isVerified, setIsVerified] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [msg, setMsg] = useState('');
-  const [showToast, ToastComponent] = useToast();
-  const [showLoader, hideLoader, LoaderComponent] = useLoader();
+  const { showToast, showLoader, hideLoader } = useAppContext();
   const validationSchema = Yup.object().shape({
     password: Yup.string()
       .required('newPasswordRequired')
@@ -126,7 +125,6 @@ export default function ForgotScreen({navigation}) {
   };
 
   return (
-    <>
       <ContainerCenter>
         <TouchableOpacity
           style={{
@@ -189,9 +187,6 @@ export default function ForgotScreen({navigation}) {
           </View>
         )}
       </ContainerCenter>
-      {ToastComponent}
-      {LoaderComponent}
-    </>
   );
 }
 

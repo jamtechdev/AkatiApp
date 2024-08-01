@@ -24,38 +24,38 @@ export const commonServices = {
 };
 
 async function getLanguage() {
-  return await axiosInstance.get(`${API_URL}/languageList`);
+  return await axiosInstance.get(`/languageList`);
 }
 
 async function setLanguage(data) {
-  return await axiosInstance.post(`${API_URL}/languageUpdate`, data);
+  return await axiosInstance.post(`/languageUpdate`, data);
 }
 
 async function getPrivacyPolicy() {
-  return await axiosInstance.get(`${API_URL}/getPolicyPrivacy`);
+  return await axiosInstance.get(`/getPolicyPrivacy`);
 }
 async function getTermsConditions() {
-  return await axiosInstance.get(`${API_URL}/getTermsAndConditions`);
+  return await axiosInstance.get(`/getTermsAndConditions`);
 }
 
 async function getRechargePlans() {
-  return await axiosInstance.get(`${API_URL}/rechargePlans`);
+  return await axiosInstance.get(`/rechargePlans`);
 }
 async function getTransactionHistory() {
-  return await axiosInstance.get(`${API_URL}/getTransactionHistory`);
+  return await axiosInstance.get(`/getTransactionHistory`);
 }
 
 async function getNotifications() {
-  return await axiosInstance.get(`${API_URL}/getNotificationList`);
+  return await axiosInstance.get(`/getNotificationList`);
 }
 
 async function getHistory() {
-  return await axiosInstance.get(`${API_URL}/books/search-history`);
+  return await axiosInstance.get(`/books/search-history`);
 }
 
 async function removeHistory(data) {
   return await axiosInstance.post(
-    `${API_URL}/books/search-history/remove`,
+    `/books/search-history/remove`,
     data
   );
 }
