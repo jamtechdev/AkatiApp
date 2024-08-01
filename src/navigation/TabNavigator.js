@@ -18,6 +18,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Library"
+        and
         component={LibraryScreen}
         options={{
           header: () => <CustomHeader title="Library" />,
