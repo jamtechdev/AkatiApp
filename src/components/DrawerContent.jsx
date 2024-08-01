@@ -1,11 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import {View, Text, StyleSheet, Image} from 'react-native';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 import logo from '../images/logo.png';
-import { Colors } from '../_utils/GlobalStyle';
+import {Colors} from '../_utils/GlobalStyle';
 const DrawerContent = (props, {navigation}) => {
   return (
-    <DrawerContentScrollView {...props} style={{ backgroundColor: Colors.tertiary}}>
+    <DrawerContentScrollView
+      {...props}
+      style={{backgroundColor: Colors.tertiary}}>
       <View style={styles.drawerHeader}>
         <Image
           source={logo} // Replace with your own image URL
@@ -30,8 +36,8 @@ const styles = StyleSheet.create({
   },
   drawerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: Colors.white
+    fontWeight: 800,
+    color: Colors.white,
   },
   profileImage: {
     width: 80,
