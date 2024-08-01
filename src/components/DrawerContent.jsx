@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../_store/_reducers/auth';
 
 const DrawerContent = props => {
-  const [show, setShow] = useState();
+  const [show, setShow] = useState(false);
   const toggleModel = () => setShow((prev) => !prev);
   const dispatch = useDispatch();
 
@@ -77,7 +77,7 @@ const DrawerContent = props => {
         title="Logout"
         icon={'logout'}
         isActive
-        onPress={toggleModel}
+        onPress={()=>toggleModel()}
       />
        <AlertModal
         visible={show}
