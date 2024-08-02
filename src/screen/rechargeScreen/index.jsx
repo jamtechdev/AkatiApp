@@ -1,6 +1,7 @@
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
+  Button,
   Checkbox,
   CustomText,
   HeadingText,
@@ -44,6 +45,17 @@ export default function RechargeScreen() {
         <CustomText style={{fontWeight: 500, fontSize: 14}}>
           €{item?.recharge_amount}
         </CustomText>
+        <Button
+          title={'Buy Now'}
+          style={{
+            paddingHorzontal: 25,
+            paddingVertical: 5,
+            width: 80,
+          }}
+          textStyle={{
+            fontSize: 12,
+          }}
+        />
       </View>
     );
   };
@@ -75,7 +87,7 @@ const styles = StyleSheet.create({
   card: {
     marginRight: 10,
     width: '45%',
-    height: 140,
+    height: 180,
     borderWidth: 1,
     borderRadius: 10,
     alignItems: 'center',

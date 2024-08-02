@@ -1,8 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import {Colors} from '../_utils/GlobalStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icons from 'react-native-vector-icons/FontAwesome';
+import {useSelector} from 'react-redux';
+import {getAuth} from '../_store/_reducers/auth';
 const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
+  const {avatar} = useSelector(getAuth);
   return (
     <View style={styles.header}>
       {showBack && (
@@ -22,12 +26,29 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
         />
       )}
       <Text style={styles.title}>{title}</Text>
-      <Ionicons
-        name={'notifications'}
-        size={22}
-        color={'white'}
-        onPress={() => navigation.navigate('notification')}
-      />
+
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: 20,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Ionicons
+          name={'notifications'}
+          size={25}
+          color={'white'}
+          onPress={() => navigation.navigate('notification')}
+        />
+        {avatar ? (
+          <Image
+            source={require('../images/avtar.png')}
+            style={{height: 25, width: 25, borderRadius: 50}}
+          />
+        ) : (
+          <Icons name={'user-circle-o'} size={25} color={'white'} />
+        )}
+      </View>
     </View>
   );
 };

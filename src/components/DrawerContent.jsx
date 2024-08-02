@@ -12,6 +12,7 @@ import {Colors} from '../_utils/GlobalStyle';
 import {AlertModal, CustomDrawerItem} from '../components';
 import {useDispatch} from 'react-redux';
 import {logout} from '../_store/_reducers/auth';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const DrawerContent = props => {
   const [show, setShow] = useState(false);
@@ -44,6 +45,10 @@ const DrawerContent = props => {
           style={styles.profileImage}
         />
         <Text style={styles.drawerTitle}>My App</Text>
+        <Icon
+          style={{position: 'absolute', right: 10, top: 10}}
+          size={25}
+          name={'closecircleo'}></Icon>
       </View>
 
       <CustomDrawerItem

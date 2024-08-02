@@ -4,7 +4,7 @@ import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
 
-const Button = ({title, onPress, gradient = true, style}) => {
+const Button = ({title, onPress, gradient = true, style, textStyle}) => {
   if (gradient) {
     return (
       <TouchableOpacity onPress={onPress} style={GlobalStyles.btnTouchable}>
@@ -13,7 +13,7 @@ const Button = ({title, onPress, gradient = true, style}) => {
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
           style={[GlobalStyles.btnPrimary, style]}>
-          <Text style={[GlobalStyles.textWhite, styles.buttonText]}>
+          <Text style={[GlobalStyles.textWhite, styles.buttonText, textStyle]}>
             {title}
           </Text>
         </LinearGradient>
