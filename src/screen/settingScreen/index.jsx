@@ -79,7 +79,7 @@ export default function SettingScreen({navigation}) {
 const styles = StyleSheet.create({
   text: {
     margin: 5,
-    fontSize: 18,
+    fontSize: 14,
     borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 15,

@@ -94,11 +94,13 @@ export default function LibraryScreen({navigation}) {
     return (
       <View style={styles.cardContainer}>
         {editMode && (
-          <Checkbox
-            label=""
-            checked={!!selectedBooks[item.id]}
-            onChange={() => handleSelectBook(item.id)}
-          />
+          <View style={{position: 'absolute', top: 10, left: 10, zIndex: 1000}}>
+            <Checkbox
+              label=""
+              checked={!!selectedBooks[item.id]}
+              onChange={() => handleSelectBook(item.id)}
+            />
+          </View>
         )}
         <Card item={item} />
       </View>
@@ -110,17 +112,26 @@ export default function LibraryScreen({navigation}) {
       <View style={styles.headerRow}>
         <HeadingText>Library Books</HeadingText>
         {libraryBooks?.length !== 0 && (
-          <Button title={editMode ? 'Cancel' : 'Edit'} onPress={handleEdit} />
+          <Button
+            style={{paddingHorizontal: 20, paddingVertical: 10}}
+            title={editMode ? 'Cancel' : 'Edit'}
+            onPress={handleEdit}
+          />
         )}
       </View>
       <View style={styles.headerRow}>
         {editMode && (
           <>
             <Button
+              style={{paddingHorizontal: 20, paddingVertical: 10}}
               title={allSelected ? 'Deselect All' : 'Select All'}
               onPress={handleSelectAll}
             />
-            <Button title={'Remove Books'} onPress={handleDelete} />
+            <Button
+              style={{paddingHorizontal: 20, paddingVertical: 10}}
+              title={'Remove Books'}
+              onPress={handleDelete}
+            />
           </>
         )}
       </View>
@@ -137,6 +148,7 @@ export default function LibraryScreen({navigation}) {
           <Button
             title={'Discover'}
             onPress={() => navigation.navigate('Home')}
+            style={{width: '100%', paddingHorizontal: 50, marginTop: 20}}
           />
         </View>
       )}

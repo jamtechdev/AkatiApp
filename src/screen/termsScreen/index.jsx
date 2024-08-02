@@ -7,10 +7,11 @@ import {
 } from '../../components';
 import {commonServices} from '../../_services/common.service';
 import {ScrollView} from 'react-native';
-import { useAppContext } from '../../_customContext/AppProvider';
+import {useAppContext} from '../../_customContext/AppProvider';
+import {Colors} from '../../_utils/GlobalStyle';
 
 function TermsScreen() {
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showToast, showLoader, hideLoader} = useAppContext();
   const [terms, setTerms] = useState({});
 
   useEffect(() => {
@@ -30,7 +31,9 @@ function TermsScreen() {
     <RowContainer>
       <HeadingText>Terms & Conditions</HeadingText>
       <ScrollView>
-        <CustomText style={{padding: 5}}>{terms?.content}</CustomText>
+        <CustomText style={{paddingVertical: 20, color: Colors.gray}}>
+          {terms?.content}
+        </CustomText>
       </ScrollView>
     </RowContainer>
   );

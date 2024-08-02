@@ -36,18 +36,23 @@ export default function RechargeScreen() {
       <View style={styles.card}>
         <Image source={coin} style={styles.image} />
         <View>
-          <CustomText>{item?.coin_balance} Coins</CustomText>
+          <CustomText
+            style={{fontWeight: 700, fontSize: 16, color: Colors.secondary}}>
+            {item?.coin_balance} Coins
+          </CustomText>
         </View>
-        <CustomText>€{item?.recharge_amount}</CustomText>
+        <CustomText style={{fontWeight: 500, fontSize: 14}}>
+          €{item?.recharge_amount}
+        </CustomText>
       </View>
     );
   };
 
   return (
     <RowContainer>
-    <View style={{ paddingBottom: 20}}>
-     <HeadingText>Recharge</HeadingText>
-    </View>
+      <View style={{paddingBottom: 20}}>
+        <HeadingText>Recharge</HeadingText>
+      </View>
       {!rechargePlans ? (
         <CustomText> Loading</CustomText>
       ) : rechargePlans.length == 0 ? (
@@ -70,7 +75,7 @@ const styles = StyleSheet.create({
   card: {
     marginRight: 10,
     width: '45%',
-    height: 150,
+    height: 140,
     borderWidth: 1,
     borderRadius: 10,
     alignItems: 'center',
