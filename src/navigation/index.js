@@ -12,6 +12,7 @@ import {PrivacyScreen, TermsScreen} from '../screen';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../_store/_reducers/auth';
 import NotificationScreen from '../screen/notificationScreen';
+import ProfileScreen from '../screen/profileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Terms" component={TermsScreen} />
         <Stack.Screen name="Privacy" component={PrivacyScreen} />
         <Stack.Screen name="notification" component={NotificationScreen} />
+        <Stack.Screen name="profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

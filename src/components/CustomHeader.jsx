@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Colors} from '../_utils/GlobalStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/FontAwesome';
@@ -43,7 +43,7 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
             onPress={() => navigation.navigate('notification')}
           />
         </GradientView>
-        <GradientView style={styles.iconButton}>
+        <GradientView style={styles.iconButton} onPress={() => navigation.navigate('profile')} >
           {avatar ? (
             <Image
               source={require('../images/avtar.png')}
