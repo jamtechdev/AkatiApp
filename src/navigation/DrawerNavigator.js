@@ -11,7 +11,7 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       screenOptions={({ navigation, route }) => ({
-        header: () => <CustomHeader title={route.name} navigation={navigation} showDrawer={true} />,
+        header: () => <CustomHeader title={''} navigation={navigation} showDrawer={true} />,
         drawerPosition: 'left',
         drawerType: 'front',
       })}

@@ -55,7 +55,7 @@ const SkeletonLoader = ({isLoading, count = 4, layoutStyle}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 7,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 250,
     backgroundColor: Colors.tertiary,
-    borderRadius: 8,
+    borderRadius: 12,
     overflow: 'hidden',
     padding: 16,
     position: 'relative',

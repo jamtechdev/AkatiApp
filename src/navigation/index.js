@@ -23,7 +23,7 @@ const AppNavigator = () => {
         screenOptions={({navigation, route}) => ({
           header: () => (
             <CustomHeader
-              title={route.name}
+              title={''}
               navigation={navigation}
               showBack={true}
             />

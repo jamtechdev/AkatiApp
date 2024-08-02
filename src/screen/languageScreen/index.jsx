@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Checkbox, HeadingText, RowContainer, TouchableText} from '../../components';
+import {Checkbox, HeadingText, RowContainer, Skeleton, TouchableText} from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAuth, getLanguage, languageSet} from '../../_store/_reducers/auth';
@@ -67,11 +67,16 @@ export default function LanguageScreen() {
       <View style={{paddingBottom: 20}}>
         <HeadingText>Languages </HeadingText>
       </View>
-      <FlatList
+      {languages && languages.length > 0 ? (
+          <FlatList
         data={languages}
         renderItem={renderLanguageItem}
         keyExtractor={(item, index) => index}
       />
+        ):(
+          <Skeleton isLoading={true} isList/>
+        )
+      }
     </RowContainer>
   );
 }

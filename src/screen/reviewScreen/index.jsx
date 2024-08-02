@@ -2,23 +2,23 @@ import {
   View,
   Text,
   StyleSheet,
-  ProgressBarAndroidComponent,
   Animated,
   TextInput,
+  FlatList,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
   CustomStarRating,
   CustomText,
   HeadingText,
   RowContainer,
+  Skeleton,
 } from '../../components';
-import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Colors} from '../../_utils/GlobalStyle';
-import {commonServices} from '../../_services/common.service';
-import {useAppContext} from '../../_customContext/AppProvider';
+import { Colors } from '../../_utils/GlobalStyle';
+import { commonServices } from '../../_services/common.service';
+import { useAppContext } from '../../_customContext/AppProvider';
 
 export default function ReviewScreen() {
   const stars = Array(5).fill('star-outline');
@@ -26,7 +26,7 @@ export default function ReviewScreen() {
   const [reviews, setReviews] = useState('');
   const [starCount, setStarCount] = useState(0);
   const [ratingDetails, setRatingDetails] = useState();
-  const {showToast, showLoader, hideLoader} = useAppContext();
+  const { showToast, showLoader, hideLoader } = useAppContext();
 
   useEffect(() => {
     getAppReviews();
@@ -36,6 +36,7 @@ export default function ReviewScreen() {
       useNativeDriver: false,
     }).start();
   }, []);
+
   const handleRatingChange = newRating => {
     setStarCount(newRating);
     console.log('New Rating:', newRating);
@@ -46,9 +47,6 @@ export default function ReviewScreen() {
       .getAppReview()
       .then(res => {
         const rateData = processReviewData(res.data);
-
-        // setReviewDetails(res.data);
-        // const ratingValue = processReviewData(res.data);
         setRatingDetails(rateData);
       })
       .catch(error => {
@@ -57,7 +55,6 @@ export default function ReviewScreen() {
   };
 
   const processReviewData = data => {
-    // Filter out the required fields
     const filteredData = data.map(review => ({
       id: review.id,
       description: review.description,
@@ -65,21 +62,19 @@ export default function ReviewScreen() {
       user_id: review.user_id,
     }));
 
-    // Calculate total average review point
     const totalStars = filteredData.reduce(
       (total, review) => total + review.star,
       0,
     );
     const avgReviewPoint = totalStars / filteredData.length;
 
-    // Calculate count of all the review points (1-5)
     const reviewCounts = filteredData.reduce((counts, review) => {
       counts[review.star] = (counts[review.star] || 0) + 1;
       return counts;
     }, {});
 
     const reviewCountArray = Array.from(
-      {length: 5},
+      { length: 5 },
       (_, i) => reviewCounts[i + 1] || 0,
     );
     const reviewLength = data.length;
@@ -114,81 +109,100 @@ export default function ReviewScreen() {
         console.log(error);
       });
   };
+
+  const renderItem = ({ item, index }) => (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 15,
+        paddingVertical: 3,
+        marginVertical: 2,
+      }}
+      key={index}
+    >
+      <CustomText style={{ fontSize: 14 }}>{index + 1} Star</CustomText>
+      <View style={styles.containerAni}>
+        <Animated.View
+          style={[
+            styles.bar,
+            { width: (item / ratingDetails.reviewLength) * 200 },
+          ]}
+        />
+      </View>
+      <CustomText style={{ fontSize: 14 }}>{item}</CustomText>
+    </View>
+  );
+
+  const renderHeader = () => (
+    <View>
+      <HeadingText>Reviews & Ratings</HeadingText>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 15,
+          paddingVertical: 5,
+        }}
+      >
+        <CustomText style={styles.totalRate}>
+          {ratingDetails?.avgReviewPoint.toFixed(1) ?? '4.7'}
+        </CustomText>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <CustomStarRating
+            size={18}
+            isDisable={true}
+            rate={parseInt(ratingDetails?.avgReviewPoint)}
+          />
+          <CustomText style={styles.rateText}>Based on 14 ratings</CustomText>
+        </View>
+      </View>
+      {!ratingDetails && (
+        <Skeleton isLoading={true} isLine />
+      )}
+    </View>
+  );
+
   return (
     <RowContainer style={styles.container}>
-      <ScrollView>
-        <HeadingText>Reviews & Ratings</HeadingText>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 15,
-          }}>
-          <CustomText style={styles.totalRate}>
-            {ratingDetails?.avgReviewPoint.toFixed(1) ?? '4.7'}
-          </CustomText>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <CustomStarRating
-              size={18}
-              isDisable={true}
-              rate={parseInt(ratingDetails?.avgReviewPoint)}
-            />
-
-            <CustomText style={styles.rateText}>Based on 14 ratings</CustomText>
-          </View>
-        </View>
-        {ratingDetails &&
-          ratingDetails.reviewCountArray &&
-          ratingDetails.reviewCountArray.map((item, index) => {
-            return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 15,
-                  marginVertical: 2,
-                }}
-                key={index}>
-                <CustomText style={{fontSize: 14}}>{index + 1} Star</CustomText>
-                <View style={styles.containerAni}>
-                  <Animated.View
-                    style={[
-                      styles.bar,
-                      {width: (item / ratingDetails.reviewLength) * 200},
-                    ]}
-                  />
-                </View>
-                <CustomText style={{fontSize: 14}}>{item}</CustomText>
+      <FlatList
+        ListHeaderComponent={renderHeader}
+        data={ratingDetails ? ratingDetails.reviewCountArray : []}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        ListFooterComponent={() => (
+          <View style={{ paddingTop: 20}}>
+            <HeadingText>Add Review</HeadingText>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                gap: 15,
+              }}
+            >
+              <View style={[styles.starView]}>
+                <CustomStarRating
+                  size={30}
+                  onRatingChange={handleRatingChange}
+                  rate={starCount}
+                />
               </View>
-            );
-          })}
-
-        <HeadingText>Add Review</HeadingText>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            gap: 15,
-          }}>
-          <View style={[styles.starView]}>
-            <CustomStarRating
-              size={30}
-              onRatingChange={handleRatingChange}
-              rate={starCount}
-            />
+              <TextInput
+                multiline
+                style={styles.reviewText}
+                placeholder="Enter your review here..."
+                onChangeText={e => setReviews(e)}
+                value={reviews}
+                placeholderTextColor={Colors.white}
+              />
+            </View>
+            <Button title={'Submit'} onPress={handlePostReview} />
           </View>
-          <TextInput
-            multiline
-            style={styles.reviewText}
-            placeholder="Enter your review here..."
-            onChangeText={e => setReviews(e)}
-            value={reviews}
-          />
-        </View>
-        <Button title={'Submit'} onPress={handlePostReview} />
-      </ScrollView>
+        )}
+        showsVerticalScrollIndicator={false}
+      />
     </RowContainer>
   );
 }
@@ -197,7 +211,7 @@ const styles = StyleSheet.create({
   totalRate: {
     color: Colors.gradientReverse,
     fontSize: 50,
-    fontWeight: 600,
+    fontWeight: '600',
   },
   rateText: {
     color: Colors.darkGray,
@@ -226,6 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: '100%',
     height: 100,
+    color: Colors.white,
     paddingHorizontal: 10,
     marginVertical: 5,
   },

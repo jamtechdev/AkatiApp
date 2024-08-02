@@ -7,6 +7,7 @@ import {
   SkeletonLoader,
   CustomStarRating,
   HorizontalScrollView,
+  Skeleton,
 } from '../../components';
 
 export default function DiscoverScreen() {
@@ -42,14 +43,17 @@ export default function DiscoverScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <HeadingText>From Your Library </HeadingText>
+          {/* <Skeleton isLoading={true}  count={3} numColumns={3} isCircleCard/> */}
           <HorizontalScrollView data={data} isCircle={true} />
         </View>
         <View>
           <HeadingText>New In Akati </HeadingText>
+          {/* <Skeleton isLoading={true}  count={2} numColumns={2}/> */}
           <HorizontalScrollView data={data} />
         </View>
         <View>
           <HeadingText>Must Read </HeadingText>
+          {/* <Skeleton isLoading={true}  count={2} numColumns={2}/> */}
           <HorizontalScrollView data={data} />
         </View>
       </ScrollView>

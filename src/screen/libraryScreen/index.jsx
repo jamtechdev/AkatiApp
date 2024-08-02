@@ -8,6 +8,7 @@ import {
   Checkbox,
   Button,
   Card,
+  Skeleton,
 } from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
 import {booksService} from '../../_services/book.service';
@@ -94,7 +95,7 @@ export default function LibraryScreen({navigation}) {
     return (
       <View style={styles.cardContainer}>
         {editMode && (
-          <View style={{position: 'absolute', top: 10, left: 10, zIndex: 1000}}>
+          <View style={styles.overlay}>
             <Checkbox
               label=""
               checked={!!selectedBooks[item.id]}
@@ -102,16 +103,19 @@ export default function LibraryScreen({navigation}) {
             />
           </View>
         )}
-        <Card item={item} />
+        <View style={editMode ? styles.cardWithOverlay : styles.card}>
+          <Card item={item} />
+        </View>
       </View>
     );
   };
+  
 
   return (
     <RowContainer>
       <View style={styles.headerRow}>
         <HeadingText>Library Books</HeadingText>
-        {libraryBooks?.length !== 0 && (
+        {libraryBooks && libraryBooks?.length !== 0 && (
           <Button
             style={{paddingHorizontal: 20, paddingVertical: 10}}
             title={editMode ? 'Cancel' : 'Edit'}
@@ -136,7 +140,9 @@ export default function LibraryScreen({navigation}) {
         )}
       </View>
 
-      {libraryBooks?.length == 0 && (
+      {!libraryBooks ? (
+        <Skeleton isLoading={true} numColumns={2} />
+      ) : libraryBooks.length == 0 ? (
         <View style={styles.noData}>
           <Image
             source={require('../../images/no-book.png')}
@@ -152,15 +158,7 @@ export default function LibraryScreen({navigation}) {
             style={{width: '100%', paddingHorizontal: 50, marginTop: 20}}
           />
         </View>
-      )}
-      <FlatList
-        data={['1', '2']}
-        renderItem={() => <SkeletonLoader isLoading={true} />}
-        keyExtractor={(item, index) => index}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-        columnWrapperStyle={styles.row}
-      />
+        ) : (
       <FlatList
         data={libraryBooks}
         renderItem={renderItem}
@@ -169,10 +167,10 @@ export default function LibraryScreen({navigation}) {
         showsVerticalScrollIndicator={false}
         columnWrapperStyle={styles.row}
       />
+        )}
     </RowContainer>
   );
 }
-
 const styles = StyleSheet.create({
   noData: {
     marginHorizontal: 'auto',
@@ -214,5 +212,26 @@ const styles = StyleSheet.create({
   cardContainer: {
     flex: 1,
     margin: 8,
+    position: 'relative',
   },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    padding:5,
+    borderRadius:10,
+    zIndex: 1000,
+  },
+  card: {
+    overflow: 'hidden',
+  },
+  cardWithOverlay: {
+    overflow: 'hidden',
+    opacity: 0.6, 
+  }
 });

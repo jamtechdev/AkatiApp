@@ -55,13 +55,13 @@ const Toast = ({
       ]}>
       <View style={styles.toastMessage}>
         {type == 'success' && (
-          <Icon size={30} name={'checkmark-circle-outline'} />
+          <Icon size={20}  color={Colors.white} name={'checkmark-circle-outline'} />
         )}
-        {type == 'info' && <Icon size={30} name={'close-circle-outline'} />}
+        {type == 'info' && <Icon size={20} name={'information-circle-outline'} color={Colors.white}/>}
         {type == 'error' && (
-          <Icon size={30} name={'information-circle-outline'} />
+          <Icon size={20} color={Colors.white} name={'close-circle-outline'} />
         )}
-        <Text>{message}</Text>
+        <Text style={styles.message}>{message}</Text>
       </View>
       {description && <Text style={styles.toastMessage}>{description}</Text>}
     </Animated.View>
@@ -76,14 +76,16 @@ const styles = StyleSheet.create({
     right: 0,
     width: '100%',
     margin: 'auto',
-
     padding: 5,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 9999999,
   },
+  message:{
+    color: Colors.white,
+  },
   toastMessage: {
-    color: 'white',
+    color: Colors.white,
     textAlign: 'left',
     flex: 1,
     alignItems: 'center',

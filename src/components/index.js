@@ -14,6 +14,7 @@ export { default as Checkbox } from './core/CheckBox';
 export {default as TextBadge} from './core/Badge'
 export { default as HorizontalScrollView } from './core/HorizontalScrollView'
 export { default as VerticalScrollView } from './core/VerticalScrollView'
+export { default as GradientView } from './core/GradientView'
 
 
 export { default as Divider } from './Divider';
@@ -24,5 +25,6 @@ export { default as CustomHeader } from './CustomHeader';
 export { default as DrawerContent } from './DrawerContent';
 export { default as CustomDrawerItem } from './CustomDrawerItem';
 export {default as SkeletonLoader} from './SkeletonLoader'
+export {default as Skeleton} from './Skeleton'
 export { default as CustomStarRating } from './CustomStarRating'
 

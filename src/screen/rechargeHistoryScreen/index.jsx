@@ -5,6 +5,7 @@ import {
   CustomText,
   HeadingText,
   RowContainer,
+  Skeleton,
   TouchableText,
 } from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
@@ -59,7 +60,7 @@ export default function RechargeHistoryScreen() {
         <HeadingText>Recharge History</HeadingText>
       </View>
       {!histories ? (
-        <CustomText> Loading</CustomText>
+        <Skeleton isLoading={true} isList/>
       ) : histories.length == 0 ? (
         <CustomText> No data Found</CustomText>
       ) : (

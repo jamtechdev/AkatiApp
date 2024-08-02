@@ -9,10 +9,10 @@ import {
 } from '@react-navigation/drawer';
 import logo from '../images/logo.png';
 import {Colors} from '../_utils/GlobalStyle';
-import {AlertModal, CustomDrawerItem} from '../components';
+import {AlertModal, CustomDrawerItem, GradientView} from '../components';
 import {useDispatch} from 'react-redux';
 import {logout} from '../_store/_reducers/auth';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icons from 'react-native-vector-icons/FontAwesome';
 
 const DrawerContent = props => {
   const [show, setShow] = useState(false);
@@ -39,18 +39,21 @@ const DrawerContent = props => {
     <DrawerContentScrollView
       {...props}
       style={{backgroundColor: Colors.tertiary}}>
+
+      <View style={{position: 'absolute', right: 0, top: 20, zIndex: 999}}>
+        <GradientView style={styles.rightButton} onPress={()=>props.navigation.toggleDrawer() }>
+          <Icons size={20} color={Colors.white} name={'indent'}></Icons>
+        </GradientView>
+      </View>
+
       <View style={styles.drawerHeader}>
         <Image
           source={logo} // Replace with your own image URL
           style={styles.profileImage}
         />
-        <Text style={styles.drawerTitle}>My App</Text>
-        <Icon
-          style={{position: 'absolute', right: 10, top: 10}}
-          size={25}
-          name={'closecircleo'}></Icon>
+        <Text style={styles.drawerTitle}>Akati</Text>
       </View>
-
+ 
       <CustomDrawerItem
         title="Discover"
         icon={'explore'}
@@ -125,6 +128,12 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     marginBottom: 10,
+  },
+  rightButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderBottomLeftRadius: 8,
+    borderTopLeftRadius: 8,
   },
 });
 

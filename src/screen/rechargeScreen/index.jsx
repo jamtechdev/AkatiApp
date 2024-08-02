@@ -6,6 +6,7 @@ import {
   CustomText,
   HeadingText,
   RowContainer,
+  Skeleton,
   TouchableText,
 } from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
@@ -66,7 +67,7 @@ export default function RechargeScreen() {
         <HeadingText>Recharge</HeadingText>
       </View>
       {!rechargePlans ? (
-        <CustomText> Loading</CustomText>
+        <Skeleton isLoading={true} numColumns={2} isCard/>
       ) : rechargePlans.length == 0 ? (
         <CustomText> No data Found</CustomText>
       ) : (
