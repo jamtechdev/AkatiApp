@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Colors} from '../_utils/GlobalStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/FontAwesome';
@@ -41,12 +41,16 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
           onPress={() => navigation.navigate('notification')}
         />
         {avatar ? (
-          <Image
-            source={require('../images/avtar.png')}
-            style={{height: 25, width: 25, borderRadius: 50}}
-          />
+          <TouchableOpacity onPress={() => navigation.navigate('profile')}>
+            <Image
+              source={require('../images/avtar.png')}
+              style={{height: 25, width: 25, borderRadius: 50}}
+            />
+          </TouchableOpacity>
         ) : (
-          <Icons name={'user-circle-o'} size={25} color={'white'} />
+          <TouchableOpacity onPress={() => navigation.navigate('profile')}>
+            <Icons name={'user-circle-o'} size={25} color={'white'} />
+          </TouchableOpacity>
         )}
       </View>
     </View>
