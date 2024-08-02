@@ -135,6 +135,7 @@ export default function LibraryScreen({navigation}) {
           </>
         )}
       </View>
+
       {libraryBooks?.length == 0 && (
         <View style={styles.noData}>
           <Image
@@ -152,6 +153,14 @@ export default function LibraryScreen({navigation}) {
           />
         </View>
       )}
+      <FlatList
+        data={['1', '2']}
+        renderItem={() => <SkeletonLoader isLoading={true} />}
+        keyExtractor={(item, index) => index}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+        columnWrapperStyle={styles.row}
+      />
       <FlatList
         data={libraryBooks}
         renderItem={renderItem}
