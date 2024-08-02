@@ -3,6 +3,7 @@ import React from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../_utils/GlobalStyle';
+import LinearGradient from 'react-native-linear-gradient';
 
 const CustomTabBar = ({state, descriptors, navigation}) => {
   return (
@@ -47,18 +48,38 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
               onPress={onPress}
               onLongPress={onLongPress}
               style={styles.tab}>
-              <View style={isFocused ? styles.activeTab : styles.inactiveTab}>
-                <Ionicons
-                  name={iconName}
-                  size={22}
-                  color={isFocused ? 'white' : 'gray'}
-                />
-                {/* {isFocused && (
+              {isFocused ? (
+                <LinearGradient
+                  colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 1}}
+                  style={styles.activeTab}>
+                    <Ionicons
+                      name={iconName}
+                      size={22}
+                      color={'white'}
+                    />
+                    {/* {isFocused && (
                 <Text style={styles.activeLabel}>
                   {route.name}
                 </Text>
               )} */}
-              </View>
+                </LinearGradient>
+              ) : (
+                  <View
+                    style={styles.inactiveTab}>
+                    <Ionicons
+                      name={iconName}
+                      size={22}
+                      color={'gray'}
+                    />
+                    {/* {isFocused && (
+                <Text style={styles.activeLabel}>
+                  {route.name}
+                </Text>
+              )} */}
+                  </View>
+              )}
             </TouchableOpacity>
           );
         })}
