@@ -15,7 +15,7 @@ import {getLanguage} from '../../_store/_reducers/auth';
 import {useSelector} from 'react-redux';
 import {useAppContext} from '../../_customContext/AppProvider';
 
-export default function LibraryScreen() {
+export default function LibraryScreen({navigation}) {
   const {showToast, showLoader, hideLoader} = useAppContext();
   const language = useSelector(getLanguage);
   const [libraryBooks, setLibraryBooks] = useState();
@@ -108,7 +108,7 @@ export default function LibraryScreen() {
   return (
     <RowContainer>
       <View style={styles.headerRow}>
-        <HeadingText>Library</HeadingText>
+        <HeadingText>Library Books</HeadingText>
         {libraryBooks?.length !== 0 && (
           <Button title={editMode ? 'Cancel' : 'Edit'} onPress={handleEdit} />
         )}
@@ -130,7 +130,14 @@ export default function LibraryScreen() {
             source={require('../../images/no-book.png')}
             style={styles.imgData}
           />
-          <CustomText>No Data Found...</CustomText>
+          <CustomText>
+            You have no books in your library yet. Let's embark together on the
+            journey...
+          </CustomText>
+          <Button
+            title={'Discover'}
+            onPress={() => navigation.navigate('Home')}
+          />
         </View>
       )}
       <FlatList
@@ -147,19 +154,22 @@ export default function LibraryScreen() {
 
 const styles = StyleSheet.create({
   noData: {
-    textAlign: 'center',
-    width: '100%',
-    height: '80%',
+    marginHorizontal: 'auto',
+    width: '80%',
+    height: '70%',
     backgroundColor: Colors.tertiary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
   },
   imgData: {
-    height: '50%',
-    width: '100%',
-    marginHorizontal: 5,
+    height: '60%',
+    width: '90%',
+    // marginHorizontal: 5,
   },
   container: {
     flex: 1,
-    padding: 16,
+    padding: 10,
     backgroundColor: Colors.background,
   },
   headerRow: {
