@@ -4,6 +4,7 @@ import {
   CustomText,
   HeadingText,
   RowContainer,
+  SkeletonLoader,
   TextBadge,
 } from '../../components';
 import { TextInput } from 'react-native-gesture-handler';
@@ -26,6 +27,7 @@ export default function SearchScreen() {
         </View>
       </View>
       <ScrollView>
+      <SkeletonLoader isLoading />
       <View>
         <HeadingText>Select Book Categories</HeadingText>
         <View style={styles.categoryContainer}>
