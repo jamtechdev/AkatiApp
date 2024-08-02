@@ -128,8 +128,9 @@ export default function ReviewScreen() {
           <CustomText style={styles.totalRate}>
             {ratingDetails?.avgReviewPoint.toFixed(1) ?? '4.7'}
           </CustomText>
-          <View>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <CustomStarRating
+              size={18}
               isDisable={true}
               rate={parseInt(ratingDetails?.avgReviewPoint)}
             />
@@ -147,9 +148,10 @@ export default function ReviewScreen() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   gap: 15,
+                  marginVertical: 2,
                 }}
                 key={index}>
-                <CustomText>{index + 1} Star</CustomText>
+                <CustomText style={{fontSize: 14}}>{index + 1} Star</CustomText>
                 <View style={styles.containerAni}>
                   <Animated.View
                     style={[
@@ -158,7 +160,7 @@ export default function ReviewScreen() {
                     ]}
                   />
                 </View>
-                <CustomText>{item}</CustomText>
+                <CustomText style={{fontSize: 14}}>{item}</CustomText>
               </View>
             );
           })}
@@ -167,11 +169,12 @@ export default function ReviewScreen() {
         <View
           style={{
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             gap: 15,
           }}>
-          <View style={[styles.starView, {margin: 5}]}>
+          <View style={[styles.starView]}>
             <CustomStarRating
+              size={30}
               onRatingChange={handleRatingChange}
               rate={starCount}
             />
@@ -193,21 +196,24 @@ export default function ReviewScreen() {
 const styles = StyleSheet.create({
   totalRate: {
     color: Colors.gradientReverse,
-    fontSize: 60,
+    fontSize: 50,
+    fontWeight: 600,
   },
   rateText: {
     color: Colors.darkGray,
+    fontSize: 14,
   },
   starView: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     gap: 5,
+    marginTop: 20,
   },
   containerAni: {
     height: 10,
     width: 200,
-    backgroundColor: 'lightgray',
+    backgroundColor: Colors.tertiary,
     borderRadius: 5,
   },
   bar: {
@@ -218,7 +224,7 @@ const styles = StyleSheet.create({
   reviewText: {
     backgroundColor: Colors.tertiary,
     borderRadius: 8,
-    width: '80%',
+    width: '100%',
     height: 100,
     paddingHorizontal: 10,
     marginVertical: 5,

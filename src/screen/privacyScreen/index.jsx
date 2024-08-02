@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {CustomText, HeadingText, RowContainer} from '../../components';
 import {ScrollView} from 'react-native';
 import {commonServices} from '../../_services/common.service';
-import { useAppContext } from '../../_customContext/AppProvider';
+import {useAppContext} from '../../_customContext/AppProvider';
+import {Colors} from '../../_utils/GlobalStyle';
 
 function PrivacyScreen() {
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showLoader, hideLoader} = useAppContext();
   const [policy, setPolicy] = useState({});
 
   useEffect(() => {
@@ -24,7 +25,9 @@ function PrivacyScreen() {
     <RowContainer>
       <HeadingText>Privacy & Policy</HeadingText>
       <ScrollView>
-        <CustomText style={{padding: 5}}>{policy?.content}</CustomText>
+        <CustomText style={{paddingVertical: 20, color: Colors.gray}}>
+          {policy?.content}
+        </CustomText>
       </ScrollView>
     </RowContainer>
   );

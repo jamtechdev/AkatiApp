@@ -1,10 +1,10 @@
 // Card.js
-import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
-import FastImage from 'react-native-fast-image'
-import LinearGradient from 'react-native-linear-gradient'
-import {Colors} from '../../_utils/GlobalStyle'
-import {IMAGE_API_URL} from '../../_constant'
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import LinearGradient from 'react-native-linear-gradient';
+import {Colors} from '../../_utils/GlobalStyle';
+import {IMAGE_API_URL} from '../../_constant';
 
 const Card = ({item}) => {
   return (
@@ -31,15 +31,15 @@ const Card = ({item}) => {
         </View>
       </LinearGradient>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   card: {
     marginRight: 10,
-    width: 180,
+    width: '100%',
     height: 250,
-    borderRadius: 20,
+    borderRadius: 10,
     overflow: 'hidden',
   },
   cardImage: {
@@ -73,6 +73,6 @@ const styles = StyleSheet.create({
     // Ensure text is truncated properly
     overflow: 'hidden',
   },
-})
+});
 
-export default Card
+export default Card;

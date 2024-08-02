@@ -7,6 +7,7 @@ const CustomStarRating = ({
   onRatingChange,
   style,
   isDisable = false,
+  size = 20,
 }) => {
   const [rating, setRating] = useState(rate);
 
@@ -29,7 +30,7 @@ const CustomStarRating = ({
           activeOpacity={0.7}>
           <Icon
             name={index < rating ? 'star' : 'star-outline'}
-            size={30}
+            size={size}
             color={index < rating ? 'gold' : 'gray'}
             style={styles.star}
           />

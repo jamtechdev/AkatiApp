@@ -29,25 +29,35 @@ export default function RechargeHistoryScreen() {
   const renderHistoriesItem = ({item}) => {
     return (
       <View style={styles.ListContainer}>
-        <Image source={coin} style={styles.image} />
-        <View>
-        <CustomText>{item?.coins} Coins</CustomText>
-        {/* <CustomText>{new Date(item?.created_at).toLocaleString()}</CustomText> */}
+        <View style={styles.innerContainer}>
+          <Image source={coin} style={styles.image} />
+          <View>
+            <CustomText style={{fontWeight: 700}}>
+              {item?.coins} Coins
+            </CustomText>
+            {/* <CustomText>{new Date(item?.created_at).toLocaleString()}</CustomText> */}
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <CustomText style={{fontSize: 12, color: Colors.gray}}>
+                TXN ID :{' '}
+              </CustomText>
+              <CustomText style={{fontSize: 12}}>
+                {item?.transaction_id}{' '}
+              </CustomText>
+            </View>
+          </View>
         </View>
-        <View>
-        <CustomText>Transaction ID :  </CustomText>
-        <CustomText>{item?.transaction_id} </CustomText>
-        </View>
-        <CustomText>€{item?.amount}</CustomText>
+        <CustomText style={{marginRight: 10, color: Colors.secondary}}>
+          €{item?.amount}
+        </CustomText>
       </View>
     );
   };
 
   return (
     <RowContainer>
-        <View style={{ paddingBottom: 20}}>
-     <HeadingText>Recharge History</HeadingText>
-    </View>
+      <View style={{paddingBottom: 20}}>
+        <HeadingText>Recharge History</HeadingText>
+      </View>
       {!histories ? (
         <CustomText> Loading</CustomText>
       ) : histories.length == 0 ? (
@@ -75,6 +85,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     alignItems: 'center',
     marginVertical: 10,
+    gap: 10,
+  },
+  innerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
   },
   image: {
     width: 70,
