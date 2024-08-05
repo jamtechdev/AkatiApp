@@ -9,6 +9,7 @@ import {
   HorizontalScrollView,
   Skeleton,
 } from '../../components';
+import {booksService} from '../../_services/book.service';
 
 export default function DiscoverScreen() {
   const data = [
@@ -38,23 +39,96 @@ export default function DiscoverScreen() {
     },
   ];
 
+  const [newBooks, setNewBooks] = useState();
+  const [mustReadBooks, setMustReadBooks] = useState();
+  const [libraryBooks, setLibrarybooks] = useState();
+  const [alsoLikeBooks, setAlsoLikeBooks] = useState();
+  const [categorybook, setCategorybook] = useState([]);
+
+  useEffect(() => {
+    booksService
+      .getBookCategory()
+      .then(res => {
+        setCategorybook(res.data.category_List);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    booksService
+      .getLibraryBooks()
+      .then(res => {
+        setLibrarybooks(res.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    booksService
+      .getNewBooksList()
+      .then(res => {
+        setNewBooks(res.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    booksService
+      .getMustReadBooks()
+      .then(res => {
+        setMustReadBooks(res.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    booksService
+      .getAlsoLikeBooks()
+      .then(res => {
+        setAlsoLikeBooks(res.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
   return (
     <RowContainer>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <HeadingText>From Your Library </HeadingText>
-          {/* <Skeleton isLoading={true}  count={3} numColumns={3} isCircleCard/> */}
-          <HorizontalScrollView data={data} isCircle={true} />
+          <Skeleton isLoading={true} count={3} numColumns={3} isCircleCard />
+          <HorizontalScrollView data={libraryBooks} isCircle={true} />
         </View>
         <View>
           <HeadingText>New In Akati </HeadingText>
           {/* <Skeleton isLoading={true}  count={2} numColumns={2}/> */}
-          <HorizontalScrollView data={data} />
+          <HorizontalScrollView data={newBooks} />
         </View>
         <View>
           <HeadingText>Must Read </HeadingText>
           {/* <Skeleton isLoading={true}  count={2} numColumns={2}/> */}
-          <HorizontalScrollView data={data} />
+          <HorizontalScrollView data={mustReadBooks} />
+        </View>
+        <View>
+          <HeadingText>You may also like</HeadingText>
+          {/* <Skeleton isLoading={true}  count={2} numColumns={2}/> */}
+          <HorizontalScrollView data={alsoLikeBooks} />
+        </View>
+        <View>
+          {categorybook?.length === 0 ? null : !categorybook?.length ? (
+            <Text>Loading...</Text>
+          ) : (
+            categorybook
+              .filter(
+                category =>
+                  category.data &&
+                  category.data.length > 0 &&
+                  category.title != 'Must Read',
+              )
+              .map((category, index) => (
+                <View key={index} className="my-4">
+                  <HeadingText>{category.title}</HeadingText>
+
+                  <HorizontalScrollView data={category.data} />
+                </View>
+              ))
+          )}
         </View>
       </ScrollView>
     </RowContainer>

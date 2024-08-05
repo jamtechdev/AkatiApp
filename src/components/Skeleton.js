@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
   isCircleCard: {
     width: 100,
     height: 100,
-    borderWidth: 1,
-    borderColor: Colors.secondary,
+    // borderWidth: 1,
+    // borderColor: Colors.secondary,
     borderRadius: 50,
     padding: 5,
     justifyContent: 'center',
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
   },
   isCard: {
     height: 180,
-    borderColor: Colors.secondary,
-    borderWidth: 1,
+    // borderColor: Colors.secondary,
+    // borderWidth: 1,
   },
   isList: {
     height: 55,

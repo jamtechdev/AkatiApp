@@ -66,7 +66,7 @@ export default function SearchScreen() {
           <HeadingText>Select Book Categories</HeadingText>
           <View style={styles.categoryContainer}>
             {categories.map((category, index) => (
-              <Button
+              <TextBadge
                 key={index}
                 title={category}
                 onPress={() => {
@@ -74,9 +74,6 @@ export default function SearchScreen() {
                   handleSearch();
                 }}
               />
-              // <TextBadge
-
-              // />
             ))}
           </View>
         </View>
@@ -84,7 +81,7 @@ export default function SearchScreen() {
           <HeadingText>Hot search</HeadingText>
           <View style={styles.categoryContainer}>
             {categories.map((category, index) => (
-              <Button
+              <TextBadge
                 key={index}
                 title={category}
                 onPress={() => {

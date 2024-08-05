@@ -6,9 +6,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Colors} from '../../_utils/GlobalStyle';
 import {IMAGE_API_URL} from '../../_constant';
 
-const Card = ({item}) => {
+const Card = ({item, style}) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       <View style={styles.cardImage}>
         {item.cover_image && (
           <FastImage
