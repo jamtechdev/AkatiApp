@@ -11,3 +11,4 @@ export {default as LanguageScreen} from './languageScreen';
 export {default as PrivacyScreen} from './privacyScreen';
 export {default as RechargeHistoryScreen} from './rechargeHistoryScreen';
 export {default as RechargeScreen} from './rechargeScreen';
+export {default as BookDetailsScreen} from './bookDetailsScreen';

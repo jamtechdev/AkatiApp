@@ -25,7 +25,7 @@ const Button = ({title, onPress, gradient = true, style, textStyle}) => {
     <TouchableOpacity
       onPress={onPress}
       style={[GlobalStyles.btnPrimary, style]}>
-      <Text style={[GlobalStyles.textWhite, styles.buttonText]}>{title}</Text>
+      <Text style={[GlobalStyles.textWhite, styles.buttonText,textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 };

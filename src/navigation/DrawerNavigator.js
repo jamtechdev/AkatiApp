@@ -1,7 +1,7 @@
 // src/navigation/DrawerNavigator.js
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { SettingsScreen, ReviewScreen, SearchScreen, LanguageScreen, RechargeHistoryScreen, RechargeScreen } from '../screen'; // Add your drawer screens here
+import { SettingsScreen, ReviewScreen, SearchScreen, LanguageScreen, RechargeHistoryScreen, RechargeScreen, BookDetailsScreen } from '../screen'; // Add your drawer screens here
 import { DrawerContent, CustomHeader } from '../components';
 import TabNavigator from './TabNavigator';
 

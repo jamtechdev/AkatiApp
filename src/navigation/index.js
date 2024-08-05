@@ -8,7 +8,7 @@ import TabNavigator from './TabNavigator';
 import {StatusBar} from 'react-native';
 import {CustomHeader, DrawerContent} from '../components';
 import DrawerNavigator from './DrawerNavigator';
-import {PrivacyScreen, TermsScreen} from '../screen';
+import {BookDetailsScreen, PrivacyScreen, TermsScreen} from '../screen';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../_store/_reducers/auth';
 import NotificationScreen from '../screen/notificationScreen';
@@ -45,6 +45,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Privacy" component={PrivacyScreen} />
         <Stack.Screen name="notification" component={NotificationScreen} />
         <Stack.Screen name="profile" component={ProfileScreen} />
+        <Stack.Screen name="BookDetails" component={BookDetailsScreen}    options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

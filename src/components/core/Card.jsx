@@ -1,13 +1,15 @@
 // Card.js
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import {Colors} from '../../_utils/GlobalStyle';
 import {IMAGE_API_URL} from '../../_constant';
-
+import { useNavigation } from '@react-navigation/native';
 const Card = ({item}) => {
+  const navigation = useNavigation();
   return (
+    <TouchableOpacity onPress={()=>navigation.navigate('BookDetails') }>
     <View style={styles.card}>
       <View style={styles.cardImage}>
         {item.cover_image && (
@@ -31,6 +33,7 @@ const Card = ({item}) => {
         </View>
       </LinearGradient>
     </View>
+    </TouchableOpacity>
   );
 };
 

@@ -27,4 +27,5 @@ export { default as CustomDrawerItem } from './CustomDrawerItem';
 export {default as SkeletonLoader} from './SkeletonLoader'
 export {default as Skeleton} from './Skeleton'
 export { default as CustomStarRating } from './CustomStarRating'
+export { default as TabSwitcher } from './TabSwitcher'
 
