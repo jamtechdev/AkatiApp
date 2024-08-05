@@ -1,9 +1,19 @@
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import React from 'react';
 import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Button,
+  FlatList,
+} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Card,
   CustomText,
   GradientView,
   HeadingText,
+  HorizontalScrollView,
   RowContainer,
   SkeletonLoader,
   TextBadge,
@@ -11,6 +21,7 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {booksService} from '../../_services/book.service';
 
 const categories = [
   'Happy',
@@ -24,16 +35,30 @@ const categories = [
 ];
 
 export default function SearchScreen() {
+  const [searchTerms, setSearchTerms] = useState('');
+  const [searchCategory, setSearchCategory] = useState('');
+  const [foundItems, setFoundItems] = useState();
+  const handleSearch = () => {
+    console.log('object');
+    booksService
+      .searchBooks(searchTerms, searchCategory)
+      .then(res => {
+        setFoundItems(res.data.data);
+      })
+      .catch(err => console.log(err));
+  };
   return (
     <RowContainer>
       <View>
-        <GradientView style={styles.searchIcon}>
+        <GradientView onPress={handleSearch}>
           <Icon size={25} color={Colors.white} name={'search'} />
         </GradientView>
+
         <TextInput
           placeholder="Which book would you like to read today..."
           style={styles.searchBar}
           placeholderTextColor={Colors.darkGray}
+          onChangeText={e => setSearchTerms(e)}
         />
       </View>
       <ScrollView>
@@ -41,7 +66,17 @@ export default function SearchScreen() {
           <HeadingText>Select Book Categories</HeadingText>
           <View style={styles.categoryContainer}>
             {categories.map((category, index) => (
-              <TextBadge key={index} text={category} />
+              <Button
+                key={index}
+                title={category}
+                onPress={() => {
+                  setSearchCategory(category);
+                  handleSearch();
+                }}
+              />
+              // <TextBadge
+
+              // />
             ))}
           </View>
         </View>
@@ -49,7 +84,14 @@ export default function SearchScreen() {
           <HeadingText>Hot search</HeadingText>
           <View style={styles.categoryContainer}>
             {categories.map((category, index) => (
-              <TextBadge key={index} text={category} />
+              <Button
+                key={index}
+                title={category}
+                onPress={() => {
+                  setSearchCategory(category);
+                  handleSearch();
+                }}
+              />
             ))}
           </View>
         </View>
@@ -75,6 +117,19 @@ export default function SearchScreen() {
             ))}
           </View>
         </View>
+        {foundItems && (
+          <View>
+            <HeadingText>Search Results </HeadingText>
+            <FlatList
+              data={foundItems}
+              renderItem={({item}) => <Card item={item} />}
+              keyExtractor={(item, index) => index}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+              columnWrapperStyle={styles.row}
+            />
+          </View>
+        )}
       </ScrollView>
     </RowContainer>
   );
@@ -119,5 +174,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.darkGray,
     borderRadius: 5,
+  },
+  row: {
+    justifyContent: 'space-between',
   },
 });

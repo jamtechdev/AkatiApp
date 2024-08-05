@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Button,
   CustomStarRating,
@@ -16,9 +16,9 @@ import {
   Skeleton,
 } from '../../components';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../_utils/GlobalStyle';
-import { commonServices } from '../../_services/common.service';
-import { useAppContext } from '../../_customContext/AppProvider';
+import {Colors} from '../../_utils/GlobalStyle';
+import {commonServices} from '../../_services/common.service';
+import {useAppContext} from '../../_customContext/AppProvider';
 
 export default function ReviewScreen() {
   const stars = Array(5).fill('star-outline');
@@ -26,7 +26,7 @@ export default function ReviewScreen() {
   const [reviews, setReviews] = useState('');
   const [starCount, setStarCount] = useState(0);
   const [ratingDetails, setRatingDetails] = useState();
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showToast, showLoader, hideLoader} = useAppContext();
 
   useEffect(() => {
     getAppReviews();
@@ -74,7 +74,7 @@ export default function ReviewScreen() {
     }, {});
 
     const reviewCountArray = Array.from(
-      { length: 5 },
+      {length: 5},
       (_, i) => reviewCounts[i + 1] || 0,
     );
     const reviewLength = data.length;
@@ -110,7 +110,7 @@ export default function ReviewScreen() {
       });
   };
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}) => (
     <View
       style={{
         flexDirection: 'row',
@@ -120,24 +120,23 @@ export default function ReviewScreen() {
         paddingVertical: 3,
         marginVertical: 2,
       }}
-      key={index}
-    >
-      <CustomText style={{ fontSize: 14 }}>{index + 1} Star</CustomText>
+      key={index}>
+      <CustomText style={{fontSize: 14}}>{index + 1} Star</CustomText>
       <View style={styles.containerAni}>
         <Animated.View
           style={[
             styles.bar,
-            { width: (item / ratingDetails.reviewLength) * 200 },
+            {width: (item / ratingDetails.reviewLength) * 200},
           ]}
         />
       </View>
-      <CustomText style={{ fontSize: 14 }}>{item}</CustomText>
+      <CustomText style={{fontSize: 14}}>{item}</CustomText>
     </View>
   );
 
   const renderHeader = () => (
     <View>
-      <HeadingText>Reviews & Ratings</HeadingText>
+      <HeadingText>App Reviews & Ratings</HeadingText>
       <View
         style={{
           flexDirection: 'row',
@@ -145,12 +144,11 @@ export default function ReviewScreen() {
           alignItems: 'center',
           gap: 15,
           paddingVertical: 5,
-        }}
-      >
+        }}>
         <CustomText style={styles.totalRate}>
           {ratingDetails?.avgReviewPoint.toFixed(1) ?? '4.7'}
         </CustomText>
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <CustomStarRating
             size={18}
             isDisable={true}
@@ -159,9 +157,7 @@ export default function ReviewScreen() {
           <CustomText style={styles.rateText}>Based on 14 ratings</CustomText>
         </View>
       </View>
-      {!ratingDetails && (
-        <Skeleton isLoading={true} isLine />
-      )}
+      {!ratingDetails && <Skeleton isLoading={true} isLine />}
     </View>
   );
 
@@ -173,15 +169,14 @@ export default function ReviewScreen() {
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={() => (
-          <View style={{ paddingTop: 20}}>
+          <View style={{paddingTop: 20}}>
             <HeadingText>Add Review</HeadingText>
             <View
               style={{
                 justifyContent: 'center',
                 alignItems: 'flex-start',
                 gap: 15,
-              }}
-            >
+              }}>
               <View style={[styles.starView]}>
                 <CustomStarRating
                   size={30}
@@ -194,7 +189,6 @@ export default function ReviewScreen() {
                 style={styles.reviewText}
                 placeholder="Enter your review here..."
                 onChangeText={e => setReviews(e)}
-                value={reviews}
                 placeholderTextColor={Colors.white}
               />
             </View>
