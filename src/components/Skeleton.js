@@ -1,6 +1,5 @@
-import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, Dimensions, Animated, FlatList} from 'react-native';
-import {Colors} from '../_utils/GlobalStyle';
+import React from 'react';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {SkeletonLoader} from '../components';
 
 const Skeleton = ({

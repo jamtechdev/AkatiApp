@@ -92,18 +92,33 @@ export default function DiscoverScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <HeadingText>From Your Library </HeadingText>
-          <Skeleton isLoading={true} count={3} numColumns={3} isCircleCard />
-          <HorizontalScrollView data={libraryBooks} isCircle={true} />
+          {!libraryBooks ? (
+            <Skeleton isLoading={true} count={3} numColumns={3} isCircleCard />
+          ) : libraryBooks.length == 0 ? (
+            <Text>No books in your library</Text>
+          ) : (
+            <HorizontalScrollView data={libraryBooks} isCircle={true} />
+          )}
         </View>
         <View>
           <HeadingText>New In Akati </HeadingText>
-          {/* <Skeleton isLoading={true}  count={2} numColumns={2}/> */}
-          <HorizontalScrollView data={newBooks} />
+          {!newBooks ? (
+            <Skeleton isLoading={true} count={3} numColumns={3} />
+          ) : newBooks.length == 0 ? (
+            <Text>No data found</Text>
+          ) : (
+            <HorizontalScrollView data={newBooks} />
+          )}
         </View>
         <View>
           <HeadingText>Must Read </HeadingText>
-          {/* <Skeleton isLoading={true}  count={2} numColumns={2}/> */}
-          <HorizontalScrollView data={mustReadBooks} />
+          {!mustReadBooks ? (
+            <Skeleton isLoading={true} count={3} numColumns={3} />
+          ) : mustReadBooks.length == 0 ? (
+            <Text>No data found</Text>
+          ) : (
+            <HorizontalScrollView data={mustReadBooks} />
+          )}
         </View>
         <View>
           <HeadingText>You may also like</HeadingText>
@@ -111,8 +126,10 @@ export default function DiscoverScreen() {
           <HorizontalScrollView data={alsoLikeBooks} />
         </View>
         <View>
-          {categorybook?.length === 0 ? null : !categorybook?.length ? (
-            <Text>Loading...</Text>
+          {categorybook?.length === 0 ? (
+            <Text>No data found</Text>
+          ) : !categorybook?.length ? (
+            <Skeleton isLoading={true} count={3} numColumns={3} />
           ) : (
             categorybook
               .filter(

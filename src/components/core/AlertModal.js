@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Modal,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import {View, Modal, Image, StyleSheet} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import {Button, CustomText} from '../../components';
 

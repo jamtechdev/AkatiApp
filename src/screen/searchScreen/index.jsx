@@ -1,21 +1,10 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Button,
-  FlatList,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
 import React, {useState} from 'react';
 import {
   Card,
-  CustomText,
   GradientView,
   HeadingText,
-  HorizontalScrollView,
   RowContainer,
-  SkeletonLoader,
   TextBadge,
 } from '../../components';
 import {TextInput} from 'react-native-gesture-handler';
