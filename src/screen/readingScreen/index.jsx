@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   Button,
   CustomText,
+  GradientView,
   HeadingText,
   RowContainer,
   TouchableText,
@@ -12,8 +13,9 @@ import {getAuth} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
+import Icons from 'react-native-vector-icons/FontAwesome';
 
-function ReadingScreen({route}) {
+function ReadingScreen({navigation, route}) {
   const {params} = route;
   const {coins} = useSelector(getAuth);
   const [bookDetails, setBookDetails] = useState();
@@ -126,7 +128,7 @@ function ReadingScreen({route}) {
           toggleModel();
           return;
         }
-        console.log(res);
+
         const bookData = {
           book_id: bookDetails.id,
           language: bookDetails.BookDetails.lng_id,
@@ -143,7 +145,16 @@ function ReadingScreen({route}) {
   };
   return (
     <RowContainer>
-      <HeadingText>Reading</HeadingText>
+      <View style={{flexDirection: 'row', gap: 50}}>
+        <GradientView
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <Icons name={'long-arrow-left'} size={20} color={'white'} />
+        </GradientView>
+        <HeadingText>
+          {bookDetails?.BookDetails && bookDetails?.BookDetails?.title}
+        </HeadingText>
+      </View>
       <View style={styles.chapterNum}>
         <TouchableText onPress={handlePrevChapter}>Prev</TouchableText>
         <CustomText>
@@ -176,5 +187,14 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     marginVertical: 10,
     borderRadius: 10,
+  },
+  backButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    // position: 'absolute',
+    width: 50,
+    marginTop: 20,
   },
 });
