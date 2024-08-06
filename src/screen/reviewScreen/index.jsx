@@ -151,7 +151,6 @@ export default function ReviewScreen() {
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <CustomStarRating
             size={18}
-            isDisable={true}
             rate={ratingDetails?.avgReviewPoint.toFixed(1)}
           />
           <CustomText style={styles.rateText}>Based on {ratingDetails?.reviewLength} ratings</CustomText>
@@ -182,6 +181,7 @@ export default function ReviewScreen() {
                   size={30}
                   onRatingChange={handleRatingChange}
                   rate={starCount}
+                  isDisable={false}
                 />
               </View>
               <TextInput

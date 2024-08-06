@@ -6,7 +6,7 @@ const CustomStarRating = ({
   rate = 0,
   onRatingChange,
   style,
-  isDisable = false,
+  isDisable = true,
   size = 20,
 }) => {
   const [rating, setRating] = useState(rate);
