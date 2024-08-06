@@ -13,6 +13,7 @@ import {useSelector} from 'react-redux';
 import {getAuth} from '../_store/_reducers/auth';
 import NotificationScreen from '../screen/notificationScreen';
 import ProfileScreen from '../screen/profileScreen';
+import ReadingScreen from '../screen/readingScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,11 +24,7 @@ const AppNavigator = () => {
       <Stack.Navigator
         screenOptions={({navigation, route}) => ({
           header: () => (
-            <CustomHeader
-              title={''}
-              navigation={navigation}
-              showBack={true}
-            />
+            <CustomHeader title={''} navigation={navigation} showBack={true} />
           ),
         })}
         initialRouteName={loggedIn && token ? 'Main' : 'Auth'}>
@@ -45,7 +42,16 @@ const AppNavigator = () => {
         <Stack.Screen name="Privacy" component={PrivacyScreen} />
         <Stack.Screen name="notification" component={NotificationScreen} />
         <Stack.Screen name="profile" component={ProfileScreen} />
-        <Stack.Screen name="BookDetails" component={BookDetailsScreen}    options={{headerShown: false}} />
+        <Stack.Screen
+          name="BookDetails"
+          component={BookDetailsScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Reading"
+          component={ReadingScreen}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

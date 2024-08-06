@@ -29,7 +29,7 @@ function BookDetailsScreen({navigation, route}) {
     rating_average,
     ratings,
   } = bookItem;
-console.log(rating)
+  console.log(rating);
   useEffect(() => {
     if (BookDetails) {
       const bookData = {
@@ -80,7 +80,7 @@ console.log(rating)
       .catch(err => console.log(err));
   };
   const handleRemoveFromLibrary = bookId => {
-    console.log(bookId)
+    console.log(bookId);
     const bookData = {
       book_id: [bookId.toString()],
       select_all: 0,
@@ -112,7 +112,14 @@ console.log(rating)
             {rating &&
               rating.length > 0 &&
               rating.map((item, index) => (
-                <View style={{backgroundColor:Colors.primary, padding:15, marginBottom:20, borderRadius:15}} key={index}>
+                <View
+                  style={{
+                    backgroundColor: Colors.primary,
+                    padding: 15,
+                    marginBottom: 20,
+                    borderRadius: 15,
+                  }}
+                  key={index}>
                   <View style={styles.reviewHeader}>
                     <Image
                       style={styles.reviewImage}
@@ -180,9 +187,7 @@ console.log(rating)
           onPress={() => navigation.goBack()}>
           <Icons name={'long-arrow-left'} size={20} color={'white'} />
         </GradientView>
-        <GradientView
-          style={styles.shareButton}
-          onPress={handleShare}>
+        <GradientView style={styles.shareButton} onPress={handleShare}>
           <Icons name={'share-alt'} size={20} color={'white'} />
         </GradientView>
         <View style={{position: 'relative', zIndex: -1}}>
@@ -231,6 +236,9 @@ console.log(rating)
                   textStyle={{color: Colors.secondary, fontWeight: '400'}}
                   gradient={false}
                   title={'Start Reading'}
+                  onPress={() =>
+                    navigation.navigate('Reading', {bookId: bookId})
+                  }
                 />
               </View>
               <View style={{width: '50%', paddingHorizontal: 5}}>
@@ -244,7 +252,9 @@ console.log(rating)
                   <Button
                     style={{paddingVertical: 10, paddingHorizontal: 10}}
                     title={'Remove Library'}
-                    onPress={() => handleRemoveFromLibrary(BookDetails?.book_id)}
+                    onPress={() =>
+                      handleRemoveFromLibrary(BookDetails?.book_id)
+                    }
                   />
                 )}
               </View>
@@ -296,10 +306,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom:20
+    marginBottom: 20,
   },
-  reviewDivider:{
-    marginBottom:5
+  reviewDivider: {
+    marginBottom: 5,
   },
   reviewImage: {
     width: 45,
@@ -336,10 +346,10 @@ const styles = StyleSheet.create({
   shareButton: {
     paddingVertical: 10,
     paddingHorizontal: 10,
-borderRadius:50,
+    borderRadius: 50,
     position: 'absolute',
     marginTop: 20,
-    right: 10
+    right: 10,
   },
   chapterText: {
     color: Colors.white,
