@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Animated,
   TextInput,
-  FlatList,
+  ScrollView, // Use ScrollView instead of FlatList
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {
@@ -16,13 +16,11 @@ import {
   Skeleton,
 } from '../../components';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Colors} from '../../_utils/GlobalStyle';
+import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
 import {commonServices} from '../../_services/common.service';
 import {useAppContext} from '../../_customContext/AppProvider';
 
 export default function ReviewScreen() {
-  const stars = Array(5).fill('star-outline');
-  const width = useRef(new Animated.Value(0)).current;
   const [reviews, setReviews] = useState('');
   const [starCount, setStarCount] = useState(0);
   const [ratingDetails, setRatingDetails] = useState();
@@ -30,11 +28,6 @@ export default function ReviewScreen() {
 
   useEffect(() => {
     getAppReviews();
-    Animated.timing(width, {
-      toValue: 100,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
   }, []);
 
   const handleRatingChange = newRating => {
@@ -86,6 +79,10 @@ export default function ReviewScreen() {
     };
   };
 
+  const handleChange = text => {
+    setReviews(text);
+  };
+
   const handlePostReview = () => {
     if (starCount === 0 || reviews.trim() === '') {
       showToast('Please provide both a rating and a review star!', 'info');
@@ -96,9 +93,13 @@ export default function ReviewScreen() {
       star: starCount,
       description: reviews,
     };
+
+    console.log('Submitting review:', reviewData);
+
     commonServices
       .postAppReview(reviewData)
       .then(res => {
+        console.log('Review submitted successfully:', res.data);
         getAppReviews();
         setStarCount(0);
         setReviews('');
@@ -106,109 +107,119 @@ export default function ReviewScreen() {
       })
       .catch(error => {
         showToast('SomeThing went wrong!', 'error');
-        console.log(error);
+        console.log('Error submitting review:', error);
       });
   };
 
-  const renderItem = ({item, index}) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 15,
-        paddingVertical: 3,
-        marginVertical: 2,
-      }}
-      key={index}>
-      <CustomText style={{fontSize: 14}}>{index + 1} Star</CustomText>
-      <View style={styles.containerAni}>
-        <Animated.View
-          style={[
-            styles.bar,
-            {width: (item / ratingDetails.reviewLength) * 200},
-          ]}
-        />
-      </View>
-      <CustomText style={{fontSize: 14}}>{item}</CustomText>
-    </View>
-  );
-
-  const renderHeader = () => (
-    <View>
-      <HeadingText>App Reviews & Ratings</HeadingText>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 15,
-          paddingVertical: 5,
-        }}>
-        <CustomText style={styles.totalRate}>
-          {ratingDetails?.avgReviewPoint.toFixed(1) ?? '4.7'}
-        </CustomText>
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <CustomStarRating
-            size={18}
-            rate={ratingDetails?.avgReviewPoint.toFixed(1)}
-          />
-          <CustomText style={styles.rateText}>Based on {ratingDetails?.reviewLength} ratings</CustomText>
-        </View>
-      </View>
-      {!ratingDetails && <Skeleton isLoading={true} isLine />}
-    </View>
-  );
-
   return (
     <RowContainer style={styles.container}>
-      <FlatList
-        ListHeaderComponent={renderHeader}
-        data={ratingDetails ? ratingDetails.reviewCountArray : []}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        ListFooterComponent={() => (
-          <View style={{paddingTop: 20}}>
-            <HeadingText>Add Review</HeadingText>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                gap: 15,
-              }}>
-              <View style={[styles.starView]}>
-                <CustomStarRating
-                  size={30}
-                  onRatingChange={handleRatingChange}
-                  rate={starCount}
-                  isDisable={false}
-                />
+      <HeadingText>App Reviews & Ratings</HeadingText>
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContainer}
+        showsVerticalScrollIndicator={false}>
+        {ratingDetails ? (
+          <>
+            <View>
+              <View style={styles.headerContainer}>
+                <CustomText style={styles.totalRate}>
+                  {ratingDetails?.avgReviewPoint.toFixed(1) ?? '4.7'}
+                </CustomText>
+                <View style={styles.ratingContainer}>
+                  <CustomStarRating
+                    size={18}
+                    rate={ratingDetails?.avgReviewPoint.toFixed(1)}
+                  />
+                  <CustomText style={styles.rateText}>
+                    Based on {ratingDetails?.reviewLength} ratings
+                  </CustomText>
+                </View>
               </View>
-              <TextInput
-                multiline
-                style={styles.reviewText}
-                placeholder="Enter your review here..."
-                onChangeText={e => setReviews(e)}
-                placeholderTextColor={Colors.white}
+            </View>
+            <View>
+              {ratingDetails.reviewCountArray.map((item, index) => (
+                <View style={styles.reviewItem} key={index}>
+                  <CustomText style={styles.reviewText}>
+                    {index + 1} Star
+                  </CustomText>
+                  <View style={styles.containerAni}>
+                    <Animated.View
+                      style={[
+                        styles.bar,
+                        {width: (item / ratingDetails.reviewLength) * 200},
+                      ]}
+                    />
+                  </View>
+                  <CustomText style={styles.reviewText}>{item}</CustomText>
+                </View>
+              ))}
+            </View>
+          </>
+        ) : (
+          <Skeleton isLoading={true} isLine />
+        )}
+        <View style={styles.footerContainer}>
+          <HeadingText>Add Review</HeadingText>
+          <View style={styles.reviewInputContainer}>
+            <View style={styles.starView}>
+              <CustomStarRating
+                size={30}
+                onRatingChange={handleRatingChange}
+                rate={starCount}
+                isDisable={false}
               />
             </View>
-            <Button title={'Submit'} onPress={handlePostReview} />
+            <TextInput
+              multiline
+              style={styles.inputView}
+              placeholder="Enter your review here..."
+              onChangeText={handleChange}
+              value={reviews}
+              placeholderTextColor={Colors.white}
+            />
           </View>
-        )}
-        showsVerticalScrollIndicator={false}
-      />
+          <Button title={'Submit'} onPress={handlePostReview} />
+        </View>
+      </ScrollView>
     </RowContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollViewContainer: {
+    padding: 10,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 15,
+    paddingVertical: 5,
+  },
   totalRate: {
     color: Colors.gradientReverse,
     fontSize: 50,
     fontWeight: '600',
   },
+  ratingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   rateText: {
     color: Colors.darkGray,
+    fontSize: 14,
+  },
+  reviewItem: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 15,
+    paddingVertical: 3,
+    marginVertical: 2,
+  },
+  reviewText: {
     fontSize: 14,
   },
   starView: {
@@ -229,13 +240,23 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary,
     borderRadius: 5,
   },
-  reviewText: {
-    backgroundColor: Colors.tertiary,
-    borderRadius: 8,
+  reviewInputContainer: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: 15,
+  },
+  footerContainer: {
+    paddingTop: 20,
+  },
+  inputView: {
+    color: Colors.white,
     width: '100%',
     height: 100,
-    color: Colors.white,
-    paddingHorizontal: 10,
-    marginVertical: 5,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    padding: 18,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    backgroundColor: Colors.tertiary,
   },
 });

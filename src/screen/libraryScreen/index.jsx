@@ -145,9 +145,6 @@ export default function LibraryScreen({navigation}) {
         )}
         </View>
       </View>
-      <View style={styles.headerRow}>
-  
-      </View>
 
       {!libraryBooks ? (
         <Skeleton isLoading={true} numColumns={2} />

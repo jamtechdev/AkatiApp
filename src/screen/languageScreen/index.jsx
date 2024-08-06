@@ -78,6 +78,7 @@ export default function LanguageScreen() {
           data={languages}
           renderItem={renderLanguageItem}
           keyExtractor={(item, index) => index}
+          showsVerticalScrollIndicator={false}
         />
       ) : (
         <Skeleton isLoading={true} isList />

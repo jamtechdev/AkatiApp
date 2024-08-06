@@ -41,9 +41,6 @@ export default function DiscoverScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoryRes = await booksService.getBookCategory();
-        setCategoryBook(categoryRes.data.category_List);
-
         const newBooksRes = await booksService.getNewBooksList();
         setNewBooks(newBooksRes.data.data);
 
@@ -57,6 +54,16 @@ export default function DiscoverScreen() {
       } finally {
         setLoading(false);
       }
+      try {
+        const categoryRes = await booksService.getBookCategory();
+        setCategoryBook(categoryRes.data.category_List);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    
+
     };
 
     fetchData();
@@ -109,6 +116,7 @@ export default function DiscoverScreen() {
           )
         )}
         keyExtractor={(item, index) => item.key + index}
+        showsVerticalScrollIndicator={false}
       />
     </RowContainer>
   );

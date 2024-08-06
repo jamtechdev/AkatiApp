@@ -11,6 +11,7 @@ const Skeleton = ({
   isCard,
   isList,
   isLine,
+  isBatch
 }) => {
   const getStyle = () => {
     if (isCircleCard) {
@@ -21,6 +22,8 @@ const Skeleton = ({
       return styles.isList;
     } else if (isLine) {
       return styles.isLine;
+    } else if(isBatch){
+      return styles.isBatch
     }
     return {};
   };
@@ -86,6 +89,11 @@ const styles = StyleSheet.create({
     height: 10,
     padding: 0,
   },
+  isBatch:{
+    width: 100,
+    height: 30,
+    borderRadius:5,
+  }
 });
 
 export default Skeleton;

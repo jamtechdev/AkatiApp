@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Checkbox,
   CustomText,
@@ -15,17 +15,25 @@ import {commonServices} from '../../_services/common.service';
 import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
 import coin from '../../images/coin.png';
+import { useFocusEffect } from '@react-navigation/native';
 export default function RechargeHistoryScreen() {
   const {showToast, showLoader, hideLoader} = useAppContext();
   const [histories, setHistories] = useState();
-  useEffect(() => {
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchHistory();
+    }, []),
+  );
+
+  const fetchHistory = ()=>{
     commonServices
-      .getTransactionHistory()
-      .then(res => {
-        setHistories(res.data.list);
-      })
-      .catch(err => console.log(err.message));
-  }, []);
+    .getTransactionHistory()
+    .then(res => {
+      setHistories(res.data.list);
+    })
+    .catch(err => console.log(err.message));
+  }
 
   const renderHistoriesItem = ({item}) => {
     return (
@@ -68,6 +76,7 @@ export default function RechargeHistoryScreen() {
           data={histories}
           renderItem={renderHistoriesItem}
           keyExtractor={(item, index) => index}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </RowContainer>

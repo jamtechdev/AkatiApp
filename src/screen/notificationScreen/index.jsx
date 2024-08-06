@@ -42,6 +42,7 @@ export default function NotificationScreen() {
           !notifications ? <Skeleton isLoading={true} isList /> : <CustomText>No Notifications found</CustomText>
         }
         contentContainerStyle={{ marginVertical: 15 }}
+        showsVerticalScrollIndicator={false}
       />
     </RowContainer>
   );

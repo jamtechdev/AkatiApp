@@ -2,11 +2,21 @@ import React, {useEffect, useState} from 'react';
 import {
   Button,
   CustomStarRating,
+  CustomText,
   GradientView,
   RowContainer,
   TabSwitcher,
+  TextBadge,
 } from '../../components';
-import {Image, ScrollView, Text, View, StyleSheet, Share, Animated} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  Text,
+  View,
+  StyleSheet,
+  Share,
+  Animated,
+} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {IMAGE_API_URL} from '../../_constant';
@@ -14,10 +24,12 @@ import {booksService} from '../../_services/book.service';
 import {useAppContext} from '../../_customContext/AppProvider';
 
 function BookDetailsScreen({navigation, route}) {
-  const [chapters, setChpaters] = useState([]);
+  const [chapters, setChapters] = useState([]);
   const [rating, setRating] = useState([]);
   const [ratingAverage, setRatingAverage] = useState(0);
   const [isInLibrary, setIsInLibrary] = useState(false);
+  const [ratingStar, setRatingStar] = useState(0);
+  const [reviewText, setReviewText] = useState('');
   const {showToast, showLoader, hideLoader} = useAppContext();
   const {params} = route;
   const {bookId, bookItem} = params;
@@ -29,7 +41,6 @@ function BookDetailsScreen({navigation, route}) {
     rating_average,
     ratings,
   } = bookItem;
-  console.log(rating);
   useEffect(() => {
     if (BookDetails) {
       const bookData = {
@@ -40,7 +51,7 @@ function BookDetailsScreen({navigation, route}) {
       booksService
         .getBookChapters(bookData)
         .then(response => {
-          setChpaters(response.data.chapters);
+          setChapters(response.data.chapters);
         })
         .catch(error => {
           console.log(error);
@@ -80,7 +91,6 @@ function BookDetailsScreen({navigation, route}) {
       .catch(err => console.log(err));
   };
   const handleRemoveFromLibrary = bookId => {
-    console.log(bookId);
     const bookData = {
       book_id: [bookId.toString()],
       select_all: 0,
@@ -102,6 +112,31 @@ function BookDetailsScreen({navigation, route}) {
     })
       .then(() => console.log('Successfully shared'))
       .catch(error => console.log('Error sharing', error));
+  };
+
+  const handleAddReview = () => {
+    if (ratingStar == 0 && reviewText == '') {
+      toast.error('Please select stars and enter review');
+      return;
+    }
+    const reviewData = {
+      rating: ratingStar,
+      message: reviewText,
+      book_id: BookDetails?.book_id,
+    };
+    booksService
+      .addReview(reviewData)
+      .then(res => {
+        // setShow(false);
+        setRatingStar(0);
+        setReviewText('');
+        // setReload(res.data);
+        showToast(res.data.message);
+      })
+      .catch(error => {
+        console.log(error);
+        showToast(error.errors.message, "error");
+      });
   };
 
   const renderTabContent = key => {
@@ -142,6 +177,9 @@ function BookDetailsScreen({navigation, route}) {
                   </View>
                 </View>
               ))}
+            {rating && rating.length == 0 && (
+              <CustomText> No comments added yet</CustomText>
+            )}
           </View>
         );
       case 'Chapters':
@@ -227,7 +265,6 @@ function BookDetailsScreen({navigation, route}) {
     extrapolate: 'clamp',
   });
 
-
   return (
     <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
       <View style={{flex: 1}}>
@@ -261,16 +298,20 @@ function BookDetailsScreen({navigation, route}) {
             resizeMode="stretch"
           /> */}
           <Animated.Image
-            style={[styles.scrollMainImage, {width: imageSize, height: imageSize, marginBottom: imagePadding}]}
+            style={[
+              styles.scrollMainImage,
+              {width: imageSize, height: imageSize, marginBottom: imagePadding},
+            ]}
             source={{uri: IMAGE_API_URL + cover_image}}
             resizeMode="stretch"
           />
         </View>
-        <Animated.ScrollView
+        <ScrollView
+          showsVerticalScrollIndicator={false}
           style={{flex: 1}}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: scrollY}}}],
-            {useNativeDriver: false}
+            {useNativeDriver: false},
           )}
           scrollEventThrottle={16}>
           <View style={{paddingVertical: 20, gap: 10, paddingHorizontal: 10}}>
@@ -283,8 +324,23 @@ function BookDetailsScreen({navigation, route}) {
               Author: {BookDetails?.author}
             </Text>
             <View>
-              <CustomStarRating rate={ratingAverage} />
+              <CustomText style={{fontSize: 20}}>
+                {' '}
+                {parseFloat(rating_average).toFixed(1)}{' '}
+                <CustomStarRating rate={ratingAverage} />{' '}
+              </CustomText>
             </View>
+            <CustomText> based on {ratings?.length} ratings</CustomText>
+            <View>
+              <CustomText> Fallowing Tags</CustomText>
+              <View style={styles.categoryContainer}>
+                {categories &&
+                  categories.map(tag => {
+                    return <TextBadge key={tag.id} title={tag.name} />;
+                  })}
+              </View>
+            </View>
+
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <View style={{width: '50%', paddingHorizontal: 5}}>
                 <Button
@@ -297,7 +353,7 @@ function BookDetailsScreen({navigation, route}) {
                   gradient={false}
                   title={'Start Reading'}
                   onPress={() =>
-                    navigation.navigate('Reading', {bookId: bookId})
+                    navigation.navigate('Reading', {bookId: bookId, chapters : chapters})
                   }
                 />
               </View>
@@ -325,6 +381,7 @@ function BookDetailsScreen({navigation, route}) {
                 borderColor: Colors.darkGray,
                 paddingTop: 15,
                 marginTop: 10,
+                minHeight: 100,
               }}>
               <Text
                 style={{
@@ -333,15 +390,12 @@ function BookDetailsScreen({navigation, route}) {
                   fontSize: 14,
                   lineHeight: 22,
                 }}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book.
+                {BookDetails?.description}
               </Text>
             </View>
           </View>
           <TabSwitcher tabs={tabs} />
-        </Animated.ScrollView>
+        </ScrollView>
       </View>
     </RowContainer>
   );
@@ -369,6 +423,7 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     padding: 10,
+    minHeight: 200,
   },
   reviewHeader: {
     flexDirection: 'row',
@@ -430,6 +485,12 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 14,
     lineHeight: 22,
+  },
+  categoryContainer: {
+    flexWrap: 'wrap',
+    gap: 8,
+    flexDirection: 'row',
+    marginVertical: 10,
   },
 });
 
