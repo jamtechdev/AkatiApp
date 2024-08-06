@@ -100,7 +100,7 @@ export default function LoginScreen({navigation}) {
       .signIn(modify)
       .then(res => {
         dispatch(login(res.data));
-        navigation.navigate('Main');
+        navigation.replace('Main');
       })
       .catch(error => {
         console.log(error, 'network');
@@ -113,7 +113,7 @@ export default function LoginScreen({navigation}) {
       .socialAuth(data)
       .then(response => {
         dispatch(login(response.data));
-        navigation.navigate('Main');
+        navigation.replace('Main');
       })
       .catch(err => {
         console.log(err);

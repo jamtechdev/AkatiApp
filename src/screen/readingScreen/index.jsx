@@ -26,7 +26,8 @@ function ReadingScreen({navigation, route}) {
   const [autoUnlock, setAutoUnlock] = useState(false);
   const [visible, setVisible] = useState(false);
   const [modalData, setModalData] = useState([]);
-
+  const [mustReadBooks, setMustReadBooks] = useState();
+  const [loadingComments, setLoadingComments] = useState(true);
   useEffect(() => {
     booksService
       .getBookById(params.bookId)

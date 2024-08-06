@@ -353,7 +353,7 @@ function BookDetailsScreen({navigation, route}) {
                   gradient={false}
                   title={'Start Reading'}
                   onPress={() =>
-                    navigation.navigate('Reading', {bookId: bookId, chapters : chapters})
+                    navigation.navigate('Reading', {bookId: bookId, chapters : chapters, bookItem: bookItem})
                   }
                 />
               </View>
