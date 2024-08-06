@@ -10,11 +10,14 @@ const Toast = ({
   description,
   duration = 3000,
   onHide,
-  type = 'success',
+  type,
 }) => {
   const [show, setShow] = useState(visible);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  if (type.length == 0) {
+    type = 'success';
+  }
   useEffect(() => {
     if (visible) {
       setShow(true);
@@ -55,9 +58,19 @@ const Toast = ({
       ]}>
       <View style={styles.toastMessage}>
         {type == 'success' && (
-          <Icon size={20}  color={Colors.white} name={'checkmark-circle-outline'} />
+          <Icon
+            size={20}
+            color={Colors.white}
+            name={'checkmark-circle-outline'}
+          />
         )}
-        {type == 'info' && <Icon size={20} name={'information-circle-outline'} color={Colors.white}/>}
+        {type == 'info' && (
+          <Icon
+            size={20}
+            name={'information-circle-outline'}
+            color={Colors.white}
+          />
+        )}
         {type == 'error' && (
           <Icon size={20} color={Colors.white} name={'close-circle-outline'} />
         )}
@@ -81,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 9999999,
   },
-  message:{
+  message: {
     color: Colors.white,
   },
   toastMessage: {
