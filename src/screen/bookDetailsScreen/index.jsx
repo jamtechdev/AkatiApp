@@ -6,7 +6,7 @@ import {
   RowContainer,
   TabSwitcher,
 } from '../../components';
-import {Image, ScrollView, Text, View, StyleSheet, Share} from 'react-native';
+import {Image, ScrollView, Text, View, StyleSheet, Share, Animated} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {IMAGE_API_URL} from '../../_constant';
@@ -149,13 +149,34 @@ function BookDetailsScreen({navigation, route}) {
           <View style={styles.tabContent}>
             {chapters && chapters.length > 0 ? (
               chapters.map((chapter, index) => (
-                <View style={{padding:15, borderWidth:1, borderColor:Colors.primary,borderRadius:5, marginBottom:10, backgroundColor:Colors.primary}} key={index}>
-                <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-                <Text style={{color:Colors.white, fontWeight:600, marginBottom:5}}>Chapter 1</Text>
-                {chapter.unlock == 1 && (
+                <View
+                  style={{
+                    padding: 15,
+                    borderWidth: 1,
+                    borderColor: Colors.primary,
+                    borderRadius: 5,
+                    marginBottom: 10,
+                    backgroundColor: Colors.primary,
+                  }}
+                  key={index}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        color: Colors.white,
+                        fontWeight: 600,
+                        marginBottom: 5,
+                      }}>
+                      Chapter 1
+                    </Text>
+                    {chapter.unlock == 1 && (
                       <Icons name={'lock'} size={15} color={Colors.secondary} />
                     )}
-                </View>
+                  </View>
                   <Text style={styles.chapterText}>
                     {chapter.chapter_details.title}
                   </Text>
@@ -184,6 +205,29 @@ function BookDetailsScreen({navigation, route}) {
     },
   ];
 
+  const scrollY = new Animated.Value(0);
+  const HEADER_MAX_HEIGHT = 200;
+  const HEADER_MIN_HEIGHT = 120;
+  const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [220, 180],
+    extrapolate: 'clamp',
+  });
+
+  const imageSize = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [200, 120],
+    extrapolate: 'clamp',
+  });
+  const imagePadding = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, 30],
+    extrapolate: 'clamp',
+  });
+
+
   return (
     <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
       <View style={{flex: 1}}>
@@ -195,10 +239,10 @@ function BookDetailsScreen({navigation, route}) {
         <GradientView style={styles.shareButton} onPress={handleShare}>
           <Icons name={'share-alt'} size={20} color={'white'} />
         </GradientView>
-        <View style={{position: 'relative', zIndex: -1}}>
+        <Animated.View style={{height: headerHeight, zIndex: -1}}>
           <Image
             source={{uri: IMAGE_API_URL + cover_image}}
-            style={{width: '100%', height: 200}}
+            style={{width: '100%', height: '100%'}}
             resizeMode="cover"
           />
           <View
@@ -209,15 +253,26 @@ function BookDetailsScreen({navigation, route}) {
               backgroundColor: 'rgba(0, 0, 0, 0.8)', // This simulates the blur effect
               opacity: 0.8,
             }}></View>
-        </View>
+        </Animated.View>
         <View style={styles.centeredImage}>
-          <Image
+          {/* <Image
             style={styles.scrollMainImage}
+            source={{uri: IMAGE_API_URL + cover_image}}
+            resizeMode="stretch"
+          /> */}
+          <Animated.Image
+            style={[styles.scrollMainImage, {width: imageSize, height: imageSize, marginBottom: imagePadding}]}
             source={{uri: IMAGE_API_URL + cover_image}}
             resizeMode="stretch"
           />
         </View>
-        <ScrollView style={{flex: 1}}>
+        <Animated.ScrollView
+          style={{flex: 1}}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: scrollY}}}],
+            {useNativeDriver: false}
+          )}
+          scrollEventThrottle={16}>
           <View style={{paddingVertical: 20, gap: 10, paddingHorizontal: 10}}>
             <Text
               style={{color: Colors.white, fontWeight: '600', fontSize: 22}}>
@@ -286,7 +341,7 @@ function BookDetailsScreen({navigation, route}) {
             </View>
           </View>
           <TabSwitcher tabs={tabs} />
-        </ScrollView>
+        </Animated.ScrollView>
       </View>
     </RowContainer>
   );
@@ -304,10 +359,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.white,
   },
-  scrollMainImage:{
+  scrollMainImage: {
     width: 120,
     height: 120,
-    marginBottom:50,
+    marginBottom: 50,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: Colors.white,
