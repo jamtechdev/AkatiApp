@@ -2,9 +2,18 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 
-function Badge({title, onPress}) {
+function Badge({title, onPress, isActive = false}) {
   return (
-    <TouchableOpacity style={styles.badgeText} onPress={onPress}>
+    <TouchableOpacity
+      style={[
+        styles.badgeText,
+        isActive
+          ? {
+              backgroundColor: Colors.secondary,
+            }
+          : {},
+      ]}
+      onPress={onPress}>
       <Text style={{color: Colors.white, fontSize: 12}}>{title}</Text>
     </TouchableOpacity>
   );

@@ -1,34 +1,68 @@
-import {View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
-import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  TextInput,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {
   Card,
+  CustomText,
   GradientView,
   HeadingText,
   RowContainer,
   TextBadge,
 } from '../../components';
-import {TextInput} from 'react-native-gesture-handler';
 import {Colors} from '../../_utils/GlobalStyle';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icons from 'react-native-vector-icons/Ionicons';
 import {booksService} from '../../_services/book.service';
-
-const categories = [
-  'Happy',
-  'Sad',
-  'Exciting',
-  'Mystery',
-  'Fantasy',
-  'Sci-Fi',
-  'Romance',
-  'Thriller',
-];
+import {commonServices} from '../../_services/common.service';
 
 export default function SearchScreen() {
   const [searchTerms, setSearchTerms] = useState('');
   const [searchCategory, setSearchCategory] = useState('');
-  const [foundItems, setFoundItems] = useState();
+  const [foundItems, setFoundItems] = useState([]);
+  const [recentSearch, setRecentSearch] = useState([]);
+  const [hotSearch, setHotSearch] = useState([]);
+  const [bookCategories, setBookCategories] = useState([]);
+  const [showCategories, setShowCategories] = useState(true);
+  useEffect(() => {
+    getBookCategories();
+    handleGetHistory();
+  }, []);
+
+  const handleGetHistory = () => {
+    commonServices
+      .getHistory()
+      .then(res => {
+        setRecentSearch(res.data.data.mySearch);
+        setHotSearch(res.data.data.hotSearch);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const getBookCategories = () => {
+    commonServices
+      .getBookCategories()
+      .then(res => {
+        setBookCategories(res.data.list);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const handleRemoveHistory = id => {
+    commonServices
+      .removeHistory({history_id: id})
+      .then(res => {
+        handleGetHistory();
+      })
+      .catch(err => console.log(err));
+  };
+
   const handleSearch = () => {
-    console.log('object');
     booksService
       .searchBooks(searchTerms, searchCategory)
       .then(res => {
@@ -36,78 +70,107 @@ export default function SearchScreen() {
       })
       .catch(err => console.log(err));
   };
+
   return (
     <RowContainer>
-      <View  style={styles.searchBar}>
+      <View style={styles.searchBar}>
         <TextInput
           placeholder="Which book would you like to read today..."
           placeholderTextColor={Colors.darkGray}
           onChangeText={e => setSearchTerms(e)}
         />
-         <GradientView onPress={handleSearch} style={[styles.searchIcon]}>
-          <Icon size={25} color={Colors.white} name={'search'} />
+        <GradientView onPress={handleSearch} style={[styles.searchIcon]}>
+          <Icons size={25} color={Colors.white} name={'search'} />
         </GradientView>
       </View>
       <ScrollView>
-        <View>
-          <HeadingText>Select Book Categories</HeadingText>
-          <View style={styles.categoryContainer}>
-            {categories.map((category, index) => (
-              <TextBadge
-                key={index}
-                title={category}
-                onPress={() => {
-                  setSearchCategory(category);
-                  handleSearch();
-                }}
-              />
-            ))}
-          </View>
+        <View
+          style={{flexDirection: 'row', gap: 20, justifyContent: 'flex-end'}}>
+          <CustomText> categories : All</CustomText>
+          <Icon
+            size={25}
+            color={Colors.white}
+            name={showCategories ? 'filter' : 'filter-off'}
+            onPress={() => setShowCategories(prev => !prev)}
+          />
         </View>
-        <View>
-          <HeadingText>Hot search</HeadingText>
-          <View style={styles.categoryContainer}>
-            {categories.map((category, index) => (
-              <TextBadge
-                key={index}
-                title={category}
-                onPress={() => {
-                  setSearchCategory(category);
-                  handleSearch();
-                }}
-              />
-            ))}
-          </View>
-        </View>
-        <View>
-          <HeadingText>Recent search</HeadingText>
-          <View style={{marginVertical: 10}}>
-            {categories.map((category, index) => (
-              <View style={styles.RecentContainer} key={index}>
-                <Text
-                  style={{
-                    color: Colors.white,
-                    fontWeight: 'bold',
-                    fontSize: 12,
-                  }}>
-                  {category}
-                </Text>
-                <Icon
-                  size={25}
-                  color={Colors.white}
-                  name={'close-circle-outline'}
+        {showCategories && (
+          <>
+            <View>
+              <HeadingText>Categories</HeadingText>
+              <View style={styles.categoryContainer}>
+                <TextBadge
+                  title={'All'}
+                  onPress={() => {
+                    setSearchCategory('');
+                    handleSearch();
+                  }}
+                  isActive={searchCategory==''}
                 />
+                {bookCategories &&
+                  bookCategories.map((category, index) => (
+                    <TextBadge
+                      key={index}
+                      title={category.name}
+                      isActive={searchCategory== category.id}
+                      onPress={() => {
+                        setSearchCategory(category.id);
+                        handleSearch();
+                      }}
+                      
+                    />
+                  ))}
               </View>
-            ))}
-          </View>
-        </View>
-        {foundItems && (
+            </View>
+            <View>
+              <HeadingText>Hot search</HeadingText>
+              <View style={styles.categoryContainer}>
+                {hotSearch &&
+                  hotSearch.map((hot, index) => (
+                    <TextBadge
+                      key={index}
+                      title={hot?.search_term}
+                      onPress={() => {
+                        // setSearchCategory(hot?.search_term);
+                        // handleSearch();
+                      }}
+                    />
+                  ))}
+              </View>
+            </View>
+            <View>
+              <HeadingText>Recent search</HeadingText>
+              <View style={{marginVertical: 10}}>
+                {recentSearch &&
+                  recentSearch.map((search, index) => (
+                    <View style={styles.RecentContainer} key={index}>
+                      <Text
+                        style={{
+                          color: Colors.white,
+                          fontWeight: 'bold',
+                          fontSize: 12,
+                        }}>
+                        {search?.search_term}
+                      </Text>
+                      <Icon
+                        size={25}
+                        color={Colors.white}
+                        name={'close-circle-outline'}
+                        onPress={() => handleRemoveHistory(search.id)}
+                      />
+                    </View>
+                  ))}
+              </View>
+            </View>
+          </>
+        )}
+        {foundItems.length > 0 && (
           <View>
             <HeadingText>Search Results </HeadingText>
             <FlatList
               data={foundItems}
               renderItem={({item}) => <Card item={item} />}
-              keyExtractor={(item, index) => index}
+              keyExtractor={item => item.id.toString()}
               numColumns={2}
               showsVerticalScrollIndicator={false}
               columnWrapperStyle={styles.row}
@@ -127,13 +190,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     color: Colors.white,
     marginBottom: 10,
-    flexDirection:"row",
-    justifyContent:"space-between"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   searchIcon: {
     width: 37,
     height: 35,
-    // backgroundColor: Colors.secondary,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
