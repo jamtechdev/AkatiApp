@@ -149,12 +149,17 @@ function BookDetailsScreen({navigation, route}) {
           <View style={styles.tabContent}>
             {chapters && chapters.length > 0 ? (
               chapters.map((chapter, index) => (
-                <Text key={index} style={styles.chapterText}>
-                  {chapter.chapter_details.title}
-                  {chapter.unlock != 1 && (
-                    <Icons name={'lock'} size={20} color={Colors.secondary} />
-                  )}
-                </Text>
+                <View style={{padding:15, borderWidth:1, borderColor:Colors.primary,borderRadius:5, marginBottom:10, backgroundColor:Colors.primary}} key={index}>
+                <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+                <Text style={{color:Colors.white, fontWeight:600, marginBottom:5}}>Chapter 1</Text>
+                {chapter.unlock == 1 && (
+                      <Icons name={'lock'} size={15} color={Colors.secondary} />
+                    )}
+                </View>
+                  <Text style={styles.chapterText}>
+                    {chapter.chapter_details.title}
+                  </Text>
+                </View>
               ))
             ) : (
               <Text style={styles.description}>No chapters available.</Text>
@@ -207,7 +212,7 @@ function BookDetailsScreen({navigation, route}) {
         </View>
         <View style={styles.centeredImage}>
           <Image
-            style={styles.mainImage}
+            style={styles.scrollMainImage}
             source={{uri: IMAGE_API_URL + cover_image}}
             resizeMode="stretch"
           />
@@ -299,6 +304,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.white,
   },
+  scrollMainImage:{
+    width: 120,
+    height: 120,
+    marginBottom:50,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: Colors.white,
+  },
   tabContent: {
     padding: 10,
   },
@@ -352,9 +365,9 @@ const styles = StyleSheet.create({
     right: 10,
   },
   chapterText: {
-    color: Colors.white,
+    color: Colors.gray,
     fontWeight: '400',
-    fontSize: 14,
+    fontSize: 12,
     lineHeight: 22,
   },
   description: {
