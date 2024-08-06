@@ -6,7 +6,15 @@ import {
   RowContainer,
   TabSwitcher,
 } from '../../components';
-import {Image, ScrollView, Text, View, StyleSheet, Share, Animated} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  Text,
+  View,
+  StyleSheet,
+  Share,
+  Animated,
+} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {IMAGE_API_URL} from '../../_constant';
@@ -171,9 +179,9 @@ function BookDetailsScreen({navigation, route}) {
                         fontWeight: 600,
                         marginBottom: 5,
                       }}>
-                      Chapter 1
+                      Chapter {index + 1}
                     </Text>
-                    {chapter.unlock == 1 && (
+                    {chapter.unlock != 1 && (
                       <Icons name={'lock'} size={15} color={Colors.secondary} />
                     )}
                   </View>
@@ -227,7 +235,6 @@ function BookDetailsScreen({navigation, route}) {
     extrapolate: 'clamp',
   });
 
-
   return (
     <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
       <View style={{flex: 1}}>
@@ -261,7 +268,10 @@ function BookDetailsScreen({navigation, route}) {
             resizeMode="stretch"
           /> */}
           <Animated.Image
-            style={[styles.scrollMainImage, {width: imageSize, height: imageSize, marginBottom: imagePadding}]}
+            style={[
+              styles.scrollMainImage,
+              {width: imageSize, height: imageSize, marginBottom: imagePadding},
+            ]}
             source={{uri: IMAGE_API_URL + cover_image}}
             resizeMode="stretch"
           />
@@ -270,7 +280,7 @@ function BookDetailsScreen({navigation, route}) {
           style={{flex: 1}}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: scrollY}}}],
-            {useNativeDriver: false}
+            {useNativeDriver: false},
           )}
           scrollEventThrottle={16}>
           <View style={{paddingVertical: 20, gap: 10, paddingHorizontal: 10}}>
