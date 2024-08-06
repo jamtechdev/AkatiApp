@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CustomStarRating = ({
@@ -11,13 +11,30 @@ const CustomStarRating = ({
 }) => {
   const [rating, setRating] = useState(rate);
 
+  useEffect(() => {
+    setRating(rate);
+  }, [rate]);
+
   const handleStarPress = index => {
     if (isDisable) {
       return;
     }
-    setRating(index + 1);
+    const newRating = index + 1;
+    setRating(newRating);
     if (onRatingChange) {
-      onRatingChange(index + 1);
+      onRatingChange(newRating);
+    }
+  };
+
+  const renderStar = (index) => {
+    const fullStar = Math.floor(rating);
+    const halfStar = rating - fullStar >= 0.5;
+    if (index < fullStar) {
+      return 'star';
+    } else if (index === fullStar && halfStar) {
+      return 'star-half-full';
+    } else {
+      return 'star-outline';
     }
   };
 
@@ -29,7 +46,7 @@ const CustomStarRating = ({
           onPress={() => handleStarPress(index)}
           activeOpacity={0.7}>
           <Icon
-            name={index < rating ? 'star' : 'star-outline'}
+            name={renderStar(index)}
             size={size}
             color={index < rating ? 'gold' : 'gray'}
             style={styles.star}

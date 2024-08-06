@@ -152,9 +152,9 @@ export default function ReviewScreen() {
           <CustomStarRating
             size={18}
             isDisable={true}
-            rate={parseInt(ratingDetails?.avgReviewPoint)}
+            rate={ratingDetails?.avgReviewPoint.toFixed(1)}
           />
-          <CustomText style={styles.rateText}>Based on 14 ratings</CustomText>
+          <CustomText style={styles.rateText}>Based on {ratingDetails?.reviewLength} ratings</CustomText>
         </View>
       </View>
       {!ratingDetails && <Skeleton isLoading={true} isLine />}
