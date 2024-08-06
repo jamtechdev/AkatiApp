@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  BottomDrawer,
   Button,
   CustomText,
   GradientView,
@@ -23,6 +24,8 @@ function ReadingScreen({navigation, route}) {
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [comments, setComments] = useState([]);
   const [autoUnlock, setAutoUnlock] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [modalData, setModalData] = useState([]);
 
   useEffect(() => {
     booksService
@@ -88,7 +91,6 @@ function ReadingScreen({navigation, route}) {
   const handleShow = () => setShow(true);
 
   const handleNextChapter = () => {
-    console.log('nexttttttttttt');
     if (currentChapterIndex < chapters.length - 1) {
       setCurrentChapterIndex(currentChapterIndex + 1);
     }
@@ -119,7 +121,6 @@ function ReadingScreen({navigation, route}) {
       book_id: currentChapter.book_id,
       chapter_id: currentChapter.id,
     };
-    console.log(currentChapter);
 
     booksService
       .unlockChapter(formData)
@@ -139,21 +140,38 @@ function ReadingScreen({navigation, route}) {
       })
       .catch(error => {
         console.log(error, 'error');
-        toast.error('something went wrong');
       });
     return;
   };
   return (
     <RowContainer>
-      <View style={{flexDirection: 'row', gap: 50}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: 50,
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
         <GradientView
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
           <Icons name={'long-arrow-left'} size={20} color={'white'} />
         </GradientView>
-        <HeadingText>
-          {bookDetails?.BookDetails && bookDetails?.BookDetails?.title}
-        </HeadingText>
+        <View style={{flexDirection: 'row', gap: 15}}>
+          <TouchableText>
+            <Icons name={'comment'} size={20} color={'white'} />
+          </TouchableText>
+          <TouchableText>
+            <Icons name={'filter'} size={20} color={'white'} />
+          </TouchableText>
+          <TouchableText
+            onPress={() => {
+              setVisible(true);
+              setModalData(chapters);
+            }}>
+            <Icons name={'list'} size={20} color={'white'} />
+          </TouchableText>
+        </View>
       </View>
       <View style={styles.chapterNum}>
         <TouchableText onPress={handlePrevChapter}>Prev</TouchableText>
@@ -172,6 +190,14 @@ function ReadingScreen({navigation, route}) {
           </CustomText>
         </View>
       </ScrollView>
+      <BottomDrawer
+        visible={visible}
+        data={modalData}
+        onClose={() => setVisible(false)}
+        currentChapter={currentChapterIndex}
+        onPress={index => setCurrentChapterIndex(index)}
+        title={bookDetails?.BookDetails?.title}
+      />
     </RowContainer>
   );
 }

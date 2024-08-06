@@ -209,9 +209,9 @@ function BookDetailsScreen({navigation, route}) {
                         fontWeight: 600,
                         marginBottom: 5,
                       }}>
-                      Chapter 1
+                      Chapter {index + 1}
                     </Text>
-                    {chapter.unlock == 1 && (
+                    {chapter.unlock != 1 && (
                       <Icons name={'lock'} size={15} color={Colors.secondary} />
                     )}
                   </View>
