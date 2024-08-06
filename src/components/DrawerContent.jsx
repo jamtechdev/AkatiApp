@@ -2,11 +2,7 @@
 // src/components/DrawerContent.js
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image, Share} from 'react-native';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
+import {DrawerContentScrollView} from '@react-navigation/drawer';
 import logo from '../images/logo.png';
 import {Colors} from '../_utils/GlobalStyle';
 import {AlertModal, CustomDrawerItem, GradientView} from '../components';
@@ -39,9 +35,10 @@ const DrawerContent = props => {
     <DrawerContentScrollView
       {...props}
       style={{backgroundColor: Colors.tertiary}}>
-
       <View style={{position: 'absolute', right: 0, top: 20, zIndex: 999}}>
-        <GradientView style={styles.rightButton} onPress={()=>props.navigation.toggleDrawer() }>
+        <GradientView
+          style={styles.rightButton}
+          onPress={() => props.navigation.toggleDrawer()}>
           <Icons size={20} color={Colors.white} name={'indent'}></Icons>
         </GradientView>
       </View>
@@ -53,7 +50,7 @@ const DrawerContent = props => {
         />
         <Text style={styles.drawerTitle}>Akati</Text>
       </View>
- 
+
       <CustomDrawerItem
         title="Discover"
         icon={'explore'}
@@ -106,8 +103,8 @@ const DrawerContent = props => {
       <AlertModal
         visible={show}
         image={logo}
-        title={'Alert?'}
-        description={'Are you sure you want to logout! '}
+        title={'Alert!'}
+        description={'Are you sure you want to logout?'}
         onOkay={logoutAction}
         onCancel={toggleModel}
       />

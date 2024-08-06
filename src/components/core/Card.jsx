@@ -6,11 +6,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Colors} from '../../_utils/GlobalStyle';
 import {IMAGE_API_URL} from '../../_constant';
 import { useNavigation } from '@react-navigation/native';
-const Card = ({item}) => {
+const Card = ({item, style}) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={()=>navigation.navigate('BookDetails') }>
-    <View style={styles.card}>
+<TouchableOpacity onPress={() => navigation.navigate('BookDetails', { bookId: item?.id, bookItem: item})}>
+    <View style={[styles.card, style]}>
       <View style={styles.cardImage}>
         {item.cover_image && (
           <FastImage

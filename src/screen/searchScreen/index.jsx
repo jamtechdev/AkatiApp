@@ -1,16 +1,16 @@
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import React from 'react';
+import {View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
+import React, {useState} from 'react';
 import {
-  CustomText,
+  Card,
   GradientView,
   HeadingText,
   RowContainer,
-  SkeletonLoader,
   TextBadge,
 } from '../../components';
 import {TextInput} from 'react-native-gesture-handler';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {booksService} from '../../_services/book.service';
 
 const categories = [
   'Happy',
@@ -24,24 +24,43 @@ const categories = [
 ];
 
 export default function SearchScreen() {
+  const [searchTerms, setSearchTerms] = useState('');
+  const [searchCategory, setSearchCategory] = useState('');
+  const [foundItems, setFoundItems] = useState();
+  const handleSearch = () => {
+    console.log('object');
+    booksService
+      .searchBooks(searchTerms, searchCategory)
+      .then(res => {
+        setFoundItems(res.data.data);
+      })
+      .catch(err => console.log(err));
+  };
   return (
     <RowContainer>
-      <View>
-        <GradientView style={styles.searchIcon}>
-          <Icon size={25} color={Colors.white} name={'search'} />
-        </GradientView>
+      <View  style={styles.searchBar}>
         <TextInput
           placeholder="Which book would you like to read today..."
-          style={styles.searchBar}
           placeholderTextColor={Colors.darkGray}
+          onChangeText={e => setSearchTerms(e)}
         />
+         <GradientView onPress={handleSearch} style={[styles.searchIcon]}>
+          <Icon size={25} color={Colors.white} name={'search'} />
+        </GradientView>
       </View>
       <ScrollView>
         <View>
           <HeadingText>Select Book Categories</HeadingText>
           <View style={styles.categoryContainer}>
             {categories.map((category, index) => (
-              <TextBadge key={index} text={category} />
+              <TextBadge
+                key={index}
+                title={category}
+                onPress={() => {
+                  setSearchCategory(category);
+                  handleSearch();
+                }}
+              />
             ))}
           </View>
         </View>
@@ -49,7 +68,14 @@ export default function SearchScreen() {
           <HeadingText>Hot search</HeadingText>
           <View style={styles.categoryContainer}>
             {categories.map((category, index) => (
-              <TextBadge key={index} text={category} />
+              <TextBadge
+                key={index}
+                title={category}
+                onPress={() => {
+                  setSearchCategory(category);
+                  handleSearch();
+                }}
+              />
             ))}
           </View>
         </View>
@@ -75,6 +101,19 @@ export default function SearchScreen() {
             ))}
           </View>
         </View>
+        {foundItems && (
+          <View>
+            <HeadingText>Search Results </HeadingText>
+            <FlatList
+              data={foundItems}
+              renderItem={({item}) => <Card item={item} />}
+              keyExtractor={(item, index) => index}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+              columnWrapperStyle={styles.row}
+            />
+          </View>
+        )}
       </ScrollView>
     </RowContainer>
   );
@@ -84,11 +123,12 @@ const styles = StyleSheet.create({
   searchBar: {
     borderWidth: 1,
     borderColor: Colors.secondary,
-    padding: 15,
+    padding: 10,
     borderRadius: 50,
     color: Colors.white,
-    paddingRight: 50,
     marginBottom: 10,
+    flexDirection:"row",
+    justifyContent:"space-between"
   },
   searchIcon: {
     width: 37,
@@ -97,11 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
-    position: 'absolute',
-    right: 8,
-    top: 5,
-    bottom: 0,
-    margin: 'auto',
   },
   categoryContainer: {
     flexWrap: 'wrap',
@@ -119,5 +154,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.darkGray,
     borderRadius: 5,
+  },
+  row: {
+    justifyContent: 'space-between',
   },
 });

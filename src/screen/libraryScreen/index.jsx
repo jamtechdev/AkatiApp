@@ -1,5 +1,5 @@
 import {View, Text, FlatList, StyleSheet, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   CustomText,
   HeadingText,
@@ -9,13 +9,15 @@ import {
   Button,
   Card,
   Skeleton,
+  GradientView,
 } from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
 import {booksService} from '../../_services/book.service';
 import {getLanguage} from '../../_store/_reducers/auth';
 import {useSelector} from 'react-redux';
 import {useAppContext} from '../../_customContext/AppProvider';
-
+import {useFocusEffect} from '@react-navigation/native';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 export default function LibraryScreen({navigation}) {
   const {showToast, showLoader, hideLoader} = useAppContext();
   const language = useSelector(getLanguage);
@@ -24,9 +26,12 @@ export default function LibraryScreen({navigation}) {
   const [selectedBooks, setSelectedBooks] = useState({});
   const [allSelected, setAllSelected] = useState(false);
 
-  useEffect(() => {
-    fetchLibraryBook();
-  }, [language]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchLibraryBook();
+    }, [language]),
+  );
+
   const fetchLibraryBook = () => {
     booksService
       .getLibraryBooks()
@@ -76,6 +81,8 @@ export default function LibraryScreen({navigation}) {
       return;
     }
     const selectAll = allSelected ? 1 : 0;
+    console.log(booksToDelete);
+    // return
     booksService
       .removeFromLibrary({book_id: booksToDelete, select_all: selectAll})
       .then(() => {
@@ -109,35 +116,37 @@ export default function LibraryScreen({navigation}) {
       </View>
     );
   };
-  
 
   return (
     <RowContainer>
       <View style={styles.headerRow}>
         <HeadingText>Library Books</HeadingText>
-        {libraryBooks && libraryBooks?.length !== 0 && (
-          <Button
-            style={{paddingHorizontal: 20, paddingVertical: 10}}
-            title={editMode ? 'Cancel' : 'Edit'}
-            onPress={handleEdit}
-          />
-        )}
-      </View>
-      <View style={styles.headerRow}>
+        <View style={{ justifyContent:'center', flexDirection: 'row', gap: 10}}>
         {editMode && (
           <>
-            <Button
-              style={{paddingHorizontal: 20, paddingVertical: 10}}
-              title={allSelected ? 'Deselect All' : 'Select All'}
-              onPress={handleSelectAll}
-            />
-            <Button
-              style={{paddingHorizontal: 20, paddingVertical: 10}}
-              title={'Remove Books'}
-              onPress={handleDelete}
-            />
+            <GradientView
+              style={styles.editModeButton}
+              onPress={handleSelectAll}>
+              <Icons name={'check-all'} size={20} color={'white'} />
+            </GradientView>
+            <GradientView style={styles.editModeButton} onPress={handleDelete}>
+              <Icons name={'book-remove-multiple'} size={20} color={'white'} />
+            </GradientView>
           </>
         )}
+        {libraryBooks && libraryBooks?.length !== 0 && (
+          <GradientView style={styles.editModeButton} onPress={handleEdit}>
+            <Icons
+              name={!editMode ? 'book-edit' : 'close'}
+              size={20}
+              color={'white'}
+            />
+          </GradientView>
+        )}
+        </View>
+      </View>
+      <View style={styles.headerRow}>
+  
       </View>
 
       {!libraryBooks ? (
@@ -158,16 +167,16 @@ export default function LibraryScreen({navigation}) {
             style={{width: '100%', paddingHorizontal: 50, marginTop: 20}}
           />
         </View>
-        ) : (
-      <FlatList
-        data={libraryBooks}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-        columnWrapperStyle={styles.row}
-      />
-        )}
+      ) : (
+        <FlatList
+          data={libraryBooks}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={styles.row}
+        />
+      )}
     </RowContainer>
   );
 }
@@ -223,8 +232,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    padding:5,
-    borderRadius:10,
+    padding: 5,
+    borderRadius: 10,
     zIndex: 1000,
   },
   card: {
@@ -232,6 +241,11 @@ const styles = StyleSheet.create({
   },
   cardWithOverlay: {
     overflow: 'hidden',
-    opacity: 0.6, 
-  }
+    opacity: 0.6,
+  },
+  editModeButton: {
+    borderRadius: 50,
+    padding: 10,
+    alignItems: 'center',
+  },
 });

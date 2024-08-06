@@ -1,66 +1,193 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   CustomStarRating,
+  GradientView,
   RowContainer,
   TabSwitcher,
 } from '../../components';
-import {Image, ScrollView, Text, View, StyleSheet} from 'react-native';
+import {Image, ScrollView, Text, View, StyleSheet, Share} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
+import Icons from 'react-native-vector-icons/FontAwesome';
+import {IMAGE_API_URL} from '../../_constant';
+import {booksService} from '../../_services/book.service';
+import {useAppContext} from '../../_customContext/AppProvider';
 
-function BookDetailsScreen() {
+function BookDetailsScreen({navigation, route}) {
+  const [chapters, setChpaters] = useState([]);
+  const [rating, setRating] = useState([]);
+  const [ratingAverage, setRatingAverage] = useState(0);
+  const [isInLibrary, setIsInLibrary] = useState(false);
+  const {showToast, showLoader, hideLoader} = useAppContext();
+  const {params} = route;
+  const {bookId, bookItem} = params;
+  const {
+    BookDetails,
+    categories,
+    category_id,
+    cover_image,
+    rating_average,
+    ratings,
+  } = bookItem;
+console.log(rating)
+  useEffect(() => {
+    if (BookDetails) {
+      const bookData = {
+        book_id: bookId,
+        language: BookDetails?.lng_id,
+      };
+
+      booksService
+        .getBookChapters(bookData)
+        .then(response => {
+          setChpaters(response.data.chapters);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    getLibraryBooks();
+    setRating(ratings);
+    setRatingAverage(rating_average);
+  }, [BookDetails, route]);
+
+  useEffect(() => {
+    if (ratings) {
+      setRating(ratings);
+      setRatingAverage(rating_average);
+    }
+  }, [ratings]);
+
+  const getLibraryBooks = () => {
+    booksService
+      .getLibraryBooks()
+      .then(res => {
+        for (let i = 0; i <= res.data.data.length; i++) {
+          if (BookDetails.book_id == res?.data?.data[i]?.BookDetails?.book_id) {
+            setIsInLibrary(true);
+          }
+        }
+      })
+      .catch(err => console.log(err));
+  };
+  const handleAddToLibrary = bookId => {
+    booksService
+      .addToLibrary({book_id: bookId})
+      .then(res => {
+        setIsInLibrary(true);
+        showToast(res.data.message);
+      })
+      .catch(err => console.log(err));
+  };
+  const handleRemoveFromLibrary = bookId => {
+    console.log(bookId)
+    const bookData = {
+      book_id: [bookId.toString()],
+      select_all: 0,
+    };
+    booksService
+      .removeFromLibrary(bookData)
+      .then(res => {
+        setIsInLibrary(false);
+        showToast(res.data.message);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const handleShare = book => {
+    Share.share({
+      title: book.title,
+      text: `Check out this page for read ${book.title} by ${book.author}. for more book please download and explore thousands of books.for android please check this: https://play.google.com/store/apps/details?id=com.akati, and for iOS please check this : https://apps.apple.com/in/app/akati/id1633617962  or for web please check the https://app.feupsontec.com`,
+      url: 'https://app.feupsontec.com',
+    })
+      .then(() => console.log('Successfully shared'))
+      .catch(error => console.log('Error sharing', error));
+  };
+
+  const renderTabContent = key => {
+    switch (key) {
+      case 'Reviews':
+        return (
+          <View style={styles.tabContent}>
+            {rating &&
+              rating.length > 0 &&
+              rating.map((item, index) => (
+                <View style={{backgroundColor:Colors.primary, padding:15, marginBottom:20, borderRadius:15}} key={index}>
+                  <View style={styles.reviewHeader}>
+                    <Image
+                      style={styles.reviewImage}
+                      source={{
+                        uri: 'https://feupsontec.com/storage/book-front-cover/63ad35ebb2492.jpeg',
+                      }}
+                      resizeMode="stretch"
+                    />
+                    <View style={styles.reviewHeaderTextContainer}>
+                      <Text style={styles.reviewAuthor}>
+                        George R.R. Martin
+                      </Text>
+                      <View style={styles.reviewRating}>
+                        <CustomStarRating rate={item.rating} />
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.reviewDivider}>
+                    <Text style={styles.reviewDescription}>{item.message}</Text>
+                  </View>
+                </View>
+              ))}
+          </View>
+        );
+      case 'Chapters':
+        return (
+          <View style={styles.tabContent}>
+            {chapters && chapters.length > 0 ? (
+              chapters.map((chapter, index) => (
+                <Text key={index} style={styles.chapterText}>
+                  {chapter.chapter_details.title}
+                  {chapter.unlock != 1 && (
+                    <Icons name={'lock'} size={20} color={Colors.secondary} />
+                  )}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.description}>No chapters available.</Text>
+            )}
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
+
   const tabs = [
     {
       key: 'Reviews',
       title: 'Reviews',
-      content: (
-        <View style={styles.tabContent}>
-          <View style={styles.reviewHeader}>
-            <Image
-              style={styles.reviewImage}
-              source={{
-                uri: 'https://feupsontec.com/storage/book-front-cover/63ad35ebb2492.jpeg',
-              }}
-              resizeMode="stretch"
-            />
-            <View style={styles.reviewHeaderTextContainer}>
-              <Text style={styles.reviewAuthor}>George R.R. Martin</Text>
-              <View style={styles.reviewRating}>
-                <CustomStarRating rate={4} />
-              </View>
-            </View>
-          </View>
-          <View style={styles.reviewDivider}>
-            <Text style={styles.reviewDescription}>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.
-            </Text>
-          </View>
-        </View>
-      ),
+      content: renderTabContent('Reviews'),
     },
     {
       key: 'Chapters',
       title: 'Chapters',
-      content: (
-        <View style={styles.tabContent}>
-          {/* Chapters content */}
-          <Text style={styles.description}>Chapters content goes here...</Text>
-        </View>
-      ),
+      content: renderTabContent('Chapters'),
     },
   ];
 
   return (
     <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
       <View style={{flex: 1}}>
-        <View style={{position: 'relative'}}>
+        <GradientView
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <Icons name={'long-arrow-left'} size={20} color={'white'} />
+        </GradientView>
+        <GradientView
+          style={styles.shareButton}
+          onPress={handleShare}>
+          <Icons name={'share-alt'} size={20} color={'white'} />
+        </GradientView>
+        <View style={{position: 'relative', zIndex: -1}}>
           <Image
-            source={{
-              uri: 'https://feupsontec.com/storage/book-front-cover/63ad35ebb2492.jpeg',
-            }}
+            source={{uri: IMAGE_API_URL + cover_image}}
             style={{width: '100%', height: 200}}
             resizeMode="cover"
           />
@@ -76,9 +203,7 @@ function BookDetailsScreen() {
         <View style={styles.centeredImage}>
           <Image
             style={styles.mainImage}
-            source={{
-              uri: 'https://feupsontec.com/storage/book-front-cover/63ad35ebb2492.jpeg',
-            }}
+            source={{uri: IMAGE_API_URL + cover_image}}
             resizeMode="stretch"
           />
         </View>
@@ -86,14 +211,14 @@ function BookDetailsScreen() {
           <View style={{paddingVertical: 20, gap: 10, paddingHorizontal: 10}}>
             <Text
               style={{color: Colors.white, fontWeight: '600', fontSize: 22}}>
-              A long way gone
+              {BookDetails?.title}
             </Text>
             <Text
               style={{color: Colors.darkGray, fontWeight: '400', fontSize: 12}}>
-              Author: George R.R. Martin
+              Author: {BookDetails?.author}
             </Text>
             <View>
-              <CustomStarRating rate={4} />
+              <CustomStarRating rate={ratingAverage} />
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <View style={{width: '50%', paddingHorizontal: 5}}>
@@ -109,10 +234,19 @@ function BookDetailsScreen() {
                 />
               </View>
               <View style={{width: '50%', paddingHorizontal: 5}}>
-                <Button
-                  style={{paddingVertical: 10, paddingHorizontal: 10}}
-                  title={'Remove Library'}
-                />
+                {!isInLibrary ? (
+                  <Button
+                    style={{paddingVertical: 10, paddingHorizontal: 10}}
+                    title={'Add Library'}
+                    onPress={() => handleAddToLibrary(BookDetails?.book_id)}
+                  />
+                ) : (
+                  <Button
+                    style={{paddingVertical: 10, paddingHorizontal: 10}}
+                    title={'Remove Library'}
+                    onPress={() => handleRemoveFromLibrary(BookDetails?.book_id)}
+                  />
+                )}
               </View>
             </View>
             <View
@@ -162,10 +296,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    marginBottom:20
+  },
+  reviewDivider:{
+    marginBottom:5
   },
   reviewImage: {
-    width: 50,
-    height: 50,
+    width: 45,
+    height: 45,
     borderRadius: 50,
     borderWidth: 1,
     borderColor: Colors.white,
@@ -181,14 +319,36 @@ const styles = StyleSheet.create({
   reviewRating: {
     marginLeft: -5,
   },
-  reviewDivider: {
-    borderTopWidth: 1,
-    borderColor: Colors.darkGray,
-    paddingTop: 15,
-    marginTop: 10,
-  },
   reviewDescription: {
     color: Colors.gray,
+    fontWeight: '400',
+    fontSize: 12,
+    lineHeight: 22,
+  },
+  backButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    position: 'absolute',
+    marginTop: 20,
+  },
+  shareButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+borderRadius:50,
+    position: 'absolute',
+    marginTop: 20,
+    right: 10
+  },
+  chapterText: {
+    color: Colors.white,
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  description: {
+    color: Colors.white,
     fontWeight: '400',
     fontSize: 14,
     lineHeight: 22,

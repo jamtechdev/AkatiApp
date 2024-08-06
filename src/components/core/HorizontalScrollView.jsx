@@ -1,11 +1,15 @@
 // HorizontalScrollView.js
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
 import {CircleCard, Card} from '../../components'; // Import the Card component
 
-const HorizontalScrollView = ({ data , isCircle =false}) => {
-  const renderItem = ({ item }) => {
-    return isCircle ? <CircleCard item={item} /> : <Card item={item} />;
+const HorizontalScrollView = ({data, isCircle = false}) => {
+  const renderItem = ({item}) => {
+    return isCircle ? (
+      <CircleCard item={item} />
+    ) : (
+      <Card item={item} style={{width: 155}} />
+    );
   };
 
   return (
@@ -13,7 +17,7 @@ const HorizontalScrollView = ({ data , isCircle =false}) => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item,) => item.id.toString()} // Ensure each item has a unique id
+        keyExtractor={item => item.id.toString()} // Ensure each item has a unique id
         horizontal
         showsHorizontalScrollIndicator={false}
       />

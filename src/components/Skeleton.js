@@ -1,6 +1,5 @@
-import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, Dimensions, Animated, FlatList} from 'react-native';
-import {Colors} from '../_utils/GlobalStyle';
+import React from 'react';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {SkeletonLoader} from '../components';
 
 const Skeleton = ({
@@ -68,8 +67,8 @@ const styles = StyleSheet.create({
   isCircleCard: {
     width: 100,
     height: 100,
-    borderWidth: 1,
-    borderColor: Colors.secondary,
+    // borderWidth: 1,
+    // borderColor: Colors.secondary,
     borderRadius: 50,
     padding: 5,
     justifyContent: 'center',
@@ -77,8 +76,8 @@ const styles = StyleSheet.create({
   },
   isCard: {
     height: 180,
-    borderColor: Colors.secondary,
-    borderWidth: 1,
+    // borderColor: Colors.secondary,
+    // borderWidth: 1,
   },
   isList: {
     height: 55,
