@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {HeadingText, RowContainer} from '../../components';
+import {CustomText, HeadingText, RowContainer} from '../../components';
 import {Image, StyleSheet, TextInput, View} from 'react-native';
 import avatar from '../../images/avtar.png';
 import {Colors} from '../../_utils/GlobalStyle';
@@ -31,6 +31,7 @@ function ProfileScreen() {
           source={userDetails?.avatar_url ? userDetails?.avatar_url : avatar}
           style={styles.avatar}
         />
+        <CustomText> Coins : {userDetails?.coins} </CustomText>
         <TextInput
           style={styles.input}
           value={

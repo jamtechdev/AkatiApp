@@ -103,8 +103,8 @@ export default function LoginScreen({navigation}) {
         navigation.replace('Main');
       })
       .catch(error => {
-        console.log(error, 'network');
-        showToast(error.message, 'error');
+        console.log(error.response.data, 'network');
+        showToast(error.response.data.message, 'error');
       });
   };
 
