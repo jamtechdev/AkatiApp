@@ -9,16 +9,19 @@ import {AlertModal, CustomDrawerItem, GradientView} from '../components';
 import {useDispatch} from 'react-redux';
 import {logout} from '../_store/_reducers/auth';
 import Icons from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
 
 const DrawerContent = props => {
   const [show, setShow] = useState(false);
   const toggleModel = () => setShow(prev => !prev);
   const dispatch = useDispatch();
-
+  const navigation = useNavigation();
   const logoutAction = async () => {
-    dispatch(logout());
+  dispatch(logout());
     toggleModel();
-    props.navigation.navigate('Auth');
+    setTimeout(() => {
+      navigation.replace('Auth');
+    }, 500);
   };
 
   const handleShare = () => {
