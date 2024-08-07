@@ -17,7 +17,7 @@ import {HeadingText} from '../../../components';
 
 const {height: screenHeight} = Dimensions.get('window');
 
-const BottomDrawer = ({
+const ChapterBottomDrawer = ({
   visible,
   onClose,
   data,
@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BottomDrawer;
+export default ChapterBottomDrawer;

@@ -16,8 +16,9 @@ import {commonServices} from '../../_services/common.service';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import BottomDrawer from './_components/BottomDrawer';
 import {useAppContext} from '../../_customContext/AppProvider';
+import ChapterBottomDrawer from './_components/ChapterBottomDrawer';
+import FilterBottomDrawer from './_components/FilterBottomDrawer';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
@@ -31,6 +32,21 @@ function ReadingScreen({navigation, route}) {
   const [mustReadBooks, setMustReadBooks] = useState();
   const [loadingComments, setLoadingComments] = useState(true);
   const {showToast, showLoader, hideLoader} = useAppContext();
+
+
+  const [filterVisible, setFilterVisible] = useState(false); // State for filter modal
+  const [textSettings, setTextSettings] = useState({
+ textAlign:  'left',
+fontWeight: 'normal',
+fontFamily: 'default',
+color: '#fff',
+backgroundColor: Colors.primary
+  });
+  const handleFilterApply = (settings) => {
+    setTextSettings(settings);
+    setFilterVisible(false);
+  };
+
   useEffect(() => {
     booksService
       .getMustReadBooks()
@@ -148,7 +164,7 @@ function ReadingScreen({navigation, route}) {
           <TouchableText>
             <Icons name={'comment'} size={20} color={'white'} />
           </TouchableText>
-          <TouchableText>
+          <TouchableText onPress={()=> setFilterVisible(true)}>
             <Icons name={'filter'} size={20} color={'white'} />
           </TouchableText>
           <TouchableText
@@ -176,9 +192,21 @@ function ReadingScreen({navigation, route}) {
 
           {currentChapter && currentChapter.unlock === 1 ? (
             <View>
-              <CustomText style={{marginVertical: 10}}>
+            <Text style={[
+            styles.chapterContent,
+            {
+              textAlign: textSettings.textAlign,
+              fontWeight: textSettings.fontWeight,
+              lineHeight: textSettings.lineHeight,
+              fontFamily: textSettings.fontFamily,
+              color: textSettings.color,
+              fontSize:textSettings.fontSize,
+              backgroundColor: textSettings.backgroundColor,
+            },
+          ]}>
+          {textSettings.fontColor}
                 {currentChapter?.chapter_details?.content}
-              </CustomText>
+              </Text>
               <View
                 style={{
                   paddingTop: 60,
@@ -259,7 +287,7 @@ function ReadingScreen({navigation, route}) {
         </View>
       </ScrollView>
 
-      <BottomDrawer
+      <ChapterBottomDrawer
         visible={visible}
         data={modalData}
         onClose={() => setVisible(false)}
@@ -267,6 +295,13 @@ function ReadingScreen({navigation, route}) {
         onPress={index => setCurrentChapterIndex(index)}
         title={BookDetails?.title}
       />
+       <FilterBottomDrawer
+        visible={filterVisible}
+        onClose={() => setFilterVisible(false)}
+        title={'Filter'}
+        filterState={textSettings}
+        setFilterState={setTextSettings}
+        />
     </RowContainer>
   );
 }
