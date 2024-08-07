@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {
-  BottomDrawer,
   Button,
   CustomText,
   GradientView,
   HeadingText,
+  HorizontalScrollView,
   RowContainer,
+  Skeleton,
   TouchableText,
 } from '../../components';
 import {booksService} from '../../_services/book.service';
@@ -15,12 +16,13 @@ import {commonServices} from '../../_services/common.service';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
+import BottomDrawer from './_components/BottomDrawer';
+import {useAppContext} from '../../_customContext/AppProvider';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
+  const {bookId, chapters, BookDetails, categories} = params;
   const {coins} = useSelector(getAuth);
-  const [bookDetails, setBookDetails] = useState();
-  const [chapters, setChapters] = useState([]);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [comments, setComments] = useState([]);
   const [autoUnlock, setAutoUnlock] = useState(false);
@@ -28,23 +30,8 @@ function ReadingScreen({navigation, route}) {
   const [modalData, setModalData] = useState([]);
   const [mustReadBooks, setMustReadBooks] = useState();
   const [loadingComments, setLoadingComments] = useState(true);
+  const {showToast, showLoader, hideLoader} = useAppContext();
   useEffect(() => {
-    booksService
-      .getBookById(params.bookId)
-      .then(res => {
-        setBookDetails(res.data.data);
-        if (res.data) {
-          const bookData = {
-            book_id: res.data.data.id,
-            language: res.data.data.BookDetails.lng_id,
-          };
-
-          getChapterData(bookData);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
     booksService
       .getMustReadBooks()
       .then(res => {
@@ -53,8 +40,7 @@ function ReadingScreen({navigation, route}) {
       .catch(error => {
         console.log(error);
       });
-  }, [params.bookId]);
-
+  }, [params]);
   const getChapterData = bookData => {
     booksService
       .getBookChapters(bookData)
@@ -65,10 +51,8 @@ function ReadingScreen({navigation, route}) {
         console.log(error);
       });
   };
-
   const currentChapter = chapters[currentChapterIndex];
   useEffect(() => {
-    // window.scrollTo(0, 0);
     fetchComments();
   }, [currentChapter]);
 
@@ -126,17 +110,19 @@ function ReadingScreen({navigation, route}) {
     booksService
       .unlockChapter(formData)
       .then(res => {
+        console.log(res.data)
         if (res.data.code == 201) {
-          toggleModel();
+          setVisible(false);
+          showToast(res.data.message, 'error');
           return;
         }
 
         const bookData = {
-          book_id: bookDetails.id,
-          language: bookDetails.BookDetails.lng_id,
+          book_id: bookId,
+          language: BookDetails.lng_id,
         };
         getChapterData(bookData);
-        toast.success(res.data.message);
+        showToast(res.data.message);
         dispatch(updateCoins(coins - currentChapter.chapter_reading_cost));
       })
       .catch(error => {
@@ -181,23 +167,105 @@ function ReadingScreen({navigation, route}) {
         </CustomText>
         <TouchableText onPress={handleNextChapter}>Next</TouchableText>
       </View>
+
       <ScrollView>
         <View>
           <HeadingText>{`Chapter ${currentChapterIndex + 1} - ${
             currentChapter?.chapter_details?.title
           }`}</HeadingText>
-          <CustomText style={{marginVertical: 10}}>
-            {currentChapter?.chapter_details?.content}
-          </CustomText>
+
+          {currentChapter && currentChapter.unlock === 1 ? (
+            <View>
+              <CustomText style={{marginVertical: 10}}>
+                {currentChapter?.chapter_details?.content}
+              </CustomText>
+              <View
+                style={{
+                  paddingTop: 60,
+                  paddingVertical: 20,
+                }}>
+                <Icons
+                  name={'heart'}
+                  size={100}
+                  color={Colors.secondary}
+                  style={{textAlign: 'center'}}
+                />
+                <CustomText
+                  style={{
+                    paddingVertical: 30,
+                    fontWeight: 'bold',
+                    fontSize: 14,
+                    textAlign: 'center',
+                  }}>
+                  Thanks for reading!{' '}
+                </CustomText>
+              </View>
+              <View style={{paddingVertical: 10, paddingBottom: 50}}>
+                {currentChapterIndex === chapters.length - 1 ? (
+                  BookDetails.is_complete == 0 && (
+                    <CustomText
+                      style={{
+                        color: Colors.secondary,
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}>
+                      {' '}
+                      Stay Tuned, more chapters are coming soon...
+                    </CustomText>
+                  )
+                ) : (
+                  <Button title="Next Chapter" onPress={handleNextChapter} />
+                )}
+              </View>
+            </View>
+          ) : (
+            <View style={{paddingVertical: 50, paddingHorizontal: 20}}>
+              <CustomText style={{fontSize: 14, textAlign: 'center'}}>
+                The story of this chapter is full of surprises. May you enjoy
+                your time when reading it.
+              </CustomText>
+              <Button
+                title="Unlock This Chapter"
+                onPress={handleUnlockChapter}
+                style={{marginTop: 50}}
+              />
+
+              <CustomText
+                style={{
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  marginVertical: 30,
+                }}>
+                Price :{' '}
+                <Icons
+                  name={'dollar'}
+                  size={15}
+                  color={Colors.secondary}
+                  style={{textAlign: 'center'}}
+                />{' '}
+                {currentChapter?.chapter_reading_cost}
+              </CustomText>
+            </View>
+          )}
+        </View>
+        <View>
+          <HeadingText>{'Must Read'}</HeadingText>
+          {!mustReadBooks && (
+            <Skeleton isLoading={true} count={3} numColumns={3} />
+          )}
+          <HorizontalScrollView data={mustReadBooks} />
         </View>
       </ScrollView>
+
       <BottomDrawer
         visible={visible}
         data={modalData}
         onClose={() => setVisible(false)}
         currentChapter={currentChapterIndex}
         onPress={index => setCurrentChapterIndex(index)}
-        title={bookDetails?.BookDetails?.title}
+        title={BookDetails?.title}
       />
     </RowContainer>
   );

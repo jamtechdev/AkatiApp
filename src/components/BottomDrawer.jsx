@@ -13,19 +13,11 @@ import {
 } from 'react-native';
 import {Colors} from '../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import CustomText from './core/CustomText';
-import HeadingText from './core/HeadingText';
+import { HeadingText } from '../components';
 
 const {height: screenHeight} = Dimensions.get('window');
 
-const BottomDrawer = ({
-  visible,
-  onClose,
-  data,
-  currentChapter,
-  onPress,
-  title,
-}) => {
+const BottomDrawer = ({visible, onClose, title, children}) => {
   const translateY = useRef(new Animated.Value(screenHeight)).current;
 
   useEffect(() => {
@@ -45,79 +37,21 @@ const BottomDrawer = ({
     >
       <View style={styles.overlay}>
         <Animated.View style={[styles.modal, {transform: [{translateY}]}]}>
-          <View style={styles.modalContent}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: 200,
-                margin: 'auto',
-              }}>
-              <HeadingText style={{color: Colors.secondary}}>
-                {title}
-              </HeadingText>
-              <TouchableOpacity onPress={onClose}>
-                <Text style={styles.button}>
-                  <Icons name={'close'} size={20} color={Colors.white} />
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView
-              style={{width: '100%'}}
-              showsVerticalScrollIndicator={false}>
-              <View style={styles.tabContent}>
-                {data && data.length > 0 ? (
-                  data.map((chapter, index) => (
-                    <Pressable
-                      style={[
-                        {
-                          padding: 15,
-                          borderWidth: 1,
-                          borderColor: Colors.primary,
-                          borderRadius: 5,
-                          marginBottom: 10,
-                          backgroundColor: Colors.primary,
-                        },
-                        index == currentChapter
-                          ? {backgroundColor: Colors.tertiary}
-                          : {},
-                      ]}
-                      key={index}
-                      onPress={() => onPress(index)}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: Colors.white,
-                            fontWeight: 600,
-                            marginBottom: 5,
-                          }}>
-                          Chapter {index + 1}
-                        </Text>
-                        {chapter.unlock != 1 && (
-                          <Icons
-                            name={'lock'}
-                            size={15}
-                            color={Colors.secondary}
-                          />
-                        )}
-                      </View>
-                      <Text style={styles.chapterText}>
-                        {chapter.chapter_details.title}
-                      </Text>
-                    </Pressable>
-                  ))
-                ) : (
-                  <Text style={styles.description}>No chapters available.</Text>
-                )}
-              </View>
-            </ScrollView>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+                 <HeadingText>{title}</HeadingText>
+            <Icons
+              name={'close'}
+              size={20}
+              color={Colors.white}
+              onPress={onClose}
+            />
           </View>
+          <View style={styles.modalContent}>{children}</View>
         </Animated.View>
       </View>
     </Modal>
@@ -131,7 +65,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   modal: {
-    height: '100%',
+    height: '80%',
     backgroundColor: Colors.tertiary,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

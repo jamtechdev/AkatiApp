@@ -9,6 +9,7 @@ export const booksService = {
   getBookById,
   getBookChapters,
   addReview,
+  getBookReview,
   addToLibrary,
   removeFromLibrary,
   searchBooks,
@@ -54,6 +55,10 @@ async function getBookChapters(data) {
 
 async function addReview(data) {
   return await axiosInstance.post("/books/review-rating-add", data);
+}
+
+async function getBookReview(book_id) {
+  return await axiosInstance.get(`/books/review-rating?book_id=${book_id}`);
 }
 
 async function addToLibrary(data) {

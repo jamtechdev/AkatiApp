@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  BottomDrawer,
   Button,
   CustomStarRating,
   CustomText,
@@ -16,6 +17,7 @@ import {
   StyleSheet,
   Share,
   Animated,
+  TextInput,
 } from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
@@ -30,6 +32,7 @@ function BookDetailsScreen({navigation, route}) {
   const [isInLibrary, setIsInLibrary] = useState(false);
   const [ratingStar, setRatingStar] = useState(0);
   const [reviewText, setReviewText] = useState('');
+  const [showModel, setShowModel] = useState(false);
   const {showToast, showLoader, hideLoader} = useAppContext();
   const {params} = route;
   const {bookId, bookItem} = params;
@@ -47,7 +50,7 @@ function BookDetailsScreen({navigation, route}) {
         book_id: bookId,
         language: BookDetails?.lng_id,
       };
-
+      fetchBookReview()
       booksService
         .getBookChapters(bookData)
         .then(response => {
@@ -58,16 +61,19 @@ function BookDetailsScreen({navigation, route}) {
         });
     }
     getLibraryBooks();
-    setRating(ratings);
     setRatingAverage(rating_average);
   }, [BookDetails, route]);
 
-  useEffect(() => {
-    if (ratings) {
-      setRating(ratings);
-      setRatingAverage(rating_average);
-    }
-  }, [ratings]);
+const fetchBookReview =()=>{
+  booksService
+  .getBookReview(bookId)
+  .then(response => {
+    setRating(response.data.data)
+  })
+  .catch(error => {
+    console.log(error);
+  });
+}
 
   const getLibraryBooks = () => {
     booksService
@@ -116,9 +122,10 @@ function BookDetailsScreen({navigation, route}) {
 
   const handleAddReview = () => {
     if (ratingStar == 0 && reviewText == '') {
-      toast.error('Please select stars and enter review');
+      showToast('Please select stars and enter review', 'error');
       return;
     }
+    showLoader()
     const reviewData = {
       rating: ratingStar,
       message: reviewText,
@@ -127,16 +134,16 @@ function BookDetailsScreen({navigation, route}) {
     booksService
       .addReview(reviewData)
       .then(res => {
-        // setShow(false);
+        fetchBookReview()
+        setShowModel(false);
         setRatingStar(0);
         setReviewText('');
-        // setReload(res.data);
         showToast(res.data.message);
       })
       .catch(error => {
         console.log(error);
-        showToast(error.errors.message, "error");
-      });
+        showToast(error.errors.message, 'error');
+      }).finally(()=> hideLoader())
   };
 
   const renderTabContent = key => {
@@ -144,9 +151,25 @@ function BookDetailsScreen({navigation, route}) {
       case 'Reviews':
         return (
           <View style={styles.tabContent}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                marginBottom: 10,
+              }}>
+              <GradientView
+                style={styles.addButton}
+                onPress={() => setShowModel(true)}>
+                <CustomText style={{fontSize: 15, fontWeight: 600}}>
+                  {' '}
+                  Add Review
+                </CustomText>
+                <Icons name={'plus-circle'} size={15} color={Colors.white} />
+              </GradientView>
+            </View>
             {rating &&
               rating.length > 0 &&
-              rating.map((item, index) => (
+              rating.slice().reverse().map((item, index) => (
                 <View
                   style={{
                     backgroundColor: Colors.primary,
@@ -158,14 +181,12 @@ function BookDetailsScreen({navigation, route}) {
                   <View style={styles.reviewHeader}>
                     <Image
                       style={styles.reviewImage}
-                      source={{
-                        uri: 'https://feupsontec.com/storage/book-front-cover/63ad35ebb2492.jpeg',
-                      }}
+                      source={{uri:item?.user?.profile_image_url_web}}
                       resizeMode="stretch"
                     />
                     <View style={styles.reviewHeaderTextContainer}>
                       <Text style={styles.reviewAuthor}>
-                        George R.R. Martin
+                      {item?.user?.first_name}{' '}{item?.user?.last_name}
                       </Text>
                       <View style={styles.reviewRating}>
                         <CustomStarRating rate={item.rating} />
@@ -265,6 +286,14 @@ function BookDetailsScreen({navigation, route}) {
     extrapolate: 'clamp',
   });
 
+  const handleRatingChange = newRating => {
+    setRatingStar(newRating);
+  };
+
+  const handleChange = text => {
+    setReviewText(text);
+  };
+
   return (
     <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
       <View style={{flex: 1}}>
@@ -323,14 +352,17 @@ function BookDetailsScreen({navigation, route}) {
               style={{color: Colors.darkGray, fontWeight: '400', fontSize: 12}}>
               Author: {BookDetails?.author}
             </Text>
-            <View>
-              <CustomText style={{fontSize: 20}}>
-                {' '}
-                {parseFloat(rating_average).toFixed(1)}{' '}
-                <CustomStarRating rate={ratingAverage} />{' '}
-              </CustomText>
-            </View>
-            <CustomText> based on {ratings?.length} ratings</CustomText>
+
+            {!rating_average ? null : (
+              <View>
+                <CustomText style={{fontSize: 20}}>
+                  {parseFloat(rating_average).toFixed(1)}
+                  <CustomStarRating rate={ratingAverage} />{' '}
+                </CustomText>
+                <CustomText> based on {ratings?.length} ratings</CustomText>
+              </View>
+            )}
+
             <View>
               <CustomText> Fallowing Tags</CustomText>
               <View style={styles.categoryContainer}>
@@ -353,7 +385,12 @@ function BookDetailsScreen({navigation, route}) {
                   gradient={false}
                   title={'Start Reading'}
                   onPress={() =>
-                    navigation.navigate('Reading', {bookId: bookId, chapters : chapters, bookItem: bookItem})
+                    navigation.navigate('Reading', {
+                      bookId: bookId,
+                      chapters: chapters,
+                      BookDetails: BookDetails,
+                      categories: categories,
+                    })
                   }
                 />
               </View>
@@ -397,6 +434,35 @@ function BookDetailsScreen({navigation, route}) {
           <TabSwitcher tabs={tabs} />
         </ScrollView>
       </View>
+      <BottomDrawer
+        visible={showModel}
+        onClose={() => setShowModel(false)}
+        title={'Add Book Review'}
+        >
+        <View style={styles.footerContainer}>
+          <View style={styles.reviewInputContainer}>
+            <View style={styles.starView}>
+            <CustomText> Add your Star :</CustomText>
+              <CustomStarRating
+                size={30}
+                onRatingChange={handleRatingChange}
+                rate={ratingStar}
+                isDisable={false}
+              />
+            </View>
+            <CustomText> Add your Star :</CustomText>
+            <TextInput
+              multiline
+              style={styles.inputView}
+              placeholder="Enter your review here..."
+              onChangeText={handleChange}
+              value={reviewText}
+              placeholderTextColor={Colors.white}
+            />
+          </View>
+          <Button title={'Submit'} onPress={handleAddReview} />
+        </View>
+      </BottomDrawer>
     </RowContainer>
   );
 }
@@ -423,7 +489,7 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     padding: 10,
-    minHeight: 200,
+    minHeight: 250,
   },
   reviewHeader: {
     flexDirection: 'row',
@@ -491,6 +557,40 @@ const styles = StyleSheet.create({
     gap: 8,
     flexDirection: 'row',
     marginVertical: 10,
+  },
+  addButton: {
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 7,
+    borderRadius: 20,
+  },
+  reviewInputContainer: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: 15,
+  },
+  footerContainer: {
+    paddingTop: 20,
+    width: '100%'
+  },
+  starView: {
+    gap: 10,
+    marginTop: 15,
+    marginBottom: 5,
+  },
+  inputView: {
+    color: Colors.white,
+    width: '100%',
+    height: 100,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    padding: 18,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    backgroundColor: Colors.tertiary,
   },
 });
 
