@@ -67,6 +67,7 @@ export default function SearchScreen() {
 
   const handleGetHistory = () => {
     commonServices.getHistory().then((res) => {
+      console.log(res.data.data)
       setRecentSearch(res.data.data.mySearch);
       setHotSearch(res.data.data.hotSearch);
     }).catch((err) => console.log(err));
@@ -134,7 +135,7 @@ export default function SearchScreen() {
         <View>
           <HeadingText>Hot search</HeadingText>
           <View style={styles.categoryContainer}>
-            {hotSearch.length > 0 ? (
+            {hotSearch.length >= 0 ? (
               hotSearch.map((hot, index) => (
                 <TextBadge
                   key={index}
@@ -148,10 +149,13 @@ export default function SearchScreen() {
                 <Skeleton isLoading={true} count={3} isHorizontal isBatch />
               </>
             )}
+            {hotSearch.length == 0 && (
+              <CustomText> No search hot search keys found </CustomText>
+            )}
           </View>
           <HeadingText>Recent search</HeadingText>
           <View style={{ marginVertical: 10 }}>
-            {recentSearch.length > 0 ? (
+            {recentSearch.length >= 0 ? (
               recentSearch.map((search, index) => (
                 <View style={styles.recentContainer} key={index}>
                   <TouchableOpacity
@@ -172,6 +176,9 @@ export default function SearchScreen() {
               ))
             ) : (
               <Skeleton isLoading={true} count={4} isList />
+            )}
+            {recentSearch.length == 0 && (
+              <CustomText> No search history found </CustomText>
             )}
           </View>
         </View>

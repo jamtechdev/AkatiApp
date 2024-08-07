@@ -10,9 +10,9 @@ import {
   Skeleton,
 } from '../../components';
 import {booksService} from '../../_services/book.service';
-import { useFocusEffect } from '@react-navigation/native';
-import { getLanguage } from '../../_store/_reducers/auth';
-import { useSelector } from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
+import {getLanguage} from '../../_store/_reducers/auth';
+import {useSelector} from 'react-redux';
 
 export default function DiscoverScreen() {
   const [loading, setLoading] = useState(true);
@@ -25,7 +25,7 @@ export default function DiscoverScreen() {
   useFocusEffect(
     useCallback(() => {
       fetchLibraryBook();
-    }, [language])
+    }, [language]),
   );
 
   const fetchLibraryBook = async () => {
@@ -36,7 +36,6 @@ export default function DiscoverScreen() {
       console.log(error);
     }
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,59 +61,74 @@ export default function DiscoverScreen() {
       } finally {
         setLoading(false);
       }
-    
-
     };
 
     fetchData();
   }, [language]);
 
-  const renderCategory = ({ item }) => (
-    <View key={item.title} style={{ marginVertical: 10 }}>
+  const renderCategory = ({item}) => (
+    <View key={item.title} style={{marginVertical: 10}}>
       <HeadingText>{item.title}</HeadingText>
       <HorizontalScrollView data={item.data} />
     </View>
   );
 
-  const renderHorizontalScrollView = (data, isCircle = false) => (
+  const renderHorizontalScrollView = (data, key, isCircle = false) =>
     loading ? (
-      <Skeleton isLoading={true} count={3} numColumns={3} isCircleCard={isCircle} />
+      <Skeleton
+        isLoading={true}
+        count={3}
+        numColumns={3}
+        isCircleCard={isCircle}
+      />
     ) : data.length === 0 ? (
-      <Text>No data found</Text>
+      key !== 'libraryBooks' && <Text>No data found</Text>
     ) : (
       <HorizontalScrollView data={data} isCircle={isCircle} />
-    )
-  );
+    );
 
   return (
     <RowContainer>
       <FlatList
         data={[
-          { title: 'From Your Library', data: libraryBooks, key: 'libraryBooks', isCircle: true },
-          { title: 'New In Akati', data: newBooks, key: 'newBooks' },
-          { title: 'Must Read', data: mustReadBooks, key: 'mustReadBooks' },
-          { title: 'You may also like', data: alsoLikeBooks, key: 'alsoLikeBooks' },
+          {
+            title: 'From Your Library',
+            data: libraryBooks,
+            key: 'libraryBooks',
+            isCircle: true,
+          },
+          {title: 'New In Akati', data: newBooks, key: 'newBooks'},
+          {title: 'Must Read', data: mustReadBooks, key: 'mustReadBooks'},
+          {
+            title: 'You may also like',
+            data: alsoLikeBooks,
+            key: 'alsoLikeBooks',
+          },
         ]}
-        renderItem={({ item }) => (
-          <View >
-            <HeadingText>{item.title}</HeadingText>
-            {renderHorizontalScrollView(item.data, item.isCircle)}
+        renderItem={({item}) => (
+          <View>
+            {item.key == 'libraryBooks' && item?.data?.length == 0 ? null : (
+              <HeadingText>{item.title}</HeadingText>
+            )}
+            {renderHorizontalScrollView(item.data, item.key, item.isCircle)}
           </View>
         )}
-        ListFooterComponent={() => (
+        ListFooterComponent={() =>
           loading ? (
             <Skeleton isLoading={true} count={3} numColumns={3} />
           ) : (
             <FlatList
               data={categoryBook.filter(
                 category =>
-                  category.data && category.data.length > 0 && category.title !== 'Must Read'
+                  category.data &&
+                  category.data.length > 0 &&
+                  category.title !== 'Must Read',
               )}
               renderItem={renderCategory}
               keyExtractor={(item, index) => item.title + index}
             />
           )
-        )}
+        }
         keyExtractor={(item, index) => item.key + index}
         showsVerticalScrollIndicator={false}
       />
