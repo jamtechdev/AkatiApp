@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import user_icon from '../../images/avtar.png';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Colors} from '../../_utils/GlobalStyle';
 // import moment from 'moment';
 
 const Comment = ({comment, onReply, onLike}) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [showReplies, setShowReplies] = useState(false); // Local state for showing replies
-  console.log(comment);
+
   const handleReply = () => {
     if (replyText.trim()) {
       onReply(comment.id, replyText);
@@ -147,18 +148,18 @@ const styles = StyleSheet.create({
   commentContainer: {
     flexDirection: 'row',
     alignItems: 'start',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.tertiary,
     padding: 10,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
-    marginLeft: 10,
-    marginTop: 5,
+    // marginLeft: 10,
+    // marginTop: 5,
     justifyContent: 'center',
   },
   replyCommentContainer: {
     flexDirection: 'row',
     alignItems: 'start',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.tertiary,
     // borderBottomWidth: 1,
     paddingVertical: 5,
     paddingLeft: 40,

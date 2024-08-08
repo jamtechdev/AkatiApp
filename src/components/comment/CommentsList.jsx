@@ -41,7 +41,7 @@ const CommentsList = ({token, chapterDetails}) => {
     commonServices
       .getComments(bookId, chapterId)
       .then(data => {
-        setComments(data.data);
+        setComments(data.data.data);
       })
       .catch(error => {
         console.error('Error fetching comments:', error);
@@ -79,11 +79,14 @@ const CommentsList = ({token, chapterDetails}) => {
 
   const addReply = (commentId, replyText) => {
     if (replyText.trim()) {
+      const formData = {
+        text: replyText,
+        comment_id: commentId,
+      };
       commonServices
-        .replayComments(token, replyText, commentId)
+        .replayComments(formData)
         .then(res => {
-          console.log('Reply added:', res);
-          fetchComments(); // Fetch updated comments list
+          fetchComments();
         })
         .catch(error => {
           console.error('Error replying to comment:', error);
@@ -93,7 +96,7 @@ const CommentsList = ({token, chapterDetails}) => {
 
   const likeComment = id => {
     commonServices
-      .addFavoriteComment(token, id)
+      .favoriteComments(id)
       .then(res => {
         fetchComments(); // Fetch updated comments list
       })
@@ -155,6 +158,7 @@ const CommentsList = ({token, chapterDetails}) => {
       </View>
       <FlatList
         data={comments}
+        style={{backgroundColor: 'black'}}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
@@ -186,9 +190,7 @@ const CommentsList = ({token, chapterDetails}) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // backgroundColor: '#fff',
-    // padding: 10,
+    marginVertical: 10,
   },
   emojiContainer: {
     flexDirection: 'row',
