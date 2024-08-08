@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {CustomText, HeadingText, RowContainer} from '../../components';
-import {Image, StyleSheet, TextInput, View} from 'react-native';
+import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
 import avatar from '../../images/avtar.png';
 import {Colors} from '../../_utils/GlobalStyle';
 import {authService} from '../../_services/auth.service';
@@ -25,31 +25,59 @@ function ProfileScreen() {
   }, []);
   return (
     <RowContainer>
-      <HeadingText>Profile </HeadingText>
       <View style={styles.profileView}>
-        <Image
-          source={userDetails?.avatar_url ? userDetails?.avatar_url : avatar}
-          style={styles.avatar}
-        />
-        <CustomText> Coins : {userDetails?.coins} </CustomText>
-        <TextInput
-          style={styles.input}
-          value={
-            userDetails?.first_name == userDetails?.last_name
-              ? userDetails?.first_name
-              : `${userDetails?.first_name} ${userDetails?.last_name}`
-          }
-          readOnly
-        />
-        <TextInput style={styles.input} value={userDetails?.email} readOnly />
-        <TextInput style={styles.input} value={userDetails?.country} readOnly />
-        <TextInput
-          style={styles.input}
-          value={
-            languages.filter(lang => lang.value == userDetails?.language)[0]?.label
-          }
-          readOnly
-        />
+        <View style={styles.avatarWrapper}>
+          <Image
+            source={userDetails?.avatar_url ? userDetails?.avatar_url : avatar}
+            style={styles.avatar}
+          />
+        </View>
+        <View style={{fontWeight: 700, color: Colors.secondary,marginVertical:20,backgroundColor:Colors.secondary,paddingVertical:5,paddingHorizontal:15,borderRadius:50}}>
+       <Text style={{ color: Colors.white}}> Coins : 0</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 20,
+            width: '100%',
+          }}>
+          <View
+            style={{
+              backgroundColor: Colors.tertiary,
+              width: '100%',
+              padding: 20,
+              borderRadius: 10,
+              gap: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
+              Name :
+            </Text>
+            <Text style={{color: Colors.white, fontSize: 14}}>John Wick</Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: Colors.tertiary,
+              width: '100%',
+              padding: 20,
+              borderRadius: 10,
+              gap: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
+              Email :
+            </Text>
+            <Text style={{color: Colors.white, fontSize: 14}}>
+              johnwick@gmail.com
+            </Text>
+          </View>
+        </View>
       </View>
     </RowContainer>
   );
@@ -59,27 +87,24 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   profileView: {
-    backgroundColor: Colors.tertiary,
-    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 10,
+  },
+  avatarWrapper: {
+    width: 120,
+    height: 120,
+    marginTop: 20,
+    borderWidth: 2,
+    borderColor: Colors.secondary,
+    padding: 10,
+    marginTop: 20,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   avatar: {
-    height: '25%',
-    width: '30%',
+    width: 100,
+    height: 100,
     borderRadius: 50,
-    marginVertical: 10,
-  },
-  input: {
-    border: 1,
-    borderColor: Colors.secondary,
-    borderWidth: 2,
-    width: '80%',
-    marginVertical: 5,
-    borderRadius: 10,
-    height: 50,
-    color: Colors.white,
-    paddingHorizontal: 20,
   },
 });

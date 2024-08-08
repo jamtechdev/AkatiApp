@@ -47,10 +47,10 @@ export default function RechargeScreen() {
           €{item?.recharge_amount}
         </CustomText>
         <Button
-        onPress={()=>{
-          setSelectedPlan(item)
-          setShowModal(true)
-        }}
+          onPress={() => {
+            setSelectedPlan(item);
+            setShowModal(true);
+          }}
           title={'Buy Now'}
           style={{
             paddingHorzontal: 25,
@@ -71,7 +71,7 @@ export default function RechargeScreen() {
         <HeadingText>Recharge</HeadingText>
       </View>
       {!rechargePlans ? (
-        <Skeleton isLoading={true} numColumns={2} isCard/>
+        <Skeleton isLoading={true} numColumns={2} isCard />
       ) : rechargePlans.length == 0 ? (
         <CustomText> No data Found</CustomText>
       ) : (
@@ -84,49 +84,30 @@ export default function RechargeScreen() {
           columnWrapperStyle={styles.row}
         />
       )}
-
-      <BottomDrawer
-        visible={showModal}
-        onClose={() => setShowModal(false)}
-        title={'Select Payment Method '}
-        style={{height : '50%'}}
-        >
-
-<View>
-<Button
-        onPress={()=>{
-          setSelectedPlan(item)
-          setShowModal(true)
-        }}
-          title={'Buy Now'}
-          style={{
-            paddingHorzontal: 25,
-            paddingVertical: 5,
-            width: 80,
-          }}
-          textStyle={{
-            fontSize: 12,
-          }}
-        />
-         <Button
-        onPress={()=>{
-          setSelectedPlan(item)
-          setShowModal(true)
-        }}
-          title={'Buy Now'}
-          style={{
-            paddingHorzontal: 25,
-            paddingVertical: 5,
-            width: 80,
-          }}
-          textStyle={{
-            fontSize: 12,
-          }}
-        />
-</View>
-
+      {showModal && (
+        <BottomDrawer
+          visible={showModal}
+          onClose={() => setShowModal(false)}
+          title={'Select Payment Method '}
+          style={{height: '35%'}}>
+          <View style={{width: '100%', paddingVertical: 25, gap: 10}}>
+            <Button
+              onPress={() => {
+                setShowModal(true);
+              }}
+              title={'Pay with Paypal'}
+            />
+            <Button
+              title={'Pay with CinetPay'}
+              onPress={() => {
+                setShowModal(false);
+              }}
+              style={{backgroundColor: '#28a745'}}
+              gradient={false}
+            />
+          </View>
         </BottomDrawer>
-
+      )}
     </RowContainer>
   );
 }

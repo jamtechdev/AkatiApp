@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {IMAGE_API_URL} from '../../_constant';
 import {booksService} from '../../_services/book.service';
 import {useAppContext} from '../../_customContext/AppProvider';
@@ -199,7 +200,10 @@ const fetchBookReview =()=>{
                 </View>
               ))}
             {rating && rating.length == 0 && (
-              <CustomText> No comments added yet</CustomText>
+              <View style={{paddingVertical:50,paddingHorizontal:20,backgroundColor:Colors.black,borderRadius:10,justifyContent:'center',alignContent:'center',gap:20}}>
+                <View style={{justifyContent:"center",alignItems:"center"}}><MaterialIcons name={'error-outline'} size={45} color={Colors.secondary} /></View>
+                <Text style={{color:Colors.white, textAlign:"center",color:Colors.gray}}>No comments added yet</Text>
+              </View>
             )}
           </View>
         );

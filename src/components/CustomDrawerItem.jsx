@@ -8,7 +8,7 @@ import GlobalStyles, { Colors } from '../_utils/GlobalStyle';
 const CustomDrawerItem = ({icon,title, onPress, isActive = false, }) => {
   if (isActive) {
     return (
-      <TouchableOpacity onPress={onPress} style={GlobalStyles.btnTouchable}>
+      <TouchableOpacity onPress={onPress} style={[GlobalStyles.btnTouchable, {paddingRight:30}]}>
         <LinearGradient
           colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
           start={{x: 0, y: 0}}
@@ -44,7 +44,12 @@ const styles = StyleSheet.create({
     justifyContent:'flex-start',
     alignItems:'center',
     gap: 10,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    paddingVertical:12,
+    marginVertical:5,
+    borderRadius:0,
+    borderTopRightRadius:50,
+    borderBottomRightRadius:50,
   }
 });
 

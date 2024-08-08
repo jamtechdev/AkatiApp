@@ -5,11 +5,16 @@ import {View, Text, StyleSheet, Image, Share} from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import logo from '../images/logo.png';
 import {Colors} from '../_utils/GlobalStyle';
-import {AlertModal, CustomDrawerItem, GradientView} from '../components';
+import {
+  AlertModal,
+  Button,
+  CustomDrawerItem,
+  GradientView,
+} from '../components';
 import {useDispatch} from 'react-redux';
 import {logout} from '../_store/_reducers/auth';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const DrawerContent = props => {
   const [show, setShow] = useState(false);
@@ -17,7 +22,7 @@ const DrawerContent = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const logoutAction = async () => {
-  dispatch(logout());
+    dispatch(logout());
     toggleModel();
     setTimeout(() => {
       navigation.replace('Auth');
@@ -35,9 +40,10 @@ const DrawerContent = props => {
   };
 
   return (
-    <DrawerContentScrollView
+    <>
+ <DrawerContentScrollView
       {...props}
-      style={{backgroundColor: Colors.tertiary}}>
+      style={{backgroundColor: Colors.tertiary, }}>
       <View style={{position: 'absolute', right: 0, top: 20, zIndex: 999}}>
         <GradientView
           style={styles.rightButton}
@@ -51,7 +57,7 @@ const DrawerContent = props => {
           source={logo} // Replace with your own image URL
           style={styles.profileImage}
         />
-        <Text style={styles.drawerTitle}>Akati</Text>
+        {/* <Text style={styles.drawerTitle}>Akati</Text> */}
       </View>
 
       <CustomDrawerItem
@@ -96,13 +102,9 @@ const DrawerContent = props => {
         onPress={handleShare}
       />
 
-      <CustomDrawerItem
-        title="Logout"
-        icon={'logout'}
-        isActive
-        onPress={() => toggleModel()}
-      />
+     
 
+    </DrawerContentScrollView>
       <AlertModal
         visible={show}
         image={logo}
@@ -111,13 +113,30 @@ const DrawerContent = props => {
         onOkay={logoutAction}
         onCancel={toggleModel}
       />
-    </DrawerContentScrollView>
+       <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          left: 0,
+          right: 0,
+          margin: 'auto',
+          justifyContent:"center",
+          padding:20,
+          backgroundColor:Colors.primary,
+        }}>
+        <Button title="Logout"></Button>
+      </View>
+    </>
+   
   );
 };
 
 const styles = StyleSheet.create({
   drawerHeader: {
     alignItems: 'center',
+    marginBottom: 30,
+    marginTop: -30,
   },
   drawerTitle: {
     fontSize: 20,
