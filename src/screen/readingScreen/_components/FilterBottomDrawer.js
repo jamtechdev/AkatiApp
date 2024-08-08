@@ -239,9 +239,8 @@ const FilterBottomDrawer = ({
       onRequestClose={onClose}
       animationType="none">
       <View style={styles.overlay}>
-        <Animated.View style={[styles.modal, {transform: [{translateY}], backgroundColor: filterState.backgroundColor}]}>
+        <Animated.View style={[styles.modal, {transform: [{translateY}]}]}>
           <View style={styles.header}>
-            <HeadingText style={{color: filterState.color}}>{title}</HeadingText>
             <Icons
               name={'close'}
               size={20}
@@ -264,17 +263,22 @@ const styles = StyleSheet.create({
   },
   modal: {
     height: '100%',
-    backgroundColor: Colors.primary,
+    backgroundColor: 'transparent',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     elevation: 5,
-    padding: 20,
+    // padding: 20,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    width:40,
+    height:40,
+    margin:"auto",
+    backgroundColor:Colors.secondary,
+    borderRadius:50
   },
   modalContent: {
     paddingBottom: 20,

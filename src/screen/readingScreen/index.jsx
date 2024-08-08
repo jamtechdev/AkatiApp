@@ -136,7 +136,7 @@ function ReadingScreen({navigation, route}) {
   const handleToggleOptions = () => setShowOptions(!showOptions);
 
   return (
-    <Pressable onPress={handleToggleOptions} style={{ flex: 1}}>
+    // <Pressable onPress={handleToggleOptions} style={{ flex: 1}}>
       <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
         <View
           style={{
@@ -328,7 +328,7 @@ function ReadingScreen({navigation, route}) {
           </View>
         </BottomDrawer>
       </RowContainer>
-      </Pressable>
+      // </Pressable>
   );
 }
 
