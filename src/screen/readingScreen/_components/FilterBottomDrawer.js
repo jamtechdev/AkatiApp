@@ -163,7 +163,7 @@ const FilterBottomDrawer = ({
           </View>
           <ScrollView
             contentContainerStyle={styles.modalContent}
-            style={{marginBottom: 300}}
+            style={{marginBottom: 200}}
             showsVerticalScrollIndicator={false}>
             {filterOptions.map(option => {
               if (option.type === 'range') {
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     width: '100%',
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   filterLabel: {
     fontSize: 18,

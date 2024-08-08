@@ -190,7 +190,8 @@ const CommentsList = ({token, chapterDetails}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 50,
   },
   emojiContainer: {
     flexDirection: 'row',
