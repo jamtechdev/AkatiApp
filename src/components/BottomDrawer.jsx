@@ -1,14 +1,8 @@
 import React, {useRef, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Animated,
-  Modal,
-} from 'react-native';
+import {View, StyleSheet, Dimensions, Animated, Modal} from 'react-native';
 import {Colors} from '../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import { HeadingText } from '../components';
+import {HeadingText} from '../components';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -31,7 +25,8 @@ const BottomDrawer = ({visible, onClose, title, children, style}) => {
       animationType="none" // Disable the default animation
     >
       <View style={styles.overlay}>
-        <Animated.View style={[styles.modal,style, {transform: [{translateY}]}]}>
+        <Animated.View
+          style={[styles.modal, style, {transform: [{translateY}]}]}>
           <View style={styles.header}>
             <HeadingText>{title}</HeadingText>
             <Icons
@@ -61,6 +56,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     elevation: 5,
     padding: 20,
+    // marginBottom: 20,
   },
   header: {
     flexDirection: 'row',
@@ -69,6 +65,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     alignItems: 'center',
+    marginBottom: 40,
   },
 });
 
