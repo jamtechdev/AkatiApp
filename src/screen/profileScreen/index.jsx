@@ -23,6 +23,7 @@ function ProfileScreen() {
         console.log(err);
       });
   }, []);
+  console.log(userDetails);
   return (
     <RowContainer>
       <View style={styles.profileView}>
@@ -32,8 +33,20 @@ function ProfileScreen() {
             style={styles.avatar}
           />
         </View>
-        <View style={{fontWeight: 700, color: Colors.secondary,marginVertical:20,backgroundColor:Colors.secondary,paddingVertical:5,paddingHorizontal:15,borderRadius:50}}>
-       <Text style={{ color: Colors.white}}> Coins : 0</Text>
+        <View
+          style={{
+            fontWeight: 700,
+            color: Colors.secondary,
+            marginVertical: 20,
+            backgroundColor: Colors.secondary,
+            paddingVertical: 5,
+            paddingHorizontal: 15,
+            borderRadius: 50,
+          }}>
+          <Text style={{color: Colors.white}}>
+            {' '}
+            Coins : {userDetails?.coins}
+          </Text>
         </View>
         <View
           style={{
@@ -55,9 +68,29 @@ function ProfileScreen() {
             }}>
             <Text
               style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
-              Name :
+             First Name :
             </Text>
-            <Text style={{color: Colors.white, fontSize: 14}}>John Wick</Text>
+            <Text style={{color: Colors.white, fontSize: 14}}>
+              {userDetails?.last_name}
+            </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: Colors.tertiary,
+              width: '100%',
+              padding: 20,
+              borderRadius: 10,
+              gap: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
+              Last Name :
+            </Text>
+            <Text style={{color: Colors.white, fontSize: 14}}>
+            {userDetails?.last_name}
+            </Text>
           </View>
           <View
             style={{
@@ -74,7 +107,47 @@ function ProfileScreen() {
               Email :
             </Text>
             <Text style={{color: Colors.white, fontSize: 14}}>
-              johnwick@gmail.com
+              {userDetails?.email}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              backgroundColor: Colors.tertiary,
+              width: '100%',
+              padding: 20,
+              borderRadius: 10,
+              gap: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
+              Country :
+            </Text>
+            <Text style={{color: Colors.white, fontSize: 14}}>
+              {
+                languages.filter(lang => lang.value == userDetails?.language)[0]
+                  ?.label
+              }
+            </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: Colors.tertiary,
+              width: '100%',
+              padding: 20,
+              borderRadius: 10,
+              gap: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
+              Country :
+            </Text>
+            <Text style={{color: Colors.white, fontSize: 14}}>
+              {userDetails?.country}
             </Text>
           </View>
         </View>

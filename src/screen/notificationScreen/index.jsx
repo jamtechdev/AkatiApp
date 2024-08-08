@@ -4,6 +4,7 @@ import { Colors } from '../../_utils/GlobalStyle';
 import { commonServices } from '../../_services/common.service';
 import { useAppContext } from '../../_customContext/AppProvider';
 import { CustomText, HeadingText, RowContainer, Skeleton } from '../../components';
+import NoDataFound from '../../components/NoDataFound';
 
 export default function NotificationScreen() {
   const { hideLoader } = useAppContext();
@@ -39,7 +40,7 @@ export default function NotificationScreen() {
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={
-          !notifications ? <Skeleton isLoading={true} isList /> : <CustomText>No Notifications found</CustomText>
+          !notifications ? <Skeleton isLoading={true} isList /> : <NoDataFound description={'No Notification data found!'} />
         }
         contentContainerStyle={{ marginVertical: 15 }}
         showsVerticalScrollIndicator={false}

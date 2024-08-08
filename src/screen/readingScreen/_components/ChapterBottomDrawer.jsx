@@ -22,6 +22,7 @@ const ChapterBottomDrawer = ({
   currentChapter,
   onPress,
   title,
+  textSettings,
 }) => {
   const translateY = useRef(new Animated.Value(screenHeight)).current;
 
@@ -41,13 +42,13 @@ const ChapterBottomDrawer = ({
       animationType="none" // Disable the default animation
     >
       <View style={styles.overlay}>
-        <Animated.View style={[styles.modal, {transform: [{translateY}]}]}>
+        <Animated.View style={[styles.modal,{backgroundColor: textSettings.backgroundColor},{transform: [{translateY}]}]}>
           <View style={styles.header}>
-            <HeadingText>{title}</HeadingText>
+            <HeadingText style={{ color: textSettings.color}}>{title}</HeadingText>
             <Icons
               name={'close'}
               size={20}
-              color={Colors.white}
+              color={textSettings.color}
               onPress={onClose}
             />
           </View>
@@ -60,12 +61,13 @@ const ChapterBottomDrawer = ({
                   <Pressable
                     style={[
                       styles.chapterContainer,
+                      {backgroundColor: textSettings.backgroundColorSecondary},
                       index === currentChapter && styles.currentChapter,
                     ]}
                     key={index}
                     onPress={() => onPress(index)}>
                     <View style={styles.chapterHeader}>
-                      <Text style={styles.chapterTitle}>
+                      <Text style={[styles.chapterTitle, {color: textSettings.color}]}>
                         Chapter {index + 1}
                       </Text>
                       {chapter.unlock !== 1 && (
@@ -76,7 +78,7 @@ const ChapterBottomDrawer = ({
                         />
                       )}
                     </View>
-                    <Text style={styles.chapterText}>
+                    <Text style={[styles.chapterText, {color: textSettings.color}]}>
                       {chapter.chapter_details.title}
                     </Text>
                   </Pressable>

@@ -39,9 +39,12 @@ function ReadingScreen({navigation, route}) {
   const [textSettings, setTextSettings] = useState({
     textAlign: 'left',
     fontWeight: 'normal',
-    fontFamily: 'default',
-    color: '#fff',
-    backgroundColor: Colors.primary,
+    fontFamily: 'baskerville',
+    lineHeight: 40,
+    fontSize: 17,
+    color: 'black',
+    backgroundColorSecondary : '#f8fffc',
+    backgroundColor: '#d4e6dd',
   });
   const handleFilterApply = settings => {
     setTextSettings(settings);
@@ -148,7 +151,7 @@ function ReadingScreen({navigation, route}) {
     return;
   };
   return (
-    <RowContainer>
+    <RowContainer style={{ backgroundColor: textSettings.backgroundColor}}>
       <View
         style={{
           flexDirection: 'row',
@@ -159,35 +162,35 @@ function ReadingScreen({navigation, route}) {
         <GradientView
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Icons name={'long-arrow-left'} size={20} color={'white'} />
+          <Icons name={'long-arrow-left'} size={20} color={Colors.white} />
         </GradientView>
         <View style={{flexDirection: 'row', gap: 15}}>
           <TouchableText onPress={() => setShowComments(true)}>
-            <Icons name={'comment'} size={20} color={'white'} />
+            <Icons name={'comment'} size={20} color={textSettings.color} />
           </TouchableText>
           <TouchableText onPress={() => setFilterVisible(true)}>
-            <Icons name={'filter'} size={20} color={'white'} />
+            <Icons name={'filter'} size={20} color={textSettings.color} />
           </TouchableText>
           <TouchableText
             onPress={() => {
               setVisible(true);
               setModalData(chapters);
             }}>
-            <Icons name={'list'} size={20} color={'white'} />
+            <Icons name={'list'} size={20} color={textSettings.color} />
           </TouchableText>
         </View>
       </View>
-      <View style={styles.chapterNum}>
-        <TouchableText onPress={handlePrevChapter}>Prev</TouchableText>
-        <CustomText>
+      <View style={[styles.chapterNum, {backgroundColor: textSettings.backgroundColorSecondary}]}>
+        <TouchableText style={{ color: textSettings.color}} onPress={handlePrevChapter} >Prev</TouchableText>
+        <CustomText style={{ color: textSettings.color}}>
           Chapter {currentChapterIndex + 1} of {chapters.length}
         </CustomText>
-        <TouchableText onPress={handleNextChapter}>Next</TouchableText>
+        <TouchableText style={{ color: textSettings.color}} onPress={handleNextChapter}>Next</TouchableText>
       </View>
 
-      <ScrollView>
+      <ScrollView  showsVerticalScrollIndicator={false}>
         <View>
-          <HeadingText>{`Chapter ${currentChapterIndex + 1} - ${
+          <HeadingText style={{ color: textSettings.color}}>{`Chapter ${currentChapterIndex + 1} - ${
             currentChapter?.chapter_details?.title
           }`}</HeadingText>
 
@@ -226,6 +229,7 @@ function ReadingScreen({navigation, route}) {
                     fontWeight: 'bold',
                     fontSize: 14,
                     textAlign: 'center',
+                    color: textSettings.color
                   }}>
                   Thanks for reading!{' '}
                 </CustomText>
@@ -251,7 +255,7 @@ function ReadingScreen({navigation, route}) {
             </View>
           ) : (
             <View style={{paddingVertical: 50, paddingHorizontal: 20}}>
-              <CustomText style={{fontSize: 14, textAlign: 'center'}}>
+              <CustomText style={{fontSize: 14, textAlign: 'center', color: textSettings.color}}>
                 The story of this chapter is full of surprises. May you enjoy
                 your time when reading it.
               </CustomText>
@@ -267,6 +271,7 @@ function ReadingScreen({navigation, route}) {
                   fontWeight: 'bold',
                   textAlign: 'center',
                   marginVertical: 30,
+                  color : textSettings.color
                 }}>
                 Price :{' '}
                 <Icons
@@ -281,7 +286,7 @@ function ReadingScreen({navigation, route}) {
           )}
         </View>
         <View>
-          <HeadingText>{'Must Read'}</HeadingText>
+          <HeadingText style={{ color: textSettings.color}}>{'Must Read'}</HeadingText>
           {!mustReadBooks && (
             <Skeleton isLoading={true} count={3} numColumns={3} />
           )}
@@ -296,6 +301,7 @@ function ReadingScreen({navigation, route}) {
         currentChapter={currentChapterIndex}
         onPress={index => setCurrentChapterIndex(index)}
         title={BookDetails?.title}
+        textSettings={textSettings}
       />
       <FilterBottomDrawer
         visible={filterVisible}

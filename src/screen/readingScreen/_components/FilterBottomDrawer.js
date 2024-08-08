@@ -10,9 +10,10 @@ import {
   ScrollView,
 } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import {HeadingText, TextBadge} from '../../../components';
+import {HeadingText, TabSwitcher, TextBadge} from '../../../components';
 import {Colors} from '../../../_utils/GlobalStyle';
 import Slider from '@react-native-community/slider';
+import NoDataFound from '../../../components/NoDataFound';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -24,6 +25,7 @@ const filterOptions = [
     currentValue: 18,
     minValue: 10,
     maxValue: 40,
+    tab: 'Layout',
   },
   {
     category: 'Text Alignment',
@@ -36,6 +38,7 @@ const filterOptions = [
       {value: 'center', label: 'Center'},
       {value: 'justify', label: 'Justify'},
     ],
+    tab: 'Layout',
   },
   {
     category: 'Text Weight',
@@ -48,6 +51,7 @@ const filterOptions = [
       {value: '600', label: '600'},
       {value: 'bold', label: 'Bold'},
     ],
+    tab: 'Layout',
   },
   {
     category: 'Line Height',
@@ -60,6 +64,7 @@ const filterOptions = [
       {value: 40, label: '40'},
       {value: 50, label: '50'},
     ],
+    tab: 'Layout',
   },
   {
     category: 'Font Style',
@@ -67,10 +72,11 @@ const filterOptions = [
     type: 'list',
     currentValue: 'default',
     options: [
-      {value: 'default', label: 'Default'},
+      {value: 'baskerville', label: 'Baskerville'},
       {value: 'Helvetica', label: 'Helvetica'},
       {value: 'Verdana', label: 'Verdana'},
     ],
+    tab: 'Themes',
   },
   {
     category: 'Font Color',
@@ -78,10 +84,11 @@ const filterOptions = [
     type: 'list',
     currentValue: 'white',
     options: [
-      {value: 'white', label: 'White'},
+      {value: '#fff', label: 'White'},
       {value: 'black', label: 'Black'},
       {value: '#ff0000', label: 'Red'},
     ],
+    tab: 'Themes',
   },
   {
     category: 'Background Color',
@@ -90,14 +97,14 @@ const filterOptions = [
     currentValue: '#18181b',
     options: [
       {value: '#18181b', label: 'Black'},
-      {value: 'white', label: 'White'},
+      {value: '#fff', label: 'White'},
       {value: 'gray', label: 'Gray'},
       {value: '#d4e6dd', label: 'Light Blue'},
       {value: '#d0ba95', label: 'Light Yellow'},
     ],
+    tab: 'Themes',
   },
 ];
-
 const FilterBottomDrawer = ({
   visible,
   onClose,
@@ -117,96 +124,132 @@ const FilterBottomDrawer = ({
 
   const handleChange = (category, value) => {
     setFilterState(prevState => {
-      // Default updated state with the new value
       let updatedState = {...prevState, [category]: value};
-
-      // Conditional updates based on category
+  
       if (category === 'backgroundColor') {
-        // Update color based on new backgroundColor
-        updatedState.color = getValidTextColor(value);
+        switch (value) {
+          case '#18181b': // Black
+            updatedState.backgroundColorSecondary = '#242424';
+            updatedState.color = 'white';
+            break;
+          case '#fff': // White
+            updatedState.backgroundColorSecondary = '#efefef';
+            updatedState.color = 'black';
+            break;
+          case 'gray': // Gray
+            updatedState.backgroundColorSecondary = '#c7c7c7';
+            updatedState.color = prevState.color; // Keep the current text color
+            break;
+          case '#d4e6dd': // Light Blue
+            updatedState.backgroundColorSecondary = '#f8fffc';
+            updatedState.color = 'black'; // Keep the current text color
+            break;
+          case '#d0ba95': // Light Yellow
+            updatedState.backgroundColorSecondary = '#ffeccc';
+            updatedState.color = prevState.color; // Keep the current text color
+            break;
+          default:
+            updatedState.backgroundColorSecondary = prevState.backgroundColorSecondary;
+            updatedState.color = prevState.color; // Keep the current text color
+        }
       } else if (category === 'color') {
-        // Update backgroundColor based on new color
-        updatedState.backgroundColor = getValidTextColor(value);
+        if (value === 'black' && prevState.backgroundColor === '#18181b') {
+          updatedState.backgroundColor = '#fff';
+        } else if (value === '#fff' && prevState.backgroundColor === '#fff') {
+          updatedState.backgroundColor = '#18181b';
+        }
       }
-
+  
       return updatedState;
     });
   };
+  
 
-  const getValidTextColor = backgroundColor => {
-    if (backgroundColor === '#18181b' || backgroundColor === 'black') {
-      return 'white';
-    }
-    if (backgroundColor === 'white') {
-      return 'black';
-    }
-    return 'black'; // Default color
+  const renderTabContent = key => {
+    const tabOptions = filterOptions.filter(option => option.tab === key);
+    return (
+      <ScrollView
+        contentContainerStyle={styles.modalContent}
+        style={{marginBottom: 200, paddingVertical: 20}}
+        showsVerticalScrollIndicator={false}>
+        {tabOptions.map(option => {
+          if (option.type === 'range') {
+            return (
+              <View key={option.category} style={styles.filterContainer}>
+                <Text style={[styles.filterLabel,{color: filterState.color}]}>
+                  {option.category} : {filterState[option.categoryValue]}
+                </Text>
+                <Slider
+                  style={styles.slider}
+                  minimumValue={option.minValue}
+                  value={filterState[option.categoryValue]}
+                  step={1}
+                  maximumValue={option.maxValue}
+                  minimumTrackTintColor={Colors.secondary}
+                  maximumTrackTintColor="#000000"
+                  onValueChange={value =>
+                    handleChange(option.categoryValue, value)
+                  }
+                />
+              </View>
+            );
+          } else if (option.type === 'list') {
+            return (
+              <View key={option.category} style={styles.filterContainer}>
+              <Text style={[styles.filterLabel,{color: filterState.color}]}>{option.category}</Text>
+                <View style={styles.categoryContainer}>
+                  {option.options.map((opt, index) => (
+                    <TextBadge
+                      key={index}
+                      style={{backgroundColor: Colors.black}}
+                      title={opt.label}
+                      onPress={() =>
+                        handleChange(option.categoryValue, opt.value)
+                      }
+                      isActive={filterState[option.categoryValue] === opt.value}
+                    />
+                  ))}
+                </View>
+              </View>
+            );
+          }
+          return null;
+        })}
+      </ScrollView>
+    );
   };
+
+  const tabs = [
+    {
+      key: 'Layout',
+      title: 'Layout',
+      content: renderTabContent('Layout'),
+    },
+    {
+      key: 'Themes',
+      title: 'Themes',
+      content: renderTabContent('Themes'),
+    },
+  ];
 
   return (
     <Modal
       transparent
       visible={visible}
       onRequestClose={onClose}
-      animationType="none" // Disable the default animation
-    >
+      animationType="none">
       <View style={styles.overlay}>
-        <Animated.View style={[styles.modal, {transform: [{translateY}]}]}>
+        <Animated.View style={[styles.modal, {transform: [{translateY}], backgroundColor: filterState.backgroundColor}]}>
           <View style={styles.header}>
-            <HeadingText>{title}</HeadingText>
+            <HeadingText style={{color: filterState.color}}>{title}</HeadingText>
             <Icons
               name={'close'}
               size={20}
-              color={Colors.white}
+              color={filterState.color}
               onPress={onClose}
             />
           </View>
-          <ScrollView
-            contentContainerStyle={styles.modalContent}
-            style={{marginBottom: 200}}
-            showsVerticalScrollIndicator={false}>
-            {filterOptions.map(option => {
-              if (option.type === 'range') {
-                return (
-                  <View key={option.category} style={styles.filterContainer}>
-                    <Text style={styles.filterLabel}>
-                      {option.category} : {filterState[option.categoryValue]}
-                    </Text>
-                    <Slider
-                      style={styles.slider}
-                      minimumValue={option.minValue}
-                      value={filterState[option.categoryValue]}
-                      step={1}
-                      maximumValue={option.maxValue}
-                      minimumTrackTintColor="#FFFFFF"
-                      maximumTrackTintColor="#000000"
-                      onValueChange={value =>
-                        handleChange(option.categoryValue, value)
-                      }
-                    />
-                  </View>
-                );
-              } else if (option.type === 'list') {
-                return (
-                  <View key={option.category} style={styles.filterContainer}>
-                    <Text style={styles.filterLabel}>{option.category}</Text>
-                    <View style={styles.categoryContainer}>
-                      {option.options.map((opt, index) => (
-                        <TextBadge
-                          key={index}
-                          title={opt.label}
-                          onPress={() =>
-                            handleChange(option.categoryValue, opt.value)
-                          }
-                        />
-                      ))}
-                    </View>
-                  </View>
-                );
-              }
-              return null;
-            })}
-          </ScrollView>
+          <TabSwitcher tabs={tabs} primary={filterState.backgroundColor} tertiary={filterState.backgroundColorSecondary} textColor={filterState.color}/>
         </Animated.View>
       </View>
     </Modal>
@@ -217,10 +260,10 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modal: {
-    height: '100%', // Adjust height to ensure visibility of content
+    height: '100%',
     backgroundColor: Colors.primary,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -234,15 +277,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalContent: {
-    paddingBottom: 20, // Ensure content is not hidden
+    paddingBottom: 20,
     alignItems: 'center',
   },
   filterContainer: {
     width: '100%',
-    // marginBottom: 20,
   },
   filterLabel: {
-    fontSize: 18,
+    fontSize: 17,
+    fontWeight: '500',
     color: Colors.white,
     marginBottom: 10,
   },
@@ -255,6 +298,9 @@ const styles = StyleSheet.create({
     gap: 5,
     flexDirection: 'row',
     marginVertical: 10,
+  },
+  tabContent: {
+    padding: 10,
   },
 });
 

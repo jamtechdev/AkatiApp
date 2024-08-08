@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native';
 import { Colors } from '../_utils/GlobalStyle';
 
-const TabSwitcher = ({ tabs }) => {
+const TabSwitcher = ({ tabs , primary = Colors.primary, tertiary = Colors.tertiary, textColor='#fff' }) => {
   const [selectedTab, setSelectedTab] = useState(tabs[0].key);
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
@@ -28,18 +28,18 @@ const TabSwitcher = ({ tabs }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.tabContainer}>
+    <View style={[styles.container, {backgroundColor: tertiary}]}>
+      <View style={[styles.tabContainer,{backgroundColor: primary}]}>
         {tabs.map(tab => (
           <TouchableOpacity
             key={tab.key}
             style={[
               styles.tab,
-              selectedTab === tab.key ? styles.activeTab : styles.inactiveTab,
+              selectedTab === tab.key ? styles.activeTab : {backgroundColor: primary},
             ]}
             onPress={() => switchTab(tab.key)}
           >
-            <Text style={styles.tabText}>{tab.title}</Text>
+            <Text style={[styles.tabText,{color: textColor}]}>{tab.title}</Text>
           </TouchableOpacity>
         ))}
       </View>

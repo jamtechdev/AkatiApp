@@ -2,11 +2,12 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 
-function Badge({title, onPress, isActive = false}) {
+function Badge({title, onPress, isActive = false, style}) {
   return (
     <TouchableOpacity
       style={[
         styles.badgeText,
+        style,
         isActive
           ? {
               backgroundColor: Colors.secondary,

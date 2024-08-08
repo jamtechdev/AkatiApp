@@ -63,11 +63,11 @@ export default function SearchScreen() {
     setShowVariant(true)
     setShowCategories(true)
     setFoundItems([])
+    handleGetHistory()
   }
 
   const handleGetHistory = () => {
     commonServices.getHistory().then((res) => {
-      console.log(res.data.data)
       setRecentSearch(res.data.data.mySearch);
       setHotSearch(res.data.data.hotSearch);
     }).catch((err) => console.log(err));
@@ -153,7 +153,9 @@ export default function SearchScreen() {
               <CustomText> No search hot search keys found </CustomText>
             )}
           </View>
+          {recentSearch.length !== 0 && (
           <HeadingText>Recent search</HeadingText>
+          )}
           <View style={{ marginVertical: 10 }}>
             {recentSearch.length >= 0 ? (
               recentSearch.map((search, index) => (

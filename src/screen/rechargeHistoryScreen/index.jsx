@@ -16,6 +16,7 @@ import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
 import coin from '../../images/coin.png';
 import { useFocusEffect } from '@react-navigation/native';
+import NoDataFound from '../../components/NoDataFound';
 export default function RechargeHistoryScreen() {
   const {showToast, showLoader, hideLoader} = useAppContext();
   const [histories, setHistories] = useState();
@@ -70,7 +71,7 @@ export default function RechargeHistoryScreen() {
       {!histories ? (
         <Skeleton isLoading={true} isList/>
       ) : histories.length == 0 ? (
-        <CustomText> No data Found</CustomText>
+        <NoDataFound description={'History not found'} />
       ) : (
         <FlatList
           data={histories}
