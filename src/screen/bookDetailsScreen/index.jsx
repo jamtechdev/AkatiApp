@@ -355,17 +355,17 @@ const fetchBookReview =()=>{
             </Text>
 
             {!rating_average ? null : (
-              <View>
-                <CustomText style={{fontSize: 20}}>
-                  {parseFloat(rating_average).toFixed(1)}
-                  <CustomStarRating rate={ratingAverage} />{' '}
-                </CustomText>
-                <CustomText> based on {ratings?.length} ratings</CustomText>
+              <View style={{marginVertical:10,gap:5}}>
+                <View style={{color:Colors.secondary,flexDirection:"row", alignItems:"center",gap:5}}>
+                  <Text style={{color:Colors.secondary,fontSize: 20,fontWeight:600}}>{parseFloat(rating_average).toFixed(1)}</Text>
+                  <CustomStarRating rate={ratingAverage} />
+                </View>
+                <CustomText style={{color:Colors.darkGray,fontSize:16}}>Based on {ratings?.length} ratings</CustomText>
               </View>
             )}
 
             <View>
-              <CustomText> Fallowing Tags</CustomText>
+              <CustomText> Following Tags</CustomText>
               <View style={styles.categoryContainer}>
                 {categories &&
                   categories.map(tag => {
