@@ -109,7 +109,7 @@ const FilterBottomDrawer = ({
 
   useEffect(() => {
     Animated.timing(translateY, {
-      toValue: visible ? screenHeight * 0.3 : screenHeight,
+      toValue: visible ? screenHeight * 0 : screenHeight,
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -127,7 +127,7 @@ const FilterBottomDrawer = ({
     transparent
     visible={visible}
     onRequestClose={onClose}
-    animationType="none" // Disable the default animation
+    animationType="none"
   >
     <View style={styles.overlay}>
       <Animated.View style={[styles.modal, { transform: [{ translateY }] }]}>
@@ -142,7 +142,6 @@ const FilterBottomDrawer = ({
         </View>
         <ScrollView
           contentContainerStyle={styles.modalContent}
-          style={{  marginBottom: 300}}
           showsVerticalScrollIndicator={false}
         >
           {filterOptions.map(option => {
@@ -200,7 +199,7 @@ overlay: {
   backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
 },
 modal: {
-  height: '100%', // Adjust height to ensure visibility of content
+  height: '70%', // Adjust height to ensure visibility of content
   backgroundColor: Colors.primary,
   borderTopLeftRadius: 30,
   borderTopRightRadius: 30,
