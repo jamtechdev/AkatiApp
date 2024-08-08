@@ -14,7 +14,14 @@ import {booksService} from '../../_services/book.service';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
-import {Pressable, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {useAppContext} from '../../_customContext/AppProvider';
@@ -78,7 +85,6 @@ function ReadingScreen({navigation, route}) {
     }
   }, [currentChapterIndex]);
 
-  
   const handleNextChapter = () => {
     if (currentChapterIndex < chapters.length - 1) {
       setCurrentChapterIndex(currentChapterIndex + 1);
@@ -136,7 +142,7 @@ function ReadingScreen({navigation, route}) {
   const handleToggleOptions = () => setShowOptions(!showOptions);
 
   return (
-    <Pressable onPress={handleToggleOptions} style={{ flex: 1}}>
+    <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
       <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
         <View
           style={{
@@ -168,28 +174,7 @@ function ReadingScreen({navigation, route}) {
             </View>
           )}
         </View>
-        {showOptions && (
-          <View
-            style={[
-              styles.chapterNum,
-              {backgroundColor: textSettings.backgroundColorSecondary},
-            ]}>
-            <TouchableText
-              style={{color: textSettings.color}}
-              onPress={handlePrevChapter}>
-              Prev
-            </TouchableText>
-            <CustomText style={{color: textSettings.color}}>
-              Chapter {currentChapterIndex + 1} of {chapters.length}
-            </CustomText>
-            <TouchableText
-              style={{color: textSettings.color}}
-              onPress={handleNextChapter}>
-              Next
-            </TouchableText>
-          </View>
-        )}
-       
+
         <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
           <View>
             <HeadingText style={{color: textSettings.color}}>{`Chapter ${
@@ -301,7 +286,27 @@ function ReadingScreen({navigation, route}) {
             <HorizontalScrollView data={mustReadBooks} />
           </View>
         </ScrollView>
-        
+        {showOptions && (
+          <View
+            style={[
+              styles.chapterNum,
+              {backgroundColor: textSettings.backgroundColorSecondary},
+            ]}>
+            <TouchableText
+              style={{color: textSettings.color}}
+              onPress={handlePrevChapter}>
+              Prev
+            </TouchableText>
+            <CustomText style={{color: textSettings.color}}>
+              Chapter {currentChapterIndex + 1} of {chapters.length}
+            </CustomText>
+            <TouchableText
+              style={{color: textSettings.color}}
+              onPress={handleNextChapter}>
+              Next
+            </TouchableText>
+          </View>
+        )}
         <ChapterBottomDrawer
           visible={visible}
           data={modalData}
@@ -328,7 +333,7 @@ function ReadingScreen({navigation, route}) {
           </View>
         </BottomDrawer>
       </RowContainer>
-      </Pressable>
+    </Pressable>
   );
 }
 
@@ -339,10 +344,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 75,
     backgroundColor: Colors.tertiary,
-    paddingVertical: 10,
-    paddingLeft: 5,
-    marginVertical: 10,
+    padding: 15,
+    justifyContent: 'space-evenly',
     borderRadius: 10,
+    marginBottom: 10,
   },
   backButton: {
     paddingVertical: 5,
