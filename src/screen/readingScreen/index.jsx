@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  BottomDrawer,
   Button,
   CustomText,
   GradientView,
@@ -19,13 +20,14 @@ import Icons from 'react-native-vector-icons/FontAwesome';
 import {useAppContext} from '../../_customContext/AppProvider';
 import ChapterBottomDrawer from './_components/ChapterBottomDrawer';
 import FilterBottomDrawer from './_components/FilterBottomDrawer';
+import CommentsList from '../../components/comment/CommentsList';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
   const {bookId, chapters, BookDetails, categories} = params;
   const {coins} = useSelector(getAuth);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
-  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState([]);
   const [autoUnlock, setAutoUnlock] = useState(false);
   const [visible, setVisible] = useState(false);
   const [modalData, setModalData] = useState([]);
@@ -33,16 +35,15 @@ function ReadingScreen({navigation, route}) {
   const [loadingComments, setLoadingComments] = useState(true);
   const {showToast, showLoader, hideLoader} = useAppContext();
 
-
   const [filterVisible, setFilterVisible] = useState(false); // State for filter modal
   const [textSettings, setTextSettings] = useState({
- textAlign:  'left',
-fontWeight: 'normal',
-fontFamily: 'default',
-color: '#fff',
-backgroundColor: Colors.primary
+    textAlign: 'left',
+    fontWeight: 'normal',
+    fontFamily: 'default',
+    color: '#fff',
+    backgroundColor: Colors.primary,
   });
-  const handleFilterApply = (settings) => {
+  const handleFilterApply = settings => {
     setTextSettings(settings);
     setFilterVisible(false);
   };
@@ -69,24 +70,24 @@ backgroundColor: Colors.primary
   };
   const currentChapter = chapters[currentChapterIndex];
   useEffect(() => {
-    fetchComments();
+    // fetchComments();
   }, [currentChapter]);
 
-  const fetchComments = () => {
-    const bookId = currentChapter?.book_id;
-    const chapterId = currentChapter?.chapter_details?.chapter_id;
-    commonServices
-      .getComments(bookId, chapterId)
-      .then(data => {
-        setComments(data.data.data);
-      })
-      .catch(error => {
-        console.error('Error fetching comments:', error);
-      })
-      .finally(() => {
-        setLoadingComments(false);
-      });
-  };
+  // const fetchComments = () => {
+  //   const bookId = currentChapter?.book_id;
+  //   const chapterId = currentChapter?.chapter_details?.chapter_id;
+  //   commonServices
+  //     .getComments(bookId, chapterId)
+  //     .then(data => {
+  //       setComments(data.data.data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching comments:', error);
+  //     })
+  //     .finally(() => {
+  //       setLoadingComments(false);
+  //     });
+  // };
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -126,7 +127,7 @@ backgroundColor: Colors.primary
     booksService
       .unlockChapter(formData)
       .then(res => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.code == 201) {
           setVisible(false);
           showToast(res.data.message, 'error');
@@ -161,10 +162,10 @@ backgroundColor: Colors.primary
           <Icons name={'long-arrow-left'} size={20} color={'white'} />
         </GradientView>
         <View style={{flexDirection: 'row', gap: 15}}>
-          <TouchableText>
+          <TouchableText onPress={() => setShowComments(true)}>
             <Icons name={'comment'} size={20} color={'white'} />
           </TouchableText>
-          <TouchableText onPress={()=> setFilterVisible(true)}>
+          <TouchableText onPress={() => setFilterVisible(true)}>
             <Icons name={'filter'} size={20} color={'white'} />
           </TouchableText>
           <TouchableText
@@ -191,20 +192,21 @@ backgroundColor: Colors.primary
           }`}</HeadingText>
 
           {currentChapter && currentChapter.unlock === 1 ? (
-            <View>
-            <Text style={[
-            styles.chapterContent,
-            {
-              textAlign: textSettings.textAlign,
-              fontWeight: textSettings.fontWeight,
-              lineHeight: textSettings.lineHeight,
-              fontFamily: textSettings.fontFamily,
-              color: textSettings.color,
-              fontSize:textSettings.fontSize,
-              backgroundColor: textSettings.backgroundColor,
-            },
-          ]}>
-          {textSettings.fontColor}
+            <View style={{marginVertical: 10}}>
+              <Text
+                style={[
+                  styles.chapterContent,
+                  {
+                    textAlign: textSettings.textAlign,
+                    fontWeight: textSettings.fontWeight,
+                    lineHeight: textSettings.lineHeight,
+                    fontFamily: textSettings.fontFamily,
+                    color: textSettings.color,
+                    fontSize: textSettings.fontSize,
+                    backgroundColor: textSettings.backgroundColor,
+                  },
+                ]}>
+                {textSettings.fontColor}
                 {currentChapter?.chapter_details?.content}
               </Text>
               <View
@@ -295,13 +297,19 @@ backgroundColor: Colors.primary
         onPress={index => setCurrentChapterIndex(index)}
         title={BookDetails?.title}
       />
-       <FilterBottomDrawer
+      <FilterBottomDrawer
         visible={filterVisible}
         onClose={() => setFilterVisible(false)}
         title={'Filter'}
         filterState={textSettings}
         setFilterState={setTextSettings}
-        />
+      />
+      <BottomDrawer
+        visible={showComments}
+        onClose={() => setShowComments(false)}
+        title={'Comments'}>
+        <CommentsList chapterDetails={currentChapter} />
+      </BottomDrawer>
     </RowContainer>
   );
 }
