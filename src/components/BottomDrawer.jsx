@@ -18,7 +18,7 @@ const BottomDrawer = ({visible, onClose, title, children, style}) => {
   useEffect(() => {
     Animated.timing(translateY, {
       toValue: visible ? 0 : screenHeight,
-      duration: 300,
+      duration: 600,
       useNativeDriver: true,
     }).start();
   }, [visible]);
