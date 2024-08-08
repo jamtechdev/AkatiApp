@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   BottomDrawer,
   Button,
@@ -14,7 +14,7 @@ import {booksService} from '../../_services/book.service';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {useAppContext} from '../../_customContext/AppProvider';
@@ -32,8 +32,9 @@ function ReadingScreen({navigation, route}) {
   const [visible, setVisible] = useState(false);
   const [modalData, setModalData] = useState([]);
   const [mustReadBooks, setMustReadBooks] = useState();
-  const [loadingComments, setLoadingComments] = useState(true);
+  const [showOptions, setShowOptions] = useState(true);
   const {showToast, showLoader, hideLoader} = useAppContext();
+  const scrollViewRef = useRef(null); // Reference for ScrollView
 
   const [filterVisible, setFilterVisible] = useState(false); // State for filter modal
   const [textSettings, setTextSettings] = useState({
@@ -42,14 +43,10 @@ function ReadingScreen({navigation, route}) {
     fontFamily: 'baskerville',
     lineHeight: 40,
     fontSize: 17,
-    color: 'black',
-    backgroundColorSecondary : '#f8fffc',
-    backgroundColor: '#d4e6dd',
+    color: '#fff',
+    backgroundColorSecondary: Colors.tertiary,
+    backgroundColor: Colors.primary,
   });
-  const handleFilterApply = settings => {
-    setTextSettings(settings);
-    setFilterVisible(false);
-  };
 
   useEffect(() => {
     booksService
@@ -61,6 +58,7 @@ function ReadingScreen({navigation, route}) {
         console.log(error);
       });
   }, [params]);
+
   const getChapterData = bookData => {
     booksService
       .getBookChapters(bookData)
@@ -71,30 +69,16 @@ function ReadingScreen({navigation, route}) {
         console.log(error);
       });
   };
+
   const currentChapter = chapters[currentChapterIndex];
+
   useEffect(() => {
-    // fetchComments();
-  }, [currentChapter]);
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({y: 0, animated: true}); // Auto scroll to top
+    }
+  }, [currentChapterIndex]);
 
-  // const fetchComments = () => {
-  //   const bookId = currentChapter?.book_id;
-  //   const chapterId = currentChapter?.chapter_details?.chapter_id;
-  //   commonServices
-  //     .getComments(bookId, chapterId)
-  //     .then(data => {
-  //       setComments(data.data.data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching comments:', error);
-  //     })
-  //     .finally(() => {
-  //       setLoadingComments(false);
-  //     });
-  // };
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  
   const handleNextChapter = () => {
     if (currentChapterIndex < chapters.length - 1) {
       setCurrentChapterIndex(currentChapterIndex + 1);
@@ -114,7 +98,6 @@ function ReadingScreen({navigation, route}) {
       setCurrentChapterIndex(index);
     }
   };
-
   useEffect(() => {
     if (autoUnlock && currentChapter && currentChapter?.unlock !== 1) {
       handleUnlockChapter();
@@ -148,178 +131,204 @@ function ReadingScreen({navigation, route}) {
       .catch(error => {
         console.log(error, 'error');
       });
-    return;
   };
+
+  const handleToggleOptions = () => setShowOptions(!showOptions);
+
   return (
-    <RowContainer style={{ backgroundColor: textSettings.backgroundColor}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          gap: 50,
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-        <GradientView
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Icons name={'long-arrow-left'} size={20} color={Colors.white} />
-        </GradientView>
-        <View style={{flexDirection: 'row', gap: 15}}>
-          <TouchableText onPress={() => setShowComments(true)}>
-            <Icons name={'comment'} size={20} color={textSettings.color} />
-          </TouchableText>
-          <TouchableText onPress={() => setFilterVisible(true)}>
-            <Icons name={'filter'} size={20} color={textSettings.color} />
-          </TouchableText>
-          <TouchableText
-            onPress={() => {
-              setVisible(true);
-              setModalData(chapters);
-            }}>
-            <Icons name={'list'} size={20} color={textSettings.color} />
-          </TouchableText>
-        </View>
-      </View>
-      <View style={[styles.chapterNum, {backgroundColor: textSettings.backgroundColorSecondary}]}>
-        <TouchableText style={{ color: textSettings.color}} onPress={handlePrevChapter} >Prev</TouchableText>
-        <CustomText style={{ color: textSettings.color}}>
-          Chapter {currentChapterIndex + 1} of {chapters.length}
-        </CustomText>
-        <TouchableText style={{ color: textSettings.color}} onPress={handleNextChapter}>Next</TouchableText>
-      </View>
-
-      <ScrollView  showsVerticalScrollIndicator={false}>
-        <View>
-          <HeadingText style={{ color: textSettings.color}}>{`Chapter ${currentChapterIndex + 1} - ${
-            currentChapter?.chapter_details?.title
-          }`}</HeadingText>
-
-          {currentChapter && currentChapter.unlock === 1 ? (
-            <View style={{marginVertical: 10}}>
-              <Text
-                style={[
-                  styles.chapterContent,
-                  {
-                    textAlign: textSettings.textAlign,
-                    fontWeight: textSettings.fontWeight,
-                    lineHeight: textSettings.lineHeight,
-                    fontFamily: textSettings.fontFamily,
-                    color: textSettings.color,
-                    fontSize: textSettings.fontSize,
-                    backgroundColor: textSettings.backgroundColor,
-                  },
-                ]}>
-                {textSettings.fontColor}
-                {currentChapter?.chapter_details?.content}
-              </Text>
-              <View
-                style={{
-                  paddingTop: 60,
-                  paddingVertical: 20,
+    <Pressable onPress={handleToggleOptions} style={{ flex: 1}}>
+      <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 50,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <GradientView
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}>
+            <Icons name={'long-arrow-left'} size={20} color={Colors.white} />
+          </GradientView>
+          {showOptions && (
+            <View style={{flexDirection: 'row', gap: 15}}>
+              <TouchableText onPress={() => setShowComments(true)}>
+                <Icons name={'comment'} size={20} color={textSettings.color} />
+              </TouchableText>
+              <TouchableText onPress={() => setFilterVisible(true)}>
+                <Icons name={'filter'} size={20} color={textSettings.color} />
+              </TouchableText>
+              <TouchableText
+                onPress={() => {
+                  setVisible(true);
+                  setModalData(chapters);
                 }}>
-                <Icons
-                  name={'heart'}
-                  size={100}
-                  color={Colors.secondary}
-                  style={{textAlign: 'center'}}
-                />
+                <Icons name={'list'} size={20} color={textSettings.color} />
+              </TouchableText>
+            </View>
+          )}
+        </View>
+        {showOptions && (
+          <View
+            style={[
+              styles.chapterNum,
+              {backgroundColor: textSettings.backgroundColorSecondary},
+            ]}>
+            <TouchableText
+              style={{color: textSettings.color}}
+              onPress={handlePrevChapter}>
+              Prev
+            </TouchableText>
+            <CustomText style={{color: textSettings.color}}>
+              Chapter {currentChapterIndex + 1} of {chapters.length}
+            </CustomText>
+            <TouchableText
+              style={{color: textSettings.color}}
+              onPress={handleNextChapter}>
+              Next
+            </TouchableText>
+          </View>
+        )}
+       
+        <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
+          <View>
+            <HeadingText style={{color: textSettings.color}}>{`Chapter ${
+              currentChapterIndex + 1
+            } - ${currentChapter?.chapter_details?.title}`}</HeadingText>
+
+            {currentChapter && currentChapter.unlock === 1 ? (
+              <View style={{marginVertical: 10}}>
+                <Text
+                  style={[
+                    styles.chapterContent,
+                    {
+                      textAlign: textSettings.textAlign,
+                      fontWeight: textSettings.fontWeight,
+                      lineHeight: textSettings.lineHeight,
+                      fontFamily: textSettings.fontFamily,
+                      color: textSettings.color,
+                      fontSize: textSettings.fontSize,
+                      backgroundColor: textSettings.backgroundColor,
+                    },
+                  ]}>
+                  {currentChapter?.chapter_details?.content}
+                </Text>
+                <View
+                  style={{
+                    paddingTop: 60,
+                    paddingVertical: 20,
+                  }}>
+                  <Icons
+                    name={'heart'}
+                    size={100}
+                    color={Colors.secondary}
+                    style={{textAlign: 'center'}}
+                  />
+                  <CustomText
+                    style={{
+                      paddingVertical: 30,
+                      fontWeight: 'bold',
+                      fontSize: 14,
+                      textAlign: 'center',
+                      color: textSettings.color,
+                    }}>
+                    Thanks for reading!{' '}
+                  </CustomText>
+                </View>
+                <View style={{paddingVertical: 10, paddingBottom: 50}}>
+                  {currentChapterIndex === chapters.length - 1 ? (
+                    BookDetails.is_complete == 0 && (
+                      <CustomText
+                        style={{
+                          color: Colors.secondary,
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                        }}>
+                        {' '}
+                        Stay Tuned, more chapters are coming soon...
+                      </CustomText>
+                    )
+                  ) : (
+                    <Button title="Next Chapter" onPress={handleNextChapter} />
+                  )}
+                </View>
+              </View>
+            ) : (
+              <View style={{paddingVertical: 50, paddingHorizontal: 20}}>
                 <CustomText
                   style={{
-                    paddingVertical: 30,
-                    fontWeight: 'bold',
                     fontSize: 14,
                     textAlign: 'center',
-                    color: textSettings.color
+                    color: textSettings.color,
                   }}>
-                  Thanks for reading!{' '}
+                  The story of this chapter is full of surprises. May you enjoy
+                  your time when reading it.
+                </CustomText>
+                <Button
+                  title="Unlock This Chapter"
+                  onPress={handleUnlockChapter}
+                  style={{marginTop: 50}}
+                />
+
+                <CustomText
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    marginVertical: 30,
+                    color: textSettings.color,
+                  }}>
+                  Price :{' '}
+                  <Icons
+                    name={'dollar'}
+                    size={15}
+                    color={Colors.secondary}
+                    style={{textAlign: 'center'}}
+                  />{' '}
+                  {currentChapter?.chapter_reading_cost}
                 </CustomText>
               </View>
-              <View style={{paddingVertical: 10, paddingBottom: 50}}>
-                {currentChapterIndex === chapters.length - 1 ? (
-                  BookDetails.is_complete == 0 && (
-                    <CustomText
-                      style={{
-                        color: Colors.secondary,
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                      }}>
-                      {' '}
-                      Stay Tuned, more chapters are coming soon...
-                    </CustomText>
-                  )
-                ) : (
-                  <Button title="Next Chapter" onPress={handleNextChapter} />
-                )}
-              </View>
-            </View>
-          ) : (
-            <View style={{paddingVertical: 50, paddingHorizontal: 20}}>
-              <CustomText style={{fontSize: 14, textAlign: 'center', color: textSettings.color}}>
-                The story of this chapter is full of surprises. May you enjoy
-                your time when reading it.
-              </CustomText>
-              <Button
-                title="Unlock This Chapter"
-                onPress={handleUnlockChapter}
-                style={{marginTop: 50}}
-              />
-
-              <CustomText
-                style={{
-                  fontSize: 15,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  marginVertical: 30,
-                  color : textSettings.color
-                }}>
-                Price :{' '}
-                <Icons
-                  name={'dollar'}
-                  size={15}
-                  color={Colors.secondary}
-                  style={{textAlign: 'center'}}
-                />{' '}
-                {currentChapter?.chapter_reading_cost}
-              </CustomText>
-            </View>
-          )}
-        </View>
-        <View>
-          <HeadingText style={{ color: textSettings.color}}>{'Must Read'}</HeadingText>
-          {!mustReadBooks && (
-            <Skeleton isLoading={true} count={3} numColumns={3} />
-          )}
-          <HorizontalScrollView data={mustReadBooks} />
-        </View>
-      </ScrollView>
-
-      <ChapterBottomDrawer
-        visible={visible}
-        data={modalData}
-        onClose={() => setVisible(false)}
-        currentChapter={currentChapterIndex}
-        onPress={index => setCurrentChapterIndex(index)}
-        title={BookDetails?.title}
-        textSettings={textSettings}
-      />
-      <FilterBottomDrawer
-        visible={filterVisible}
-        onClose={() => setFilterVisible(false)}
-        title={'Filter'}
-        filterState={textSettings}
-        setFilterState={setTextSettings}
-      />
-      <BottomDrawer
-        visible={showComments}
-        onClose={() => setShowComments(false)}
-        title={'Comments'}
-        style={{height: '85%'}}>
-        <View style={{height: '100%', marginBottom: 50}}>
-          <CommentsList chapterDetails={currentChapter} />
-        </View>
-      </BottomDrawer>
-    </RowContainer>
+            )}
+          </View>
+          <View>
+            <HeadingText style={{color: textSettings.color}}>
+              {'Must Read'}
+            </HeadingText>
+            {!mustReadBooks && (
+              <Skeleton isLoading={true} count={3} numColumns={3} />
+            )}
+            <HorizontalScrollView data={mustReadBooks} />
+          </View>
+        </ScrollView>
+        
+        <ChapterBottomDrawer
+          visible={visible}
+          data={modalData}
+          onClose={() => setVisible(false)}
+          currentChapter={currentChapterIndex}
+          onPress={index => setCurrentChapterIndex(index)}
+          title={BookDetails?.title}
+          textSettings={textSettings}
+        />
+        <FilterBottomDrawer
+          visible={filterVisible}
+          onClose={() => setFilterVisible(false)}
+          title={'Filter'}
+          filterState={textSettings}
+          setFilterState={setTextSettings}
+        />
+        <BottomDrawer
+          visible={showComments}
+          onClose={() => setShowComments(false)}
+          title={'Comments'}
+          style={{height: '85%'}}>
+          <View style={{height: '100%', marginBottom: 50}}>
+            <CommentsList chapterDetails={currentChapter} />
+          </View>
+        </BottomDrawer>
+      </RowContainer>
+      </Pressable>
   );
 }
 
@@ -340,7 +349,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderBottomRightRadius: 8,
     borderTopRightRadius: 8,
-    // position: 'absolute',
     width: 50,
     marginTop: 20,
   },

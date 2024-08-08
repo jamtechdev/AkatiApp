@@ -8,6 +8,7 @@ const CustomStarRating = ({
   style,
   isDisable = true,
   size = 20,
+  starStyle
 }) => {
   const [rating, setRating] = useState(rate);
 
@@ -49,7 +50,7 @@ const CustomStarRating = ({
             name={renderStar(index)}
             size={size}
             color={index < rating ? 'gold' : 'gray'}
-            style={styles.star}
+            style={[starStyle]}
           />
         </TouchableOpacity>
       ))}
@@ -60,9 +61,7 @@ const CustomStarRating = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-  },
-  star: {
-    marginHorizontal: 5,
+    gap: 5
   },
 });
 
