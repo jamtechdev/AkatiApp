@@ -1,6 +1,7 @@
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
+  BottomDrawer,
   Button,
   Checkbox,
   CustomText,
@@ -21,7 +22,6 @@ export default function RechargeScreen() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [choosePaymentMethod, setChoosePaymentMethod] = useState(null);
-
   useEffect(() => {
     commonServices
       .getRechargePlans()
@@ -47,6 +47,10 @@ export default function RechargeScreen() {
           €{item?.recharge_amount}
         </CustomText>
         <Button
+        onPress={()=>{
+          setSelectedPlan(item)
+          setShowModal(true)
+        }}
           title={'Buy Now'}
           style={{
             paddingHorzontal: 25,
@@ -80,6 +84,49 @@ export default function RechargeScreen() {
           columnWrapperStyle={styles.row}
         />
       )}
+
+      <BottomDrawer
+        visible={showModal}
+        onClose={() => setShowModal(false)}
+        title={'Select Payment Method '}
+        style={{height : '50%'}}
+        >
+
+<View>
+<Button
+        onPress={()=>{
+          setSelectedPlan(item)
+          setShowModal(true)
+        }}
+          title={'Buy Now'}
+          style={{
+            paddingHorzontal: 25,
+            paddingVertical: 5,
+            width: 80,
+          }}
+          textStyle={{
+            fontSize: 12,
+          }}
+        />
+         <Button
+        onPress={()=>{
+          setSelectedPlan(item)
+          setShowModal(true)
+        }}
+          title={'Buy Now'}
+          style={{
+            paddingHorzontal: 25,
+            paddingVertical: 5,
+            width: 80,
+          }}
+          textStyle={{
+            fontSize: 12,
+          }}
+        />
+</View>
+
+        </BottomDrawer>
+
     </RowContainer>
   );
 }

@@ -1,4 +1,3 @@
-// BottomModal.js
 import React, {useRef, useEffect} from 'react';
 import {
   View,
@@ -6,7 +5,6 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
-  TouchableOpacity,
   Modal,
   ScrollView,
   Pressable,
@@ -29,7 +27,7 @@ const ChapterBottomDrawer = ({
 
   useEffect(() => {
     Animated.timing(translateY, {
-      toValue: visible ? screenHeight * 0.3 : screenHeight,
+      toValue: visible ? 0 : screenHeight,
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -44,12 +42,7 @@ const ChapterBottomDrawer = ({
     >
       <View style={styles.overlay}>
         <Animated.View style={[styles.modal, {transform: [{translateY}]}]}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+          <View style={styles.header}>
             <HeadingText>{title}</HeadingText>
             <Icons
               name={'close'}
@@ -58,62 +51,41 @@ const ChapterBottomDrawer = ({
               onPress={onClose}
             />
           </View>
-          <View style={styles.modalContent}>
-            <ScrollView
-              style={{width: '100%'}}
-              showsVerticalScrollIndicator={false}>
-              <View style={styles.tabContent}>
-                {data && data.length > 0 ? (
-                  data.map((chapter, index) => (
-                    <Pressable
-                      style={[
-                        {
-                          padding: 15,
-                          borderWidth: 1,
-                          borderColor: Colors.primary,
-                          borderRadius: 5,
-                          marginBottom: 10,
-                          backgroundColor: Colors.primary,
-                        },
-                        index == currentChapter && {
-                          backgroundColor: Colors.secondary,
-                        },
-                      ]}
-                      key={index}
-                      onPress={() => onPress(index)}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: Colors.white,
-                            fontWeight: 600,
-                            marginBottom: 5,
-                          }}>
-                          Chapter {index + 1}
-                        </Text>
-                        {chapter.unlock != 1 && (
-                          <Icons
-                            name={'lock'}
-                            size={15}
-                            color={Colors.secondary}
-                          />
-                        )}
-                      </View>
-                      <Text style={styles.chapterText}>
-                        {chapter.chapter_details.title}
+          <ScrollView
+            contentContainerStyle={styles.modalContent}
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.tabContent}>
+              {data && data.length > 0 ? (
+                data.map((chapter, index) => (
+                  <Pressable
+                    style={[
+                      styles.chapterContainer,
+                      index === currentChapter && styles.currentChapter,
+                    ]}
+                    key={index}
+                    onPress={() => onPress(index)}>
+                    <View style={styles.chapterHeader}>
+                      <Text style={styles.chapterTitle}>
+                        Chapter {index + 1}
                       </Text>
-                    </Pressable>
-                  ))
-                ) : (
-                  <Text style={styles.description}>No chapters available.</Text>
-                )}
-              </View>
-            </ScrollView>
-          </View>
+                      {chapter.unlock !== 1 && (
+                        <Icons
+                          name={'lock'}
+                          size={15}
+                          color={Colors.secondary}
+                        />
+                      )}
+                    </View>
+                    <Text style={styles.chapterText}>
+                      {chapter.chapter_details.title}
+                    </Text>
+                  </Pressable>
+                ))
+              ) : (
+                <Text style={styles.description}>No chapters available.</Text>
+              )}
+            </View>
+          </ScrollView>
         </Animated.View>
       </View>
     </Modal>
@@ -122,30 +94,51 @@ const ChapterBottomDrawer = ({
 
 const styles = StyleSheet.create({
   overlay: {
-    // flex: 1,
+    flex: 1,
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   modal: {
-    height: '100%',
+    height: '60%',
     backgroundColor: Colors.tertiary,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     elevation: 5,
     padding: 20,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
   modalContent: {
-    // justifyContent: 'center',
-    paddingTop: 15,
+    paddingBottom: 20,
     alignItems: 'center',
   },
-  text: {
-    fontSize: 18,
-    marginBottom: 20,
+  tabContent: {
+    width: '100%',
   },
-  button: {
-    fontSize: 18,
-    color: 'blue',
+  chapterContainer: {
+    padding: 15,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+    borderRadius: 5,
+    marginBottom: 10,
+    backgroundColor: Colors.primary,
+  },
+  currentChapter: {
+    backgroundColor: Colors.secondary,
+  },
+  chapterHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  chapterTitle: {
+    color: Colors.white,
+    fontWeight: '600',
+    marginBottom: 5,
   },
   chapterText: {
     color: Colors.white,
@@ -153,9 +146,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
   },
-  tabContent: {
-    padding: 10,
-    width: '100%',
+  description: {
+    color: Colors.white,
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
