@@ -44,14 +44,21 @@ const Comment = ({comment, onReply, onLike}) => {
             {comment?.user?.first_name} {comment?.user?.last_name}
           </Text>
           <Text style={styles.text}>{comment.text}</Text>
-          <View style={styles.footer}>
-            <Text style={styles.time}>
-              {/* {moment(comment.created_at).fromNow()} */}
-            </Text>
-            <TouchableOpacity
-              onPress={() => setShowReplyInput(!showReplyInput)}>
-              <Text style={styles.replyButton}>Reply</Text>
-            </TouchableOpacity>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={styles.footer}>
+              <TouchableOpacity
+                onPress={() => setShowReplyInput(!showReplyInput)}>
+                <Text style={styles.replyButton}>Reply</Text>
+              </TouchableOpacity>
+            </View>
+            {comment.all_replies && comment.all_replies.length > 0 && (
+              <TouchableOpacity onPress={toggleReplies}>
+                <Text style={styles.replyListButton}>
+                  View {comment?.all_replies.length}{' '}
+                  {comment?.all_replies.length == 1 ? 'reply' : 'replies'}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
           {showReplyInput && (
             <View style={styles.inputContainer}>
@@ -65,21 +72,11 @@ const Comment = ({comment, onReply, onLike}) => {
                 <Icon
                   name="send"
                   size={30}
-                  color="#007AFF"
+                  color={Colors.secondary}
                   style={styles.sendIcon}
                 />
               </TouchableOpacity>
             </View>
-          )}
-          {comment.all_replies && comment.all_replies.length > 0 && (
-            <>
-              <TouchableOpacity onPress={toggleReplies}>
-                <Text style={styles.replyListButton}>
-                  View {comment?.all_replies.length}{' '}
-                  {comment?.all_replies.length == 1 ? 'reply' : 'replies'}
-                </Text>
-              </TouchableOpacity>
-            </>
           )}
         </View>
         <TouchableOpacity
@@ -151,7 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tertiary,
     padding: 10,
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: Colors.darkGray,
     // marginLeft: 10,
     // marginTop: 5,
     justifyContent: 'center',
@@ -164,14 +161,14 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingLeft: 40,
     // marginLeft:10,
-    borderBottomColor: '#ddd',
+    borderBottomColor: Colors.darkGray,
     paddingBottom: 10,
     justifyContent: 'center',
   },
   replyView: {
-    marginLeft: 5,
-    padding: 10,
-    marginTop: 5,
+    // marginLeft: 5,
+    padding: 0,
+    // marginTop: 5,
   },
   avatar: {
     marginRight: 10,
@@ -184,6 +181,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginVertical: 5,
+    fontSize: 12,
   },
   footer: {
     flexDirection: 'row',
@@ -200,14 +198,18 @@ const styles = StyleSheet.create({
   likeButtonView: {
     paddingHorizontal: 10,
     paddingTop: 10,
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
   replyButton: {
-    color: '#007bff',
+    color: Colors.secondary,
+    fontSize: 14,
   },
   replyListButton: {
-    color: '#007bff',
-    fontSize: 15,
-    marginTop: 5,
+    color: Colors.secondary,
+    fontSize: 14,
+    // marginTop: 5,
   },
   replyInputContainer: {
     flexDirection: 'row',
@@ -219,13 +221,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     // borderBottomWidth: 1,
-    borderColor: '#ddd',
+    borderColor: Colors.darkGray,
     padding: 10,
   },
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: Colors.darkGray,
     padding: 10,
     borderRadius: 20,
     // marginRight: 10,

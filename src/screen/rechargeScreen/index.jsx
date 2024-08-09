@@ -17,7 +17,8 @@ import {commonServices} from '../../_services/common.service';
 import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
 import coin from '../../images/coin.png';
-export default function RechargeScreen() {
+
+export default function RechargeScreen({navigation}) {
   const [rechargePlans, setRechargePlans] = useState();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -32,6 +33,21 @@ export default function RechargeScreen() {
         console.log(error);
       });
   }, []);
+
+  const handleGetItem = type => {
+    if (type == 'paypal') {
+      navigation.navigate('PayPalPaymentScreen', {
+        coins: selectedPlan.coin_balance,
+        rechargeAmount: selectedPlan.recharge_amount,
+      });
+    } else {
+      // navigation.navigate('CinetPaymentScreen');
+      navigation.navigate('CinetPaymentScreen', {
+        coins: selectedPlan.coin_balance,
+        rechargeAmount: selectedPlan.recharge_amount,
+      });
+    }
+  };
 
   const renderRechargeItem = ({item}) => {
     return (
@@ -89,11 +105,12 @@ export default function RechargeScreen() {
           visible={showModal}
           onClose={() => setShowModal(false)}
           title={'Select Payment Method '}
-          style={{height: '35%'}}>
+          style={{height: '28%'}}>
           <View style={{width: '100%', paddingVertical: 25, gap: 10}}>
             <Button
               onPress={() => {
-                setShowModal(true);
+                setShowModal(false);
+                handleGetItem('paypal');
               }}
               title={'Pay with Paypal'}
             />
@@ -101,6 +118,7 @@ export default function RechargeScreen() {
               title={'Pay with CinetPay'}
               onPress={() => {
                 setShowModal(false);
+                handleGetItem('CinetPay');
               }}
               style={{backgroundColor: '#28a745'}}
               gradient={false}

@@ -14,6 +14,8 @@ import {getAuth} from '../_store/_reducers/auth';
 import NotificationScreen from '../screen/notificationScreen';
 import ProfileScreen from '../screen/profileScreen';
 import ReadingScreen from '../screen/readingScreen';
+import CinetPaymentScreen from '../screen/cinetPaymentScreen';
+import paypalPayment from '../screen/paypalPayment';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +54,11 @@ const AppNavigator = () => {
           component={ReadingScreen}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="CinetPaymentScreen"
+          component={CinetPaymentScreen}
+        />
+        <Stack.Screen name="PayPalPaymentScreen" component={paypalPayment} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -42,9 +42,14 @@ const ChapterBottomDrawer = ({
       animationType="none" // Disable the default animation
     >
       <View style={styles.overlay}>
-        <Animated.View style={[styles.modal,{backgroundColor: textSettings.backgroundColor},{transform: [{translateY}]}]}>
+        <Animated.View
+          style={[
+            styles.modal,
+            {backgroundColor: textSettings.backgroundColor},
+            {transform: [{translateY}]},
+          ]}>
           <View style={styles.header}>
-            <HeadingText style={{ color: textSettings.color}}>{title}</HeadingText>
+            {/* <HeadingText style={{ color: textSettings.color}}>{title}</HeadingText> */}
             <Icons
               name={'close'}
               size={20}
@@ -67,7 +72,11 @@ const ChapterBottomDrawer = ({
                     key={index}
                     onPress={() => onPress(index)}>
                     <View style={styles.chapterHeader}>
-                      <Text style={[styles.chapterTitle, {color: textSettings.color}]}>
+                      <Text
+                        style={[
+                          styles.chapterTitle,
+                          {color: textSettings.color},
+                        ]}>
                         Chapter {index + 1}
                       </Text>
                       {chapter.unlock !== 1 && (
@@ -78,7 +87,8 @@ const ChapterBottomDrawer = ({
                         />
                       )}
                     </View>
-                    <Text style={[styles.chapterText, {color: textSettings.color}]}>
+                    <Text
+                      style={[styles.chapterText, {color: textSettings.color}]}>
                       {chapter.chapter_details.title}
                     </Text>
                   </Pressable>
@@ -101,22 +111,28 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   modal: {
-    height: '60%',
-    backgroundColor: Colors.tertiary,
+    height: '50%',
+    backgroundColor: 'transparent',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     elevation: 5,
-    padding: 20,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 20,
+    marginTop: -50,
+    width: 40,
+    height: 40,
+    margin: 'auto',
+    backgroundColor: Colors.secondary,
+    borderRadius: 50,
   },
   modalContent: {
     paddingBottom: 20,
     alignItems: 'center',
+    padding: 20,
   },
   tabContent: {
     width: '100%',

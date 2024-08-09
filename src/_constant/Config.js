@@ -1,16 +1,28 @@
-
 export const API_URL = 'https://feupsontec.com/api/customer';
 export const IMAGE_API_URL = 'https://feupsontec.com/storage/book-front-cover/';
-export const PAYPAL_CLIENT_ID = 'AdUP4boW0BB7uxglGu0hNwP8RFVsZ2W7b3nN0Dgj9kMrWtRI_FbRHVKKf7ciuiD-0hpMVEHYnj0R63Hf';
+export const PAYPAL_CLIENT_ID =
+  'AdUP4boW0BB7uxglGu0hNwP8RFVsZ2W7b3nN0Dgj9kMrWtRI_FbRHVKKf7ciuiD-0hpMVEHYnj0R63Hf';
 export const CINETPAY_API_ID = '695644265ece900561f2c6.42532258';
 export const CINETPAY_SITE_ID = '454000';
-
+export const RETURN_URL = 'https://feupsontec.com/payment/';
+export const PAYMENT_URL = 'https://api.sandbox.paypal.com/';
+export const auth = {
+  Username:
+    'AebKdjX-2ykT750qpEb-ufImR6bBs-ZJVTf7nFyqAl44ipTyWi-SDyM8aTY_SlLJIk7FCaxrQYOMYroH',
+  // 'Afpdigg4ddVECCQifzGXScb9n5mhkOkdEvh-RSL8fTh4g0xpUsRdXmHT7A64wcmten_YIsRI38h6jR0s', //"your_paypal-app-client-ID", ----->LIVE
+  // 'AdUP4boW0BB7uxglGu0hNwP8RFVsZ2W7b3nN0Dgj9kMrWtRI_FbRHVKKf7ciuiD-0hpMVEHYnj0R63Hf', //"your_paypal-app-client-ID",---- DEV
+  Password:
+    'EIR72jeb2pV2v5n6sgqu8v04JidaPMBVbU7xOV4lmP4DKiODbGvfD8PtTqhDR9mQb4cLGRrMM3XDcoho',
+  // 'EIGVqyjApFhFKNU7vY2fVFlVXoRKFwTHhu2OGsw8R7je-pRimHIAaUcFpx8pFaQ_o-IbkxhJtdE1ajJp', //"your-paypal-app-secret-ID   ------>LIVE
+  // 'EBc99xva3dsQwXYPW6P7mlnqiqINKw_vU5pTv1u0adlttr0ryY_AEh2EJEMI3KohZD_j2yfm9fRGxWm6', //"your-paypal-app-secret-ID  ---DEV
+};
 
 const Config = {
   API_URL,
   IMAGE_API_URL,
   PAYPAL_CLIENT_ID,
   CINETPAY_API_ID,
-  CINETPAY_SITE_ID
-}
-export default Config
+  CINETPAY_SITE_ID,
+  RETURN_URL,
+};
+export default Config;

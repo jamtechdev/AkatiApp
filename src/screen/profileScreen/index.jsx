@@ -23,7 +23,6 @@ function ProfileScreen() {
         console.log(err);
       });
   }, []);
-  console.log(userDetails);
   return (
     <RowContainer>
       <View style={styles.profileView}>
@@ -68,7 +67,7 @@ function ProfileScreen() {
             }}>
             <Text
               style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
-             First Name :
+              First Name :
             </Text>
             <Text style={{color: Colors.white, fontSize: 14}}>
               {userDetails?.last_name}
@@ -89,7 +88,7 @@ function ProfileScreen() {
               Last Name :
             </Text>
             <Text style={{color: Colors.white, fontSize: 14}}>
-            {userDetails?.last_name}
+              {userDetails?.last_name}
             </Text>
           </View>
           <View

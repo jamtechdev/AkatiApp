@@ -43,7 +43,9 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
             onPress={() => navigation.navigate('notification')}
           />
         </GradientView>
-        <GradientView style={styles.iconButton} onPress={() => navigation.navigate('profile')} >
+        <GradientView
+          style={styles.iconButton}
+          onPress={() => navigation.navigate('profile')}>
           {avatar ? (
             <Image
               source={require('../images/avtar.png')}

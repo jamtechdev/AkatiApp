@@ -28,7 +28,6 @@ const BottomDrawer = ({visible, onClose, title, children, style}) => {
         <Animated.View
           style={[styles.modal, style, {transform: [{translateY}]}]}>
           <View style={styles.header}>
-            <HeadingText>{title}</HeadingText>
             <Icons
               name={'close'}
               size={20}
@@ -60,12 +59,17 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 30,
+    width: 40,
+    height: 40,
+    margin: 'auto',
+    backgroundColor: Colors.secondary,
+    borderRadius: 50,
   },
   modalContent: {
     alignItems: 'center',
-    marginBottom: 40,
   },
 });
 

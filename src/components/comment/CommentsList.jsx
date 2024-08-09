@@ -14,6 +14,8 @@ import EmojiPicker from 'rn-emoji-keyboard';
 import Comment from './Comment';
 import {commonServices} from '../../_services/common.service';
 import {useAppContext} from '../../_customContext/AppProvider';
+import {Colors} from '../../_utils/GlobalStyle';
+import NoDataFound from '../NoDataFound';
 
 const defaultEmojis = ['😀', '😂', '😍', '👍', '😎', '🥳', '🙌', '🔥'];
 
@@ -153,12 +155,17 @@ const CommentsList = ({token, chapterDetails}) => {
           onChangeText={setNewComment}
         />
         <TouchableOpacity onPress={addComment}>
-          <Icon name="send" size={30} color="#007AFF" style={styles.sendIcon} />
+          <Icon
+            name="send"
+            size={30}
+            color={Colors.secondary}
+            style={styles.sendIcon}
+          />
         </TouchableOpacity>
       </View>
       <FlatList
         data={comments}
-        style={{backgroundColor: 'black'}}
+        style={{backgroundColor: 'black', height: '100%'}}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
@@ -178,7 +185,8 @@ const CommentsList = ({token, chapterDetails}) => {
                 alignItems: 'center',
               }}>
               <Text style={{fontSize: 15, fontWeight: 'bold', marginTop: 50}}>
-                No comments available.
+                {/* No comments available. */}
+                <NoDataFound description={'No comments available.'} />
               </Text>
             </View>
           )
@@ -191,7 +199,7 @@ const CommentsList = ({token, chapterDetails}) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    marginBottom: 50,
+    marginBottom: 0,
   },
   emojiContainer: {
     flexDirection: 'row',
@@ -202,7 +210,7 @@ const styles = StyleSheet.create({
     lineHeight: 41,
   },
   emojiBox: {
-    borderColor: '#ddd',
+    borderColor: Colors.darkGray,
     borderWidth: 1,
     paddingHorizontal: 9,
     paddingBottom: 12,
@@ -211,7 +219,7 @@ const styles = StyleSheet.create({
   },
   addEmojiIcon: {
     marginLeft: 10,
-    borderColor: '#ddd',
+    borderColor: Colors.darkGray,
     borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 10,
@@ -220,13 +228,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: '#ddd',
+    borderColor: Colors.darkGray,
     padding: 10,
   },
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: Colors.darkGray,
     padding: 10,
     borderRadius: 20,
   },
