@@ -1386,6 +1386,8 @@ PODS:
   - RNGoogleSignin (12.2.1):
     - GoogleSignIn (~> 7.1)
     - React-Core
+  - RNIap (12.15.2):
+    - React-Core
   - RNReanimated (3.14.0):
     - DoubleConversion
     - glog
@@ -1530,6 +1532,7 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNIap (from `../node_modules/react-native-iap`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -1694,6 +1697,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNIap:
+    :path: "../node_modules/react-native-iap"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1790,6 +1795,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: f1fdc7ac62df96e3c8362d516caaf84fab69085d
   RNGestureHandler: 4fd316f1bdb8d7f6a54efc58da5923cb83014b19
   RNGoogleSignin: 08dc4ba7eac2096c7fecfe109f0950fa4683c803
+  RNIap: 2a3674383dcf383e5b7b3c4680dc87f1b2657326
   RNReanimated: f4ff116e33e0afc3d127f70efe928847c7c66355
   RNScreens: 5aeecbb09aa7285379b6e9f3c8a3c859bb16401c
   RNVectorIcons: 2a2f79274248390b80684ea3c4400bd374a15c90

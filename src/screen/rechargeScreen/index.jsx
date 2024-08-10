@@ -1,14 +1,20 @@
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  Platform,
+  Alert,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   BottomDrawer,
   Button,
-  Checkbox,
   CustomText,
   HeadingText,
   RowContainer,
   Skeleton,
-  TouchableText,
 } from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,12 +23,40 @@ import {commonServices} from '../../_services/common.service';
 import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
 import coin from '../../images/coin.png';
+import {
+  initConnection,
+  requestPurchase,
+  getProducts,
+  endConnection,
+  clearTransactionIOS,
+} from 'react-native-iap';
 
 export default function RechargeScreen({navigation}) {
   const [rechargePlans, setRechargePlans] = useState();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [choosePaymentMethod, setChoosePaymentMethod] = useState(null);
+  const {showToast, showLoader, hideLoader} = useAppContext();
+
+  const itemSubs = [
+    'com.akati.ebook.60.coin',
+    'com.akati.ebook.300.coin',
+    'com.akati.ebook.200.coin',
+    'com.akati.ebook.100.coin',
+  ];
+
+  useEffect(() => {
+    initConnection()
+      .then(() => {
+        console.log('IAP connection established');
+        getItems();
+      })
+      .catch(err => console.log('Error in establishing IAP connection', err));
+
+    return () => {
+      endConnection();
+    };
+  }, []);
+
   useEffect(() => {
     commonServices
       .getRechargePlans()
@@ -34,18 +68,58 @@ export default function RechargeScreen({navigation}) {
       });
   }, []);
 
+  const getItems = async () => {
+    try {
+      getProducts({skus: itemSubs})
+        .then(res => {
+          console.log('result', res);
+        })
+        .catch(err => console.log(err));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleGetItem = type => {
     if (type == 'paypal') {
       navigation.navigate('PayPalPaymentScreen', {
         coins: selectedPlan.coin_balance,
         rechargeAmount: selectedPlan.recharge_amount,
       });
+    } else if (type == 'apple') {
+      _requestSubscription(
+        `com.akati.ebook.${selectedPlan.coin_balance}.coin`,
+        selectedPlan,
+      );
     } else {
-      // navigation.navigate('CinetPaymentScreen');
       navigation.navigate('CinetPaymentScreen', {
         coins: selectedPlan.coin_balance,
         rechargeAmount: selectedPlan.recharge_amount,
       });
+    }
+  };
+
+  const _requestSubscription = async (sku, item) => {
+    try {
+      await clearTransactionIOS();
+      showLoader();
+      const data = await requestPurchase({
+        sku,
+        flushFailedPurchasesCachedAsPendingAndroid: true,
+      });
+      console.log('data', data);
+      if (data?.transactionId) {
+        savePaymentDetails(data, item);
+      }
+    } catch (err) {
+      if (err.code === 'E_USER_CANCELLED') {
+        showToast('Purchase is canceled by you', 'error');
+      } else {
+        showToast(JSON.stringify(err?.message, null, 2), 'error');
+        console.warn(err.code, err.message);
+      }
+    } finally {
+      hideLoader();
     }
   };
 
@@ -94,7 +168,7 @@ export default function RechargeScreen({navigation}) {
         <FlatList
           data={rechargePlans}
           renderItem={renderRechargeItem}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item, index) => index.toString()}
           numColumns={2}
           showsVerticalScrollIndicator={false}
           columnWrapperStyle={styles.row}
@@ -107,22 +181,36 @@ export default function RechargeScreen({navigation}) {
           title={'Select Payment Method '}
           style={{height: '28%'}}>
           <View style={{width: '100%', paddingVertical: 25, gap: 10}}>
-            <Button
-              onPress={() => {
-                setShowModal(false);
-                handleGetItem('paypal');
-              }}
-              title={'Pay with Paypal'}
-            />
-            <Button
-              title={'Pay with CinetPay'}
-              onPress={() => {
-                setShowModal(false);
-                handleGetItem('CinetPay');
-              }}
-              style={{backgroundColor: '#28a745'}}
-              gradient={false}
-            />
+            {Platform.OS == 'ios' ? (
+              <View>
+                <Button
+                  onPress={() => {
+                    setShowModal(false);
+                    handleGetItem('apple');
+                  }}
+                  title={'Apple Pay'}
+                />
+              </View>
+            ) : (
+              <View>
+                <Button
+                  onPress={() => {
+                    setShowModal(false);
+                    handleGetItem('paypal');
+                  }}
+                  title={'Pay with PayPal'}
+                />
+                <Button
+                  title={'Pay with CinetPay'}
+                  onPress={() => {
+                    setShowModal(false);
+                    handleGetItem('CinetPay');
+                  }}
+                  style={{backgroundColor: '#28a745'}}
+                  gradient={false}
+                />
+              </View>
+            )}
           </View>
         </BottomDrawer>
       )}
