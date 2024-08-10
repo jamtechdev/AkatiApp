@@ -77,6 +77,7 @@ android {
 
     namespace "com.akatiapp"
     defaultConfig {
+        missingDimensionStrategy "store", "play"
         applicationId  "com.akati"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
