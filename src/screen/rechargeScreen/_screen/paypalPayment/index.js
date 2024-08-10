@@ -10,8 +10,8 @@ import axios from 'axios';
 // import {payment_done} from '../../config/images';
 // import CoinLoader from '../../components/CoinLoader';
 import styles from './styles';
-import {auth, PAYMENT_URL, RETURN_URL} from '../../_constant/Config';
-import axiosInstance from '../../_services/axiosInstance';
+import {auth, PAYMENT_URL, RETURN_URL} from '../../../../_constant/Config';
+import axiosInstance from '../../../../_services/axiosInstance';
 
 const PaypalPayment = ({route, navigation}) => {
   const [ammount, setammount] = useState('');

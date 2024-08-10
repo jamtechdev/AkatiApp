@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../../_utils/GlobalStyle';
+import {Colors} from '../../../../_utils/GlobalStyle';
 
 const styles = StyleSheet.create({
   container: {

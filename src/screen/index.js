@@ -12,3 +12,8 @@ export {default as PrivacyScreen} from './privacyScreen';
 export {default as RechargeHistoryScreen} from './rechargeHistoryScreen';
 export {default as RechargeScreen} from './rechargeScreen';
 export {default as BookDetailsScreen} from './bookDetailsScreen';
+export {default as NotificationScreen} from './notificationScreen';
+export {default as ProfileScreen} from './profileScreen';
+export {default as ReadingScreen} from './readingScreen';
+export {default as CinetPaymentScreen} from './rechargeScreen/_screen/cinetPaymentScreen';
+export {default as PaypalPayment} from './rechargeScreen/_screen/paypalPayment';

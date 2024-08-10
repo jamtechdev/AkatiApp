@@ -8,14 +8,9 @@ import TabNavigator from './TabNavigator';
 import {StatusBar} from 'react-native';
 import {CustomHeader, DrawerContent} from '../components';
 import DrawerNavigator from './DrawerNavigator';
-import {BookDetailsScreen, PrivacyScreen, TermsScreen} from '../screen';
+import {BookDetailsScreen, CinetPaymentScreen, NotificationScreen, PaypalPayment, PrivacyScreen, ProfileScreen, ReadingScreen, TermsScreen} from '../screen';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../_store/_reducers/auth';
-import NotificationScreen from '../screen/notificationScreen';
-import ProfileScreen from '../screen/profileScreen';
-import ReadingScreen from '../screen/readingScreen';
-import CinetPaymentScreen from '../screen/cinetPaymentScreen';
-import paypalPayment from '../screen/paypalPayment';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,7 +53,7 @@ const AppNavigator = () => {
           name="CinetPaymentScreen"
           component={CinetPaymentScreen}
         />
-        <Stack.Screen name="PayPalPaymentScreen" component={paypalPayment} />
+        <Stack.Screen name="PayPalPaymentScreen" component={PaypalPayment} />
       </Stack.Navigator>
     </NavigationContainer>
   );

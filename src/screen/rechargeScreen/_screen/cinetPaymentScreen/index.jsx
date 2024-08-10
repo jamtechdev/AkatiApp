@@ -11,10 +11,10 @@ import {
   CINETPAY_API_ID,
   CINETPAY_SITE_ID,
   RETURN_URL,
-} from '../../_constant/Config';
-import axiosInstance from '../../_services/axiosInstance';
+} from '../../../../_constant/Config';
+import axiosInstance from '../../../../_services/axiosInstance';
 import {useSelector} from 'react-redux';
-import {getAuth} from '../../_store/_reducers/auth';
+import {getAuth} from '../../../../_store/_reducers/auth';
 
 const CinetPaymentScreen = ({route, navigation}) => {
   const [ammount, setammount] = useState('');
