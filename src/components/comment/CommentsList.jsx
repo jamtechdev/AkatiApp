@@ -152,6 +152,7 @@ const CommentsList = ({token, chapterDetails}) => {
           style={styles.input}
           placeholder="Write a comment..."
           value={newComment}
+          placeholderTextColor={Colors.white}
           onChangeText={setNewComment}
         />
         <TouchableOpacity onPress={addComment}>
@@ -165,7 +166,7 @@ const CommentsList = ({token, chapterDetails}) => {
       </View>
       <FlatList
         data={comments}
-        style={{backgroundColor: 'black', height: '100%'}}
+        style={{ height: '100%'}}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
@@ -237,6 +238,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.darkGray,
     padding: 10,
     borderRadius: 20,
+    color:Colors.white
   },
   sendIcon: {
     marginLeft: 10,

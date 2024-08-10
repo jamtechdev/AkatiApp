@@ -300,11 +300,17 @@ function ReadingScreen({navigation, route}) {
             <CustomText style={{color: textSettings.color}}>
               Chapter {currentChapterIndex + 1} of {chapters.length}
             </CustomText>
-            <TouchableText
-              style={{color: textSettings.color}}
-              onPress={handleNextChapter}>
-              Next
-            </TouchableText>
+            {currentChapterIndex + 1 !== chapters.length ? (
+              <TouchableText
+                style={{color: textSettings.color}}
+                onPress={handleNextChapter}>
+                Next
+              </TouchableText>
+            ) : (
+              <TouchableText style={{color: textSettings.color}}>
+                {' '}
+              </TouchableText>
+            )}
           </View>
         )}
         <ChapterBottomDrawer

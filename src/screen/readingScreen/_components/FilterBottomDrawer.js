@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import {HeadingText, TabSwitcher, TextBadge} from '../../../components';
+import {GradientView, HeadingText, TabSwitcher, TextBadge} from '../../../components';
 import {Colors} from '../../../_utils/GlobalStyle';
 import Slider from '@react-native-community/slider';
 import NoDataFound from '../../../components/NoDataFound';
@@ -240,14 +240,9 @@ const FilterBottomDrawer = ({
       animationType="none">
       <View style={styles.overlay}>
         <Animated.View style={[styles.modal, {transform: [{translateY}]}]}>
-          <View style={styles.header}>
-            <Icons
-              name={'close'}
-              size={20}
-              color={filterState.color}
-              onPress={onClose}
-            />
-          </View>
+        <GradientView style={styles.header} onPress={onClose}>
+            <Icons name={'close'} size={20} color={Colors.white} />
+          </GradientView>
           <TabSwitcher tabs={tabs} primary={filterState.backgroundColor} tertiary={filterState.backgroundColorSecondary} textColor={filterState.color}/>
         </Animated.View>
       </View>
@@ -270,15 +265,14 @@ const styles = StyleSheet.create({
     // padding: 20,
   },
   header: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
-    width:40,
-    height:40,
-    margin:"auto",
-    backgroundColor:Colors.secondary,
-    borderRadius:50
+    marginTop: -20,
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   modalContent: {
     paddingBottom: 20,

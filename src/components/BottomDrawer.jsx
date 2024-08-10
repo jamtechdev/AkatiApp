@@ -2,7 +2,7 @@ import React, {useRef, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, Animated, Modal} from 'react-native';
 import {Colors} from '../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import {HeadingText} from '../components';
+import {GradientView, HeadingText} from '../components';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -27,14 +27,9 @@ const BottomDrawer = ({visible, onClose, title, children, style}) => {
       <View style={styles.overlay}>
         <Animated.View
           style={[styles.modal, style, {transform: [{translateY}]}]}>
-          <View style={styles.header}>
-            <Icons
-              name={'close'}
-              size={20}
-              color={Colors.white}
-              onPress={onClose}
-            />
-          </View>
+          <GradientView style={styles.header} onPress={onClose}>
+            <Icons name={'close'} size={20} color={Colors.white} />
+          </GradientView>
           <View style={styles.modalContent}>{children}</View>
         </Animated.View>
       </View>
@@ -58,15 +53,14 @@ const styles = StyleSheet.create({
     // marginBottom: 20,
   },
   header: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 30,
+    marginTop: -20,
     width: 40,
     height: 40,
-    margin: 'auto',
-    backgroundColor: Colors.secondary,
     borderRadius: 50,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   modalContent: {
     alignItems: 'center',

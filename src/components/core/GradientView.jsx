@@ -8,7 +8,19 @@ export default function GradientView({
   onPress = () => console.log('hii'),
 }) {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        style,
+        {
+          paddingHorizontal: 0,
+          paddingVertical: 0,
+          margin: 0,
+          padding: 0,
+          marginHorizontal: 0,
+          marginVertical: 0,
+        },
+      ]}>
       <LinearGradient
         colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
         start={{x: 0, y: 0}}

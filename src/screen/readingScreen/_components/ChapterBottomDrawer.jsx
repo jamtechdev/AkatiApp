@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../../../_utils/GlobalStyle';
-import {HeadingText} from '../../../components';
+import {GradientView, HeadingText} from '../../../components';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -48,15 +48,9 @@ const ChapterBottomDrawer = ({
             {backgroundColor: textSettings.backgroundColor},
             {transform: [{translateY}]},
           ]}>
-          <View style={styles.header}>
-            {/* <HeadingText style={{ color: textSettings.color}}>{title}</HeadingText> */}
-            <Icons
-              name={'close'}
-              size={20}
-              color={textSettings.color}
-              onPress={onClose}
-            />
-          </View>
+           <GradientView style={styles.header} onPress={onClose}>
+            <Icons name={'close'} size={20} color={Colors.white} />
+          </GradientView>
           <ScrollView
             contentContainerStyle={styles.modalContent}
             showsVerticalScrollIndicator={false}>
@@ -118,16 +112,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   header: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop: -50,
+    marginTop: -20,
     width: 40,
     height: 40,
-    margin: 'auto',
-    backgroundColor: Colors.secondary,
     borderRadius: 50,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   modalContent: {
     paddingBottom: 20,
