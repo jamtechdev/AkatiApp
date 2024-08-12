@@ -22,7 +22,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {Colors} from '../../_utils/GlobalStyle';
+import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MIcons from 'react-native-vector-icons/MaterialIcons';
@@ -30,6 +30,7 @@ import {useAppContext} from '../../_customContext/AppProvider';
 import ChapterBottomDrawer from './_components/ChapterBottomDrawer';
 import FilterBottomDrawer from './_components/FilterBottomDrawer';
 import CommentsList from '../../components/comment/CommentsList';
+import LinearGradient from 'react-native-linear-gradient';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
@@ -146,19 +147,33 @@ function ReadingScreen({navigation, route}) {
   return (
     <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
       <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
+      <View style={{position: 'absolute', top: 15, zIndex: 999}}>
+          <LinearGradient
+            colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={GlobalStyles.backButton}>
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={GlobalStyles.backButton}>
+              <Icons name={'long-arrow-left'} size={25} color={'white'} />
+            </Pressable>
+          </LinearGradient>
+        </View>
         <View
           style={{
             flexDirection: 'row',
             gap: 50,
             alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingVertical:10
+            justifyContent:'flex-end',
+            paddingVertical:10,
+            height: 45,
           }}>
-          <GradientView
+          {/* <GradientView
             style={styles.backButton}
             onPress={() => navigation.goBack()}>
             <Icons name={'long-arrow-left'} size={20} color={Colors.white} />
-          </GradientView>
+          </GradientView> */}
           {showOptions && (
             <View style={{flexDirection: 'row', gap: 15}}>
               <TouchableText onPress={() => setShowComments(true)}>

@@ -35,12 +35,11 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <GradientView style={styles.iconButton}>
+        <GradientView style={styles.iconButton}  onPress={() => navigation.navigate('notification')}>
           <Ionicons
             name={'notifications'}
             size={20}
             color={'white'}
-            onPress={() => navigation.navigate('notification')}
           />
         </GradientView>
         <GradientView

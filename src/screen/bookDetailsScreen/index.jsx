@@ -18,13 +18,15 @@ import {
   Share,
   Animated,
   TextInput,
+  Pressable,
 } from 'react-native';
-import {Colors} from '../../_utils/GlobalStyle';
+import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {IMAGE_API_URL} from '../../_constant';
 import {booksService} from '../../_services/book.service';
 import {useAppContext} from '../../_customContext/AppProvider';
 import NoDataFound from '../../components/NoDataFound';
+import LinearGradient from 'react-native-linear-gradient';
 
 function BookDetailsScreen({navigation, route}) {
   const [chapters, setChapters] = useState([]);
@@ -51,7 +53,7 @@ function BookDetailsScreen({navigation, route}) {
         book_id: bookId,
         language: BookDetails?.lng_id,
       };
-      fetchBookReview()
+      fetchBookReview();
       booksService
         .getBookChapters(bookData)
         .then(response => {
@@ -65,16 +67,16 @@ function BookDetailsScreen({navigation, route}) {
     setRatingAverage(rating_average);
   }, [BookDetails, route]);
 
-const fetchBookReview =()=>{
-  booksService
-  .getBookReview(bookId)
-  .then(response => {
-    setRating(response.data.data)
-  })
-  .catch(error => {
-    console.log(error);
-  });
-}
+  const fetchBookReview = () => {
+    booksService
+      .getBookReview(bookId)
+      .then(response => {
+        setRating(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   const getLibraryBooks = () => {
     booksService
@@ -111,22 +113,22 @@ const fetchBookReview =()=>{
       .catch(err => console.log(err));
   };
 
-  const handleShare = (book) => {
-    const title =BookDetails.title;
+  const handleShare = book => {
+    const title = BookDetails.title;
     const message = `Book Name : ${title}  \n\nCheck out this page for reading "${BookDetails.title}" by "${BookDetails.author}". For more books, please download and explore thousands of titles. \n\nFor Android, check this: https://play.google.com/store/apps/details?id=com.akati \nFor iOS, check this: https://apps.apple.com/in/app/akati/id1633617962 \nFor web, visit: https://app.feupsontec.com`;
     Share.share({
-      title:title,
+      title: title,
       message: message,
       url: 'https://app.feupsontec.com',
     })
-      .then((result) => {
+      .then(result => {
         if (result.action === Share.sharedAction) {
           console.log('Successfully shared');
         } else if (result.action === Share.dismissedAction) {
           console.log('Share dismissed');
         }
       })
-      .catch((error) => console.log('Error sharing', error));
+      .catch(error => console.log('Error sharing', error));
   };
 
   const handleAddReview = () => {
@@ -134,7 +136,7 @@ const fetchBookReview =()=>{
       showToast('Please select stars and enter review', 'error');
       return;
     }
-    showLoader()
+    showLoader();
     const reviewData = {
       rating: ratingStar,
       message: reviewText,
@@ -143,7 +145,7 @@ const fetchBookReview =()=>{
     booksService
       .addReview(reviewData)
       .then(res => {
-        fetchBookReview()
+        fetchBookReview();
         setShowModel(false);
         setRatingStar(0);
         setReviewText('');
@@ -152,7 +154,8 @@ const fetchBookReview =()=>{
       .catch(error => {
         console.log(error);
         showToast(error.errors.message, 'error');
-      }).finally(()=> hideLoader())
+      })
+      .finally(() => hideLoader());
   };
 
   const renderTabContent = key => {
@@ -178,35 +181,40 @@ const fetchBookReview =()=>{
             </View>
             {rating &&
               rating.length > 0 &&
-              rating.slice().reverse().map((item, index) => (
-                <View
-                  style={{
-                    backgroundColor: Colors.primary,
-                    padding: 15,
-                    marginBottom: 20,
-                    borderRadius: 15,
-                  }}
-                  key={index}>
-                  <View style={styles.reviewHeader}>
-                    <Image
-                      style={styles.reviewImage}
-                      source={{uri:item?.user?.profile_image_url_web}}
-                      resizeMode="stretch"
-                    />
-                    <View style={styles.reviewHeaderTextContainer}>
-                      <Text style={styles.reviewAuthor}>
-                      {item?.user?.first_name}{' '}{item?.user?.last_name}
-                      </Text>
-                      <View style={styles.reviewRating}>
-                        <CustomStarRating rate={item.rating} />
+              rating
+                .slice()
+                .reverse()
+                .map((item, index) => (
+                  <View
+                    style={{
+                      backgroundColor: Colors.primary,
+                      padding: 15,
+                      marginBottom: 20,
+                      borderRadius: 15,
+                    }}
+                    key={index}>
+                    <View style={styles.reviewHeader}>
+                      <Image
+                        style={styles.reviewImage}
+                        source={{uri: item?.user?.profile_image_url_web}}
+                        resizeMode="stretch"
+                      />
+                      <View style={styles.reviewHeaderTextContainer}>
+                        <Text style={styles.reviewAuthor}>
+                          {item?.user?.first_name} {item?.user?.last_name}
+                        </Text>
+                        <View style={styles.reviewRating}>
+                          <CustomStarRating rate={item.rating} />
+                        </View>
                       </View>
                     </View>
+                    <View style={styles.reviewDivider}>
+                      <Text style={styles.reviewDescription}>
+                        {item.message}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={styles.reviewDivider}>
-                    <Text style={styles.reviewDescription}>{item.message}</Text>
-                  </View>
-                </View>
-              ))}
+                ))}
             {rating && rating.length == 0 && (
               <NoDataFound description={'No comments added yet'} />
             )}
@@ -306,14 +314,40 @@ const fetchBookReview =()=>{
   return (
     <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
       <View style={{flex: 1}}>
-        <GradientView
+        {/* <GradientView
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
           <Icons name={'long-arrow-left'} size={20} color={'white'} />
-        </GradientView>
+        </GradientView> */}
+        <View style={{position: 'absolute', top: 15}}>
+          <LinearGradient
+            colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={GlobalStyles.backButton}>
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={GlobalStyles.backButton}>
+              <Icons name={'long-arrow-left'} size={25} color={'white'} />
+            </Pressable>
+          </LinearGradient>
+        </View>
+        <View style={{position: 'absolute', top: 15, right: 60}}>
+          <LinearGradient
+            colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={GlobalStyles.rightButton}>
+            <Pressable onPress={handleShare} style={GlobalStyles.rightButton}>
+              <Icons name={'share-alt'} size={20} color={'white'} />
+            </Pressable>
+          </LinearGradient>
+        </View>
+
+        {/* 
         <GradientView style={styles.shareButton} onPress={handleShare}>
           <Icons name={'share-alt'} size={20} color={'white'} />
-        </GradientView>
+        </GradientView> */}
         <Animated.View style={{height: headerHeight, zIndex: -1}}>
           <Image
             source={{uri: IMAGE_API_URL + cover_image}}
@@ -363,12 +397,27 @@ const fetchBookReview =()=>{
             </Text>
 
             {!rating_average ? null : (
-              <View style={{marginVertical:10,gap:5}}>
-                <View style={{color:Colors.secondary,flexDirection:"row", alignItems:"center",gap:5}}>
-                  <Text style={{color:Colors.secondary,fontSize: 20,fontWeight:600}}>{parseFloat(rating_average).toFixed(1)}</Text>
+              <View style={{marginVertical: 10, gap: 5}}>
+                <View
+                  style={{
+                    color: Colors.secondary,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 5,
+                  }}>
+                  <Text
+                    style={{
+                      color: Colors.secondary,
+                      fontSize: 20,
+                      fontWeight: 600,
+                    }}>
+                    {parseFloat(rating_average).toFixed(1)}
+                  </Text>
                   <CustomStarRating rate={ratingAverage} />
                 </View>
-                <CustomText style={{color:Colors.darkGray,fontSize:16}}>Based on {ratings?.length} ratings</CustomText>
+                <CustomText style={{color: Colors.darkGray, fontSize: 16}}>
+                  Based on {ratings?.length} ratings
+                </CustomText>
               </View>
             )}
 
@@ -446,12 +495,11 @@ const fetchBookReview =()=>{
       <BottomDrawer
         visible={showModel}
         onClose={() => setShowModel(false)}
-        title={'Add Book Review'}
-        >
+        title={'Add Book Review'}>
         <View style={styles.footerContainer}>
           <View style={styles.reviewInputContainer}>
             <View style={styles.starView}>
-            <CustomText> Add your Star :</CustomText>
+              <CustomText> Add your Star :</CustomText>
               <CustomStarRating
                 size={30}
                 onRatingChange={handleRatingChange}
@@ -583,7 +631,7 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     paddingTop: 20,
-    width: '100%'
+    width: '100%',
   },
   starView: {
     gap: 10,

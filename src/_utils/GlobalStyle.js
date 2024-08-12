@@ -73,6 +73,24 @@ const GlobalStyles = StyleSheet.create({
     fontSize: 16,
     color: Colors.secondary,
   },
+  backButton: {
+    position: 'absolute',
+    height: 30,
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+  },
+  rightButton: {
+    position: 'absolute',
+    height: 30,
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomLeftRadius: 8,
+    borderTopLeftRadius: 8,
+  }
 });
 
 export default GlobalStyles;
