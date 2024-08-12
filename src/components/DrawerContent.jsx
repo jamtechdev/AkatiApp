@@ -122,7 +122,7 @@ const DrawerContent = props => {
           padding: 20,
           backgroundColor: Colors.primary,
         }}>
-        <Button title="Logout"></Button>
+        <Button title="Logout" onPress={()=>logoutAction()}></Button>
       </View>
     </>
   );
