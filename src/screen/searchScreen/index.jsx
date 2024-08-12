@@ -209,25 +209,27 @@ export default function SearchScreen() {
 
   return (
     <RowContainer>
-      <View style={{flexDirection:"row", alignItems:"center", gap:10}}>
-      <View style={styles.searchBar}>
-        <TextInput
-          style={{color: Colors.white, width: '85%'}}
-          placeholder="Which book would you like to read today..."
-          placeholderTextColor={Colors.darkGray}
-          onChangeText={setSearchTerms}
-          value={searchTerms}
-        />
-        <GradientView onPress={handleSearch} style={styles.searchIcon}>
-          <Icons size={25} color={Colors.white} name={'search'} />
+      <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+        <View style={styles.searchBar}>
+          <TextInput
+            style={{color: Colors.white, width: '85%'}}
+            placeholder="Which book would you like to read today..."
+            placeholderTextColor={Colors.darkGray}
+            onChangeText={setSearchTerms}
+            value={searchTerms}
+          />
+          <GradientView onPress={handleSearch} style={styles.searchIcon}>
+            <Icons size={25} color={Colors.white} name={'search'} />
+          </GradientView>
+        </View>
+        <GradientView onPress={handleSearch} style={styles.filterIcons}>
+          <Icon
+            size={30}
+            color={Colors.white}
+            name={showCategories ? 'filter' : 'filter-off'}
+            onPress={() => setShowCategories(prev => !prev)}
+          />
         </GradientView>
-      </View>
-      <Icon
-          size={25}
-          color={Colors.white}
-          name={showCategories ? 'filter' : 'filter-off'}
-          onPress={() => setShowCategories(prev => !prev)}
-        />
       </View>
 
       {/* <View style={styles.filterContainer}>
@@ -273,7 +275,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width:"90%"
+    width: '90%',
   },
   searchIcon: {
     width: 37,
@@ -292,9 +294,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tertiary,
   },
   filterIcons: {
-    flexDirection: 'row',
-    gap: 20,
-    justifyContent: 'flex-end',
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    marginRight: 10,
   },
   categoryContainer: {
     flexWrap: 'wrap',
