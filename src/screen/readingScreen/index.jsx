@@ -24,6 +24,8 @@ import {
 } from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
+import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MIcons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from '../../_customContext/AppProvider';
 import ChapterBottomDrawer from './_components/ChapterBottomDrawer';
 import FilterBottomDrawer from './_components/FilterBottomDrawer';
@@ -150,6 +152,7 @@ function ReadingScreen({navigation, route}) {
             gap: 50,
             alignItems: 'center',
             justifyContent: 'space-between',
+            paddingVertical:10
           }}>
           <GradientView
             style={styles.backButton}
@@ -159,17 +162,17 @@ function ReadingScreen({navigation, route}) {
           {showOptions && (
             <View style={{flexDirection: 'row', gap: 15}}>
               <TouchableText onPress={() => setShowComments(true)}>
-                <Icons name={'comment'} size={20} color={textSettings.color} />
+                <MIcons name={'chat'} size={20} color={textSettings.color} />
               </TouchableText>
               <TouchableText onPress={() => setFilterVisible(true)}>
-                <Icons name={'gears'} size={20} color={textSettings.color} />
+                <MCIcons name={'format-font'} size={20} color={textSettings.color} />
               </TouchableText>
               <TouchableText
                 onPress={() => {
                   setVisible(true);
                   setModalData(chapters);
                 }}>
-                <Icons name={'list'} size={20} color={textSettings.color} />
+                <MIcons name={'library-books'} size={20} color={textSettings.color} />
               </TouchableText>
             </View>
           )}
@@ -360,7 +363,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderBottomRightRadius: 8,
     borderTopRightRadius: 8,
+    justifyContent: 'space-between',
+    alignItems: 'center',
     width: 50,
-    marginTop: 10,
   },
 });

@@ -111,14 +111,22 @@ const fetchBookReview =()=>{
       .catch(err => console.log(err));
   };
 
-  const handleShare = book => {
+  const handleShare = (book) => {
+    const title =BookDetails.title;
+    const message = `Book Name : ${title}  \n\nCheck out this page for reading "${BookDetails.title}" by "${BookDetails.author}". For more books, please download and explore thousands of titles. \n\nFor Android, check this: https://play.google.com/store/apps/details?id=com.akati \nFor iOS, check this: https://apps.apple.com/in/app/akati/id1633617962 \nFor web, visit: https://app.feupsontec.com`;
     Share.share({
-      title: book.title,
-      text: `Check out this page for read ${book.title} by ${book.author}. for more book please download and explore thousands of books.for android please check this: https://play.google.com/store/apps/details?id=com.akati, and for iOS please check this : https://apps.apple.com/in/app/akati/id1633617962  or for web please check the https://app.feupsontec.com`,
+      title:title,
+      message: message,
       url: 'https://app.feupsontec.com',
     })
-      .then(() => console.log('Successfully shared'))
-      .catch(error => console.log('Error sharing', error));
+      .then((result) => {
+        if (result.action === Share.sharedAction) {
+          console.log('Successfully shared');
+        } else if (result.action === Share.dismissedAction) {
+          console.log('Share dismissed');
+        }
+      })
+      .catch((error) => console.log('Error sharing', error));
   };
 
   const handleAddReview = () => {
