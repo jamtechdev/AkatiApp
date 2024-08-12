@@ -28,3 +28,4 @@ export {default as Skeleton} from './Skeleton';
 export {default as CustomStarRating} from './CustomStarRating';
 export {default as TabSwitcher} from './TabSwitcher';
 export {default as BottomDrawer} from './BottomDrawer';
+export {default as TextInputWithIcon} from './TextInputWithIcon';

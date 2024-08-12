@@ -15,6 +15,7 @@ import {
   RowContainer,
   Skeleton,
   TextBadge,
+  TextInputWithIcon,
 } from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -209,7 +210,7 @@ export default function SearchScreen() {
 
   return (
     <RowContainer>
-      <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+      {/* <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
         <View style={styles.searchBar}>
           <TextInput
             style={{color: Colors.white, width: '85%'}}
@@ -223,6 +224,41 @@ export default function SearchScreen() {
           </GradientView>
         </View>
         <GradientView onPress={handleSearch} style={styles.filterIcons}>
+          <Icon
+            size={30}
+            color={Colors.white}
+            name={showCategories ? 'filter' : 'filter-off'}
+            onPress={() => setShowCategories(prev => !prev)}
+          />
+        </GradientView>
+      </View> */}
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 10,
+          paddingVertical: 10,
+        }}>
+        <TextInputWithIcon
+          iconName={'search'}
+          placeholder="Which book would you like to read today..."
+          placeholderTextColor={Colors.darkGray}
+          onChangeText={setSearchTerms}
+          value={searchTerms}
+          // onIconPress={() => alert('test')}
+          style={{flex: 1}}
+          onIconPress={handleSearch}
+        />
+        <GradientView onPress={handleSearch}
+        style={{
+          height : 35,
+          justifyContent: 'center',
+          alignItems:'center',
+          borderRadius: 4
+        }}
+        >
           <Icon
             size={30}
             color={Colors.white}
