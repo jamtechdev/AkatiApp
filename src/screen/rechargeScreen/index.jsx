@@ -47,7 +47,7 @@ export default function RechargeScreen({navigation}) {
   useEffect(() => {
     initConnection()
       .then(() => {
-        console.log('IAP connection established');
+        // console.log('IAP connection established');
         getItems();
       })
       .catch(err => console.log('Error in establishing IAP connection', err));
@@ -72,7 +72,7 @@ export default function RechargeScreen({navigation}) {
     try {
       getProducts({skus: itemSubs})
         .then(res => {
-          console.log('result', res);
+          // console.log('result', res);
         })
         .catch(err => console.log(err));
     } catch (err) {

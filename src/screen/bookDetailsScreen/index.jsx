@@ -311,6 +311,20 @@ function BookDetailsScreen({navigation, route}) {
     setReviewText(text);
   };
 
+
+  const routeReadingScreen = () =>{
+    if( !chapters || chapters?.length == 0 && !BookDetails){
+      showToast('There no any chapter added in this book.', 'error')
+      return 
+    }
+    navigation.navigate('Reading', {
+      bookId: bookId,
+      chapters: chapters,
+      BookDetails: BookDetails,
+      categories: categories,
+    })
+  }
+
   return (
     <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
       <View style={{flex: 1}}>
@@ -443,12 +457,7 @@ function BookDetailsScreen({navigation, route}) {
                   gradient={false}
                   title={'Start Reading'}
                   onPress={() =>
-                    navigation.navigate('Reading', {
-                      bookId: bookId,
-                      chapters: chapters,
-                      BookDetails: BookDetails,
-                      categories: categories,
-                    })
+                  routeReadingScreen()
                   }
                 />
               </View>
