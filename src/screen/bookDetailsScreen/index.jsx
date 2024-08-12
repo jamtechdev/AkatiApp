@@ -588,6 +588,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 8,
     position: 'absolute',
     marginTop: 20,
+    // backgroundColor: Colors.gradient,
   },
   shareButton: {
     paddingVertical: 10,
@@ -596,6 +597,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 20,
     right: 10,
+    backgroundColor: Colors.gradient,
   },
   chapterText: {
     color: Colors.gray,
