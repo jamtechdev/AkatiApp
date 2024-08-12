@@ -72,6 +72,8 @@ const GlobalStyles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     color: Colors.secondary,
+    paddingVertical: 7,
+    paddingLeft: 20,
   },
   backButton: {
     position: 'absolute',
