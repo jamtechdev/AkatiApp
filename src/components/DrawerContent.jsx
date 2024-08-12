@@ -41,70 +41,67 @@ const DrawerContent = props => {
 
   return (
     <>
- <DrawerContentScrollView
-      {...props}
-      style={{backgroundColor: Colors.tertiary, }}>
-      <View style={{position: 'absolute', right: 0, top: 20, zIndex: 999}}>
-        <GradientView
-          style={styles.rightButton}
-          onPress={() => props.navigation.toggleDrawer()}>
-          <Icons size={20} color={Colors.white} name={'indent'}></Icons>
-        </GradientView>
-      </View>
+      <DrawerContentScrollView
+        {...props}
+        style={{backgroundColor: Colors.tertiary}}>
+        <View style={{position: 'absolute', right: 0, top: 20, zIndex: 999}}>
+          <GradientView
+            style={styles.rightButton}
+            onPress={() => props.navigation.toggleDrawer()}>
+            <Icons size={20} color={Colors.white} name={'indent'}></Icons>
+          </GradientView>
+        </View>
 
-      <View style={styles.drawerHeader}>
-        <Image
-          source={logo} // Replace with your own image URL
-          style={styles.profileImage}
+        <View style={styles.drawerHeader}>
+          <Image
+            source={logo} // Replace with your own image URL
+            style={styles.profileImage}
+          />
+          {/* <Text style={styles.drawerTitle}>Akati</Text> */}
+        </View>
+
+        <CustomDrawerItem
+          title="Discover"
+          icon={'explore'}
+          onPress={() => props.navigation.navigate('Discover')}
         />
-        {/* <Text style={styles.drawerTitle}>Akati</Text> */}
-      </View>
 
-      <CustomDrawerItem
-        title="Discover"
-        icon={'explore'}
-        onPress={() => props.navigation.navigate('Discover')}
-      />
+        <CustomDrawerItem
+          title="Recharge"
+          icon={'refresh'}
+          onPress={() => props.navigation.navigate('Recharge')}
+        />
 
-      <CustomDrawerItem
-        title="Recharge"
-        icon={'refresh'}
-        onPress={() => props.navigation.navigate('Recharge')}
-      />
+        <CustomDrawerItem
+          title="Recharge History"
+          icon={'history'}
+          onPress={() => props.navigation.navigate('RechargeHistory')}
+        />
 
-      <CustomDrawerItem
-        title="Recharge History"
-        icon={'history'}
-        onPress={() => props.navigation.navigate('RechargeHistory')}
-      />
+        <CustomDrawerItem
+          title="Reviews"
+          icon={'rate-review'}
+          onPress={() => props.navigation.navigate('Review')}
+        />
 
-      <CustomDrawerItem
-        title="Reviews"
-        icon={'rate-review'}
-        onPress={() => props.navigation.navigate('Review')}
-      />
+        <CustomDrawerItem
+          title="Language"
+          icon={'language'}
+          onPress={() => props.navigation.navigate('Language')}
+        />
 
-      <CustomDrawerItem
-        title="Language"
-        icon={'language'}
-        onPress={() => props.navigation.navigate('Language')}
-      />
+        <CustomDrawerItem
+          title="Settings"
+          icon={'settings'}
+          onPress={() => props.navigation.navigate('Settings')}
+        />
 
-      <CustomDrawerItem
-        title="Settings"
-        icon={'settings'}
-        onPress={() => props.navigation.navigate('Settings')}
-      />
-
-      <CustomDrawerItem
-        title="Share with Friend"
-        icon={'share'}
-        onPress={handleShare}
-      />
-
-     
-
-    </DrawerContentScrollView>
+        <CustomDrawerItem
+          title="Share with Friend"
+          icon={'share'}
+          onPress={handleShare}
+        />
+      </DrawerContentScrollView>
       <AlertModal
         visible={show}
         image={logo}
@@ -113,7 +110,7 @@ const DrawerContent = props => {
         onOkay={logoutAction}
         onCancel={toggleModel}
       />
-       <View
+      <View
         style={{
           position: 'absolute',
           bottom: 0,
@@ -121,14 +118,13 @@ const DrawerContent = props => {
           left: 0,
           right: 0,
           margin: 'auto',
-          justifyContent:"center",
-          padding:20,
-          backgroundColor:Colors.primary,
+          justifyContent: 'center',
+          padding: 20,
+          backgroundColor: Colors.primary,
         }}>
         <Button title="Logout"></Button>
       </View>
     </>
-   
   );
 };
 
@@ -136,7 +132,7 @@ const styles = StyleSheet.create({
   drawerHeader: {
     alignItems: 'center',
     marginBottom: 30,
-    marginTop: -30,
+    marginTop: 30,
   },
   drawerTitle: {
     fontSize: 20,

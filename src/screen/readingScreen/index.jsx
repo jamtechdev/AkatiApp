@@ -162,7 +162,7 @@ function ReadingScreen({navigation, route}) {
                 <Icons name={'comment'} size={20} color={textSettings.color} />
               </TouchableText>
               <TouchableText onPress={() => setFilterVisible(true)}>
-                <Icons name={'filter'} size={20} color={textSettings.color} />
+                <Icons name={'gears'} size={20} color={textSettings.color} />
               </TouchableText>
               <TouchableText
                 onPress={() => {

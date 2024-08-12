@@ -48,7 +48,7 @@ const ChapterBottomDrawer = ({
             {backgroundColor: textSettings.backgroundColor},
             {transform: [{translateY}]},
           ]}>
-           <GradientView style={styles.header} onPress={onClose}>
+          <GradientView style={styles.header} onPress={onClose}>
             <Icons name={'close'} size={20} color={Colors.white} />
           </GradientView>
           <ScrollView
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -20,
+    marginTop: -35,
     width: 40,
     height: 40,
     borderRadius: 50,
