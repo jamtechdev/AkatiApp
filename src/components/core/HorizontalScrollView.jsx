@@ -20,7 +20,6 @@ const HorizontalScrollView = ({data, isCircle = false}) => {
         keyExtractor={item => item.id.toString()} // Ensure each item has a unique id
         horizontal
         showsHorizontalScrollIndicator={false}
-        scrollEnabled={false}
       />
     </View>
   );
