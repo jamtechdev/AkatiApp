@@ -31,11 +31,11 @@ const DrawerNavigator = () => {
           headerShown: false,
         })}
       />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
-      <Drawer.Screen name="Review" component={ReviewScreen} />
-      <Drawer.Screen name="Language" component={LanguageScreen} />
       <Drawer.Screen name="Recharge" component={RechargeScreen} />
       <Drawer.Screen name="RechargeHistory" component={RechargeHistoryScreen} />
+      <Drawer.Screen name="Review" component={ReviewScreen} />
+      <Drawer.Screen name="Language" component={LanguageScreen} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
     </Drawer.Navigator>
   );
 };

@@ -63,36 +63,42 @@ const DrawerContent = props => {
         <CustomDrawerItem
           title="Discover"
           icon={'explore'}
+          isActive={props.state.index == 0}
           onPress={() => props.navigation.navigate('Discover')}
         />
 
         <CustomDrawerItem
           title="Recharge"
           icon={'refresh'}
+          isActive={props.state.index == 1}
           onPress={() => props.navigation.navigate('Recharge')}
         />
 
         <CustomDrawerItem
           title="Recharge History"
           icon={'history'}
+          isActive={props.state.index == 2}
           onPress={() => props.navigation.navigate('RechargeHistory')}
         />
 
         <CustomDrawerItem
           title="Reviews"
           icon={'rate-review'}
+          isActive={props.state.index == 3}
           onPress={() => props.navigation.navigate('Review')}
         />
 
         <CustomDrawerItem
           title="Language"
           icon={'language'}
+          isActive={props.state.index == 4}
           onPress={() => props.navigation.navigate('Language')}
         />
 
         <CustomDrawerItem
           title="Settings"
           icon={'settings'}
+          isActive={props.state.index == 5}
           onPress={() => props.navigation.navigate('Settings')}
         />
 
@@ -122,7 +128,7 @@ const DrawerContent = props => {
           padding: 20,
           backgroundColor: Colors.primary,
         }}>
-        <Button title="Logout" onPress={()=>logoutAction()}></Button>
+        <Button title="Logout" onPress={()=>toggleModel()}></Button>
       </View>
     </>
   );

@@ -14,7 +14,7 @@ const CustomDrawerItem = ({icon,title, onPress, isActive = false, }) => {
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
           style={[GlobalStyles.btnPrimary,  styles.btnRow]}>
-         {icon &&  <Icons size={25} name={icon} />}
+         {icon &&  <Icons size={25} name={icon}  color={Colors.white} />}
           <Text style={[GlobalStyles.textWhite, styles.buttonText]}>
             {title}
           </Text>
