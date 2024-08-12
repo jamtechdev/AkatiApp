@@ -15,6 +15,7 @@ import {useSelector} from 'react-redux';
 import {getAuth} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
 import {
+  LogBox,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -57,6 +58,10 @@ function ReadingScreen({navigation, route}) {
     backgroundColorSecondary: Colors.tertiary,
     backgroundColor: Colors.primary,
   });
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   useEffect(() => {
     booksService
@@ -147,7 +152,7 @@ function ReadingScreen({navigation, route}) {
   return (
     <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
       <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
-      <View style={{position: 'absolute', top: 15, zIndex: 999}}>
+        <View style={{position: 'absolute', top: 15, zIndex: 999}}>
           <LinearGradient
             colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
             start={{x: 0, y: 0}}
@@ -165,8 +170,8 @@ function ReadingScreen({navigation, route}) {
             flexDirection: 'row',
             gap: 50,
             alignItems: 'center',
-            justifyContent:'flex-end',
-            paddingVertical:10,
+            justifyContent: 'flex-end',
+            paddingVertical: 10,
             height: 45,
           }}>
           {/* <GradientView
@@ -180,14 +185,22 @@ function ReadingScreen({navigation, route}) {
                 <MIcons name={'chat'} size={20} color={textSettings.color} />
               </TouchableText>
               <TouchableText onPress={() => setFilterVisible(true)}>
-                <MCIcons name={'format-font'} size={20} color={textSettings.color} />
+                <MCIcons
+                  name={'format-font'}
+                  size={20}
+                  color={textSettings.color}
+                />
               </TouchableText>
               <TouchableText
                 onPress={() => {
                   setVisible(true);
                   setModalData(chapters);
                 }}>
-                <MIcons name={'library-books'} size={20} color={textSettings.color} />
+                <MIcons
+                  name={'library-books'}
+                  size={20}
+                  color={textSettings.color}
+                />
               </TouchableText>
             </View>
           )}
