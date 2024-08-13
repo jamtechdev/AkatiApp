@@ -1,17 +1,18 @@
 import React, {useRef, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, Animated, Modal} from 'react-native';
-import {Colors} from '../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import {GradientView, HeadingText} from '../components';
+import { Colors } from '../../../_utils/GlobalStyle';
+import { GradientView } from '../../../components';
 
 const {height: screenHeight} = Dimensions.get('window');
 
-const BottomDrawer = ({
+const CommentsBottomDrawer = ({
   visible,
   onClose,
   title,
   children,
   style,
+  textSettings,
 }) => {
   const translateY = useRef(new Animated.Value(screenHeight)).current;
 
@@ -33,12 +34,14 @@ const BottomDrawer = ({
       <View
         style={[
           styles.overlay,
+          {backgroundColor: textSettings?.backgroundColor},
         ]}>
         <Animated.View
           style={[
             styles.modal,
             style,
             {transform: [{translateY}]},
+            {backgroundColor: textSettings?.backgroundColor},
           ]}>
           <GradientView style={styles.header} onPress={onClose}>
             <Icons name={'close'} size={20} color={Colors.white} />
@@ -54,7 +57,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    // backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   modal: {
     height: '50%', // Adjust this value as needed
@@ -80,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BottomDrawer;
+export default CommentsBottomDrawer;
