@@ -32,6 +32,7 @@ import ChapterBottomDrawer from './_components/ChapterBottomDrawer';
 import FilterBottomDrawer from './_components/FilterBottomDrawer';
 import CommentsList from '../../components/comment/CommentsList';
 import LinearGradient from 'react-native-linear-gradient';
+import CommentsBottomDrawer from './_components/CommentBottomDrawer';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
@@ -358,7 +359,7 @@ function ReadingScreen({navigation, route}) {
         filterState={textSettings}
         setFilterState={setTextSettings}
       />
-      <BottomDrawer
+      <CommentsBottomDrawer
         visible={showComments}
         onClose={() => setShowComments(false)}
         title={'Comments'}
@@ -370,7 +371,7 @@ function ReadingScreen({navigation, route}) {
             textSettings={textSettings}
           />
         </View>
-      </BottomDrawer>
+      </CommentsBottomDrawer>
     </RowContainer>
   );
 }
