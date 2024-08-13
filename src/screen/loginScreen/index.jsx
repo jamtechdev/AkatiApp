@@ -147,6 +147,7 @@ export default function LoginScreen({navigation}) {
                 avatar: currentProfile.imageURL,
               };
               console.log('data sending in API', data);
+              handleSocialLogin(data);
             }
           });
         }

@@ -66,13 +66,13 @@ const PaypalPayment = ({route, navigation}) => {
     if (data.success) {
       setispayprogress(false);
       // resetCoins(response.data.coins);
-      ref.current.play();
+      // ref.current.play();
       setTimeout(() => {
-        props.navigation.goBack();
+        navigation.goBack();
       }, 2000);
     } else {
       alert('Something went wrong.');
-      props.navigation.goBack();
+    navigation.goBack();
     }
   };
   // on payment success
@@ -183,9 +183,9 @@ const PaypalPayment = ({route, navigation}) => {
       setShouldShowWebviewLoading(false);
     }
     if (webViewState.url.includes(`${RETURN_URL}failed`)) {
-      return props.navigation.goBack();
+      return navigation.goBack();
     }
-    if (webViewState.url.includes(`${RETURN_URL}success`)) {
+    if (webViewState.url.includes(`https://feupsontec.com/payment/success`)) {
       setPaypalUrl(null);
       const urlArr = webViewState.url.split(/(=|&)/);
       const paymentId = urlArr[2];
@@ -240,7 +240,7 @@ const PaypalPayment = ({route, navigation}) => {
               <WebView
                 style={styles.webView}
                 source={{uri: paypalUrl}}
-                onNavigationStateChange={this._onNavigationStateChange}
+                onNavigationStateChange={_onNavigationStateChange}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
                 startInLoadingState={false}
