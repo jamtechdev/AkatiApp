@@ -24,7 +24,7 @@ const BottomDrawer = ({visible, onClose, title, children, style}) => {
       onRequestClose={onClose}
       animationType="none" // Disable the default animation
     >
-      <View style={[styles.overlay]}>
+      <View style={styles.overlay}>
         <Animated.View
           style={[styles.modal, style, {transform: [{translateY}]}]}>
           <GradientView style={styles.header} onPress={onClose}>

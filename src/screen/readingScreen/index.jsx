@@ -320,26 +320,25 @@ function ReadingScreen({navigation, route}) {
       </ScrollView>
       {showOptions && (
         <View
-          style={[
-            styles.chapterNum,
-            {backgroundColor: textSettings.backgroundColorSecondary},
-          ]}>
+          style={[styles.chapterNum, {backgroundColor: textSettings.color}]}>
           <TouchableText
-            style={{color: textSettings.color}}
+            style={{color: textSettings.backgroundColor}}
             onPress={handlePrevChapter}>
             Prev
           </TouchableText>
-          <CustomText style={{color: textSettings.color}}>
+          <CustomText style={{color: textSettings.backgroundColor}}>
             Chapter {currentChapterIndex + 1} of {chapters.length}
           </CustomText>
           {currentChapterIndex + 1 !== chapters.length ? (
             <TouchableText
-              style={{color: textSettings.color}}
+              style={{color: textSettings.backgroundColor}}
               onPress={handleNextChapter}>
               Next
             </TouchableText>
           ) : (
-            <TouchableText style={{color: textSettings.color}}> </TouchableText>
+            <TouchableText style={{color: textSettings.backgroundColor}}>
+              {' '}
+            </TouchableText>
           )}
         </View>
       )}
