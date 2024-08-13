@@ -150,68 +150,67 @@ function ReadingScreen({navigation, route}) {
   const handleToggleOptions = () => setShowOptions(!showOptions);
 
   return (
-    <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
-      <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
-        <View style={{position: 'absolute', top: 15, zIndex: 999}}>
-          <LinearGradient
-            colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 1}}
+    <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
+      <View style={{position: 'absolute', top: 15, zIndex: 999}}>
+        <LinearGradient
+          colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 1}}
+          style={GlobalStyles.backButton}>
+          <Pressable
+            onPress={() => navigation.goBack()}
             style={GlobalStyles.backButton}>
-            <Pressable
-              onPress={() => navigation.goBack()}
-              style={GlobalStyles.backButton}>
-              <Icons name={'long-arrow-left'} size={25} color={'white'} />
-            </Pressable>
-          </LinearGradient>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 50,
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            paddingVertical: 10,
-            height: 45,
-          }}>
-          {/* <GradientView
+            <Icons name={'long-arrow-left'} size={25} color={'white'} />
+          </Pressable>
+        </LinearGradient>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: 50,
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          paddingVertical: 10,
+          height: 45,
+        }}>
+        {/* <GradientView
             style={styles.backButton}
             onPress={() => navigation.goBack()}>
             <Icons name={'long-arrow-left'} size={20} color={Colors.white} />
           </GradientView> */}
-          {showOptions && (
-            <View style={{flexDirection: 'row', gap: 15}}>
-              <TouchableText onPress={() => setShowComments(true)}>
-                <MIcons name={'chat'} size={20} color={textSettings.color} />
-              </TouchableText>
-              <TouchableText onPress={() => setFilterVisible(true)}>
-                <MCIcons
-                  name={'format-font'}
-                  size={20}
-                  color={textSettings.color}
-                />
-              </TouchableText>
-              <TouchableText
-                onPress={() => {
-                  setVisible(true);
-                  setModalData(chapters);
-                }}>
-                <MIcons
-                  name={'library-books'}
-                  size={20}
-                  color={textSettings.color}
-                />
-              </TouchableText>
-            </View>
-          )}
-        </View>
+        {showOptions && (
+          <View style={{flexDirection: 'row', gap: 15}}>
+            <TouchableText onPress={() => setShowComments(true)}>
+              <MIcons name={'chat'} size={20} color={textSettings.color} />
+            </TouchableText>
+            <TouchableText onPress={() => setFilterVisible(true)}>
+              <MCIcons
+                name={'format-font'}
+                size={20}
+                color={textSettings.color}
+              />
+            </TouchableText>
+            <TouchableText
+              onPress={() => {
+                setVisible(true);
+                setModalData(chapters);
+              }}>
+              <MIcons
+                name={'library-books'}
+                size={20}
+                color={textSettings.color}
+              />
+            </TouchableText>
+          </View>
+        )}
+      </View>
 
-        <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
-          <View>
+      <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
+        <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
+          <>
             <HeadingText style={{color: textSettings.color}}>{`Chapter ${
               currentChapterIndex + 1
             } - ${currentChapter?.chapter_details?.title}`}</HeadingText>
-
             {currentChapter && currentChapter.unlock === 1 ? (
               <View style={{marginVertical: 10}}>
                 <Text
@@ -306,71 +305,69 @@ function ReadingScreen({navigation, route}) {
                 </CustomText>
               </View>
             )}
-          </View>
-          <View>
-            <HeadingText style={{color: textSettings.color}}>
-              {'Must Read'}
-            </HeadingText>
-            {!mustReadBooks && (
-              <Skeleton isLoading={true} count={3} numColumns={3} />
-            )}
-            <HorizontalScrollView data={mustReadBooks} />
-          </View>
-        </ScrollView>
-        {showOptions && (
-          <View
-            style={[
-              styles.chapterNum,
-              {backgroundColor: textSettings.backgroundColorSecondary},
-            ]}>
+            <View>
+              <HeadingText style={{color: textSettings.color}}>
+                {'Must Read'}
+              </HeadingText>
+              {!mustReadBooks && (
+                <Skeleton isLoading={true} count={3} numColumns={3} />
+              )}
+              <HorizontalScrollView data={mustReadBooks} />
+            </View>
+          </>
+        </Pressable>
+      </ScrollView>
+      {showOptions && (
+        <View
+          style={[
+            styles.chapterNum,
+            {backgroundColor: textSettings.backgroundColorSecondary},
+          ]}>
+          <TouchableText
+            style={{color: textSettings.color}}
+            onPress={handlePrevChapter}>
+            Prev
+          </TouchableText>
+          <CustomText style={{color: textSettings.color}}>
+            Chapter {currentChapterIndex + 1} of {chapters.length}
+          </CustomText>
+          {currentChapterIndex + 1 !== chapters.length ? (
             <TouchableText
               style={{color: textSettings.color}}
-              onPress={handlePrevChapter}>
-              Prev
+              onPress={handleNextChapter}>
+              Next
             </TouchableText>
-            <CustomText style={{color: textSettings.color}}>
-              Chapter {currentChapterIndex + 1} of {chapters.length}
-            </CustomText>
-            {currentChapterIndex + 1 !== chapters.length ? (
-              <TouchableText
-                style={{color: textSettings.color}}
-                onPress={handleNextChapter}>
-                Next
-              </TouchableText>
-            ) : (
-              <TouchableText style={{color: textSettings.color}}>
-                {' '}
-              </TouchableText>
-            )}
-          </View>
-        )}
-        <ChapterBottomDrawer
-          visible={visible}
-          data={modalData}
-          onClose={() => setVisible(false)}
-          currentChapter={currentChapterIndex}
-          onPress={index => setCurrentChapterIndex(index)}
-          title={BookDetails?.title}
-          textSettings={textSettings}
-        />
-        <FilterBottomDrawer
-          visible={filterVisible}
-          onClose={() => setFilterVisible(false)}
-          title={'Filter'}
-          filterState={textSettings}
-          setFilterState={setTextSettings}
-        />
-        <BottomDrawer
-          visible={showComments}
-          onClose={() => setShowComments(false)}
-          title={'Comments'}
-          style={{height: '85%'}}>
-          <View style={{height: '100%'}}>
-            <CommentsList chapterDetails={currentChapter} />
-          </View>
-        </BottomDrawer>
-      </RowContainer>
-    </Pressable>
+          ) : (
+            <TouchableText style={{color: textSettings.color}}> </TouchableText>
+          )}
+        </View>
+      )}
+      <ChapterBottomDrawer
+        visible={visible}
+        data={modalData}
+        onClose={() => setVisible(false)}
+        currentChapter={currentChapterIndex}
+        onPress={index => setCurrentChapterIndex(index)}
+        title={BookDetails?.title}
+        textSettings={textSettings}
+      />
+      <FilterBottomDrawer
+        visible={filterVisible}
+        onClose={() => setFilterVisible(false)}
+        title={'Filter'}
+        filterState={textSettings}
+        setFilterState={setTextSettings}
+      />
+      <BottomDrawer
+        visible={showComments}
+        onClose={() => setShowComments(false)}
+        title={'Comments'}
+        style={{height: '85%'}}>
+        <View style={{height: '100%'}}>
+          <CommentsList chapterDetails={currentChapter} />
+        </View>
+      </BottomDrawer>
+    </RowContainer>
   );
 }
 
