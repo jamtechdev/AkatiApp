@@ -1,5 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {CustomText, HeadingText, RowContainer} from '../../components';
+import {
+  CustomText,
+  GradientView,
+  HeadingText,
+  RowContainer,
+} from '../../components';
 import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
 import avatar from '../../images/avtar.png';
 import {Colors} from '../../_utils/GlobalStyle';
@@ -32,20 +37,21 @@ function ProfileScreen() {
             style={styles.avatar}
           />
         </View>
-        <View
-          style={{
-            fontWeight: 700,
-            color: Colors.secondary,
-            marginVertical: 20,
-            backgroundColor: Colors.secondary,
-            paddingVertical: 5,
-            paddingHorizontal: 15,
-            borderRadius: 50,
-          }}>
-          <Text style={{color: Colors.white}}>
-            {' '}
-            Coins : {userDetails?.coins}
-          </Text>
+        <View style={{marginVertical: 15}}>
+          <GradientView
+            style={{
+              fontWeight: 700,
+              color: Colors.secondary,
+              backgroundColor: Colors.secondary,
+              paddingVertical: 5,
+              paddingHorizontal: 15,
+              borderRadius: 50,
+            }}>
+            <Text style={{color: Colors.white}}>
+              {' '}
+              Coins : {userDetails?.coins}
+            </Text>
+          </GradientView>
         </View>
         <View
           style={{

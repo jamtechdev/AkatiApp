@@ -6,7 +6,14 @@ import {GradientView, HeadingText} from '../components';
 
 const {height: screenHeight} = Dimensions.get('window');
 
-const BottomDrawer = ({visible, onClose, title, children, style}) => {
+const BottomDrawer = ({
+  visible,
+  onClose,
+  title,
+  children,
+  style,
+  textSettings,
+}) => {
   const translateY = useRef(new Animated.Value(screenHeight)).current;
 
   useEffect(() => {
@@ -24,9 +31,18 @@ const BottomDrawer = ({visible, onClose, title, children, style}) => {
       onRequestClose={onClose}
       animationType="none" // Disable the default animation
     >
-      <View style={styles.overlay}>
+      <View
+        style={[
+          styles.overlay,
+          {backgroundColor: textSettings?.backgroundColor},
+        ]}>
         <Animated.View
-          style={[styles.modal, style, {transform: [{translateY}]}]}>
+          style={[
+            styles.modal,
+            style,
+            {transform: [{translateY}]},
+            {backgroundColor: textSettings?.backgroundColor},
+          ]}>
           <GradientView style={styles.header} onPress={onClose}>
             <Icons name={'close'} size={20} color={Colors.white} />
           </GradientView>

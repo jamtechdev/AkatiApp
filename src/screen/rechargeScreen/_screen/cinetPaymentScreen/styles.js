@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     width: '90%',
-    color: Colors.black,
+    color: Colors.white,
   },
   lottieStyle: {
     height: 150,
@@ -34,12 +34,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
   },
-  webView: {height: '100%', width: '100%'},
+  webView: {height: '100%', width: '100%', backgroundColor: Colors.tertiary},
   paymentProcessing: {
     ...StyleSheet.absoluteFill,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    // backgroundColor: '#ffffff',
   },
 });
 export default styles;

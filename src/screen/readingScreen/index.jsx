@@ -362,9 +362,13 @@ function ReadingScreen({navigation, route}) {
         visible={showComments}
         onClose={() => setShowComments(false)}
         title={'Comments'}
+        textSettings={textSettings}
         style={{height: '85%'}}>
         <View style={{height: '100%'}}>
-          <CommentsList chapterDetails={currentChapter} />
+          <CommentsList
+            chapterDetails={currentChapter}
+            textSettings={textSettings}
+          />
         </View>
       </BottomDrawer>
     </RowContainer>

@@ -24,7 +24,7 @@ const getRandomEmojis = num => {
   return shuffled.slice(0, num);
 };
 
-const CommentsList = ({token, chapterDetails}) => {
+const CommentsList = ({token, chapterDetails, textSettings}) => {
   const {showToast} = useAppContext();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -122,7 +122,11 @@ const CommentsList = ({token, chapterDetails}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {backgroundColor: textSettings?.backgroundColor},
+      ]}>
       <View style={styles.emojiContainer}>
         <TouchableOpacity onPress={() => setShowEmojiPicker(!showEmojiPicker)}>
           <Icon
@@ -152,7 +156,7 @@ const CommentsList = ({token, chapterDetails}) => {
           style={styles.input}
           placeholder="Write a comment..."
           value={newComment}
-          placeholderTextColor={Colors.white}
+          placeholderTextColor={textSettings?.color}
           onChangeText={setNewComment}
         />
         <TouchableOpacity onPress={addComment}>
@@ -166,11 +170,16 @@ const CommentsList = ({token, chapterDetails}) => {
       </View>
       <FlatList
         data={comments}
-        style={{ height: '100%'}}
+        style={{height: '100%'}}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
-          <Comment comment={item} onReply={addReply} onLike={likeComment} />
+          <Comment
+            comment={item}
+            onReply={addReply}
+            onLike={likeComment}
+            textSettings={textSettings}
+          />
         )}
         ListEmptyComponent={
           loadingComments ? (
@@ -238,7 +247,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.darkGray,
     padding: 10,
     borderRadius: 20,
-    color:Colors.white
+    color: Colors.white,
   },
   sendIcon: {
     marginLeft: 10,

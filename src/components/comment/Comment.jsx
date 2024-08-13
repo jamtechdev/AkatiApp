@@ -14,7 +14,7 @@ import {Colors} from '../../_utils/GlobalStyle';
 import moment from 'moment';
 // import moment from 'moment';
 
-const Comment = ({comment, onReply, onLike}) => {
+const Comment = ({comment, onReply, onLike, textSettings}) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [showReplies, setShowReplies] = useState(false); // Local state for showing replies
@@ -33,7 +33,14 @@ const Comment = ({comment, onReply, onLike}) => {
 
   return (
     <>
-      <View style={styles.commentContainer}>
+      <View
+        style={[
+          styles.commentContainer,
+          {
+            backgroundColor: textSettings?.backgroundColor,
+            color: textSettings?.color,
+          },
+        ]}>
         {/* <Avatar
           rounded
           source={user_icon}
@@ -41,13 +48,15 @@ const Comment = ({comment, onReply, onLike}) => {
           containerStyle={styles.avatar}
         /> */}
         <View style={styles.commentContent}>
-          <Text style={styles.username}>
+          <Text style={[styles.username, {color: textSettings?.color}]}>
             {comment?.user?.first_name} {comment?.user?.last_name}
           </Text>
-          <Text style={styles.text}>{comment.text}</Text>
-          <Text style={styles.time}>
-                      {moment(comment.created_at).fromNow()}
-                    </Text>
+          <Text style={[styles.text, {color: textSettings?.color}]}>
+            {comment.text}
+          </Text>
+          <Text style={[styles.time, {color: textSettings?.color}]}>
+            {moment(comment.created_at).fromNow()}
+          </Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={styles.footer}>
               <TouchableOpacity
@@ -58,17 +67,21 @@ const Comment = ({comment, onReply, onLike}) => {
             {comment.all_replies && comment.all_replies.length > 0 && (
               <TouchableOpacity onPress={toggleReplies}>
                 <Text style={styles.replyListButton}>
-                {showReplies ? 'Hide' : 'View'} {comment?.all_replies.length}{' '}
+                  {showReplies ? 'Hide' : 'View'} {comment?.all_replies.length}{' '}
                   {comment?.all_replies.length == 1 ? 'reply' : 'replies'}
                 </Text>
               </TouchableOpacity>
             )}
           </View>
           {showReplyInput && (
-            <View style={styles.inputContainer}>
+            <View
+              style={[
+                styles.inputContainer,
+                {backgroundColor: textSettings?.backgroundColor},
+              ]}>
               <TextInput
-                style={styles.input}
-                placeholderTextColor={Colors.white}
+                style={[styles.input, {color: textSettings?.color}]}
+                placeholderTextColor={textSettings?.color}
                 placeholder="Write a reply..."
                 value={replyText}
                 onChangeText={setReplyText}
@@ -100,10 +113,19 @@ const Comment = ({comment, onReply, onLike}) => {
         </TouchableOpacity>
       </View>
       {showReplies && (
-        <View style={styles.replyView}>
+        <View
+          style={[
+            styles.replyView,
+            {backgroundColor: textSettings?.backgroundColor},
+          ]}>
           {comment.all_replies.map((item, index) => {
             return (
-              <View style={styles.replyCommentContainer} key={index}>
+              <View
+                style={[
+                  styles.replyCommentContainer,
+                  {backgroundColor: textSettings?.backgroundColor},
+                ]}
+                key={index}>
                 {/* <Avatar
                   rounded
                   source={user_icon}
@@ -111,12 +133,14 @@ const Comment = ({comment, onReply, onLike}) => {
                   containerStyle={styles.avatar}
                 /> */}
                 <View style={styles.commentContent}>
-                  <Text style={styles.username}>
+                  <Text style={[styles.username, {color: textSettings?.color}]}>
                     {comment?.user?.first_name} {comment?.user?.last_name}
                   </Text>
-                  <Text style={styles.text}>{item.text}</Text>
+                  <Text style={[styles.text, {color: textSettings?.color}]}>
+                    {item.text}
+                  </Text>
                   <View style={styles.footer}>
-                    <Text style={styles.time}>
+                    <Text style={[styles.time, {color: textSettings?.color}]}>
                       {moment(comment.created_at).fromNow()}
                     </Text>
                   </View>
@@ -150,7 +174,6 @@ const styles = StyleSheet.create({
   commentContainer: {
     flexDirection: 'row',
     alignItems: 'start',
-    backgroundColor: Colors.tertiary,
     padding: 10,
     borderTopWidth: 1,
     borderTopColor: Colors.darkGray,
@@ -183,12 +206,11 @@ const styles = StyleSheet.create({
   },
   username: {
     fontWeight: 'bold',
-    color: Colors.white
   },
   text: {
     marginVertical: 5,
     fontSize: 12,
-    color: Colors.white
+    color: Colors.white,
   },
   footer: {
     flexDirection: 'row',
@@ -237,7 +259,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.darkGray,
     padding: 10,
     borderRadius: 20,
-    color: Colors.white
+    color: Colors.white,
     // marginRight: 10,
   },
   sendIcon: {

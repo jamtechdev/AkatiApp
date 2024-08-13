@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   webview: {
     width: '100%',
     height: '100%',
-    position: 'absolute',
+    // position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     width: '90%',
-    color: Colors.black,
+    color: Colors.white,
   },
   lottieStyle: {
     height: 150,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFill,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    // backgroundColor: '#ffffff',
   },
 });
 export default styles;

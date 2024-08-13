@@ -10,7 +10,12 @@ import {
   ScrollView,
 } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import {GradientView, HeadingText, TabSwitcher, TextBadge} from '../../../components';
+import {
+  GradientView,
+  HeadingText,
+  TabSwitcher,
+  TextBadge,
+} from '../../../components';
 import {Colors} from '../../../_utils/GlobalStyle';
 import Slider from '@react-native-community/slider';
 import NoDataFound from '../../../components/NoDataFound';
@@ -125,7 +130,7 @@ const FilterBottomDrawer = ({
   const handleChange = (category, value) => {
     setFilterState(prevState => {
       let updatedState = {...prevState, [category]: value};
-  
+
       if (category === 'backgroundColor') {
         switch (value) {
           case '#18181b': // Black
@@ -149,7 +154,8 @@ const FilterBottomDrawer = ({
             updatedState.color = prevState.color; // Keep the current text color
             break;
           default:
-            updatedState.backgroundColorSecondary = prevState.backgroundColorSecondary;
+            updatedState.backgroundColorSecondary =
+              prevState.backgroundColorSecondary;
             updatedState.color = prevState.color; // Keep the current text color
         }
       } else if (category === 'color') {
@@ -159,11 +165,10 @@ const FilterBottomDrawer = ({
           updatedState.backgroundColor = '#18181b';
         }
       }
-  
+
       return updatedState;
     });
   };
-  
 
   const renderTabContent = key => {
     const tabOptions = filterOptions.filter(option => option.tab === key);
@@ -176,7 +181,7 @@ const FilterBottomDrawer = ({
           if (option.type === 'range') {
             return (
               <View key={option.category} style={styles.filterContainer}>
-                <Text style={[styles.filterLabel,{color: filterState.color}]}>
+                <Text style={[styles.filterLabel, {color: filterState.color}]}>
                   {option.category} : {filterState[option.categoryValue]}
                 </Text>
                 <Slider
@@ -190,13 +195,16 @@ const FilterBottomDrawer = ({
                   onValueChange={value =>
                     handleChange(option.categoryValue, value)
                   }
+                  thumbTintColor="#fff"
                 />
               </View>
             );
           } else if (option.type === 'list') {
             return (
               <View key={option.category} style={styles.filterContainer}>
-              <Text style={[styles.filterLabel,{color: filterState.color}]}>{option.category}</Text>
+                <Text style={[styles.filterLabel, {color: filterState.color}]}>
+                  {option.category}
+                </Text>
                 <View style={styles.categoryContainer}>
                   {option.options.map((opt, index) => (
                     <TextBadge
@@ -240,10 +248,15 @@ const FilterBottomDrawer = ({
       animationType="none">
       <View style={styles.overlay}>
         <Animated.View style={[styles.modal, {transform: [{translateY}]}]}>
-        <GradientView style={styles.header} onPress={onClose}>
+          <GradientView style={styles.header} onPress={onClose}>
             <Icons name={'close'} size={20} color={Colors.white} />
           </GradientView>
-          <TabSwitcher tabs={tabs} primary={filterState.backgroundColor} tertiary={filterState.backgroundColorSecondary} textColor={filterState.color}/>
+          <TabSwitcher
+            tabs={tabs}
+            primary={filterState.backgroundColor}
+            tertiary={filterState.backgroundColorSecondary}
+            textColor={filterState.color}
+          />
         </Animated.View>
       </View>
     </Modal>

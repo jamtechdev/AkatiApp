@@ -15,6 +15,7 @@ import {
 import axiosInstance from '../../../../_services/axiosInstance';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../../../../_store/_reducers/auth';
+import {RowContainer} from '../../../../components';
 
 const CinetPaymentScreen = ({route, navigation}) => {
   const [ammount, setammount] = useState('');
@@ -180,55 +181,50 @@ const CinetPaymentScreen = ({route, navigation}) => {
   return (
     <React.Fragment>
       {isPayProgress == false ? (
-        <View style={styles.container}>
+        <RowContainer style={styles.container}>
           <Text style={styles.Textstyle}>Success !</Text>
           <Text style={styles.Textstyle}>Payment done successfully.</Text>
-          {/* <LottieView
-            style={styles.lottieStyle}
-            ref={ref}
-            source={payment_done}
-            loop={false}
-          /> */}
-        </View>
+        </RowContainer>
       ) : (
-        <View style={{flex: 1}}>
-          {paypalUrl || !isWebViewLoading ? (
-            <View style={[styles.webview, {height: '90%'}]}>
-              {showInfo && (
-                <View
-                  style={{
-                    backgroundColor: '#ff0000',
-                    paddingVertical: 15,
-                    paddingLeft: 25,
-                    // paddingHorizontal: 10
-                  }}>
-                  <Text
-                    style={{fontSize: 18, fontWeight: 'bold', color: '#fff'}}>
-                    Please don't go back during payment is inProcess.
-                  </Text>
-                </View>
-              )}
-              <WebView
-                style={styles.webView}
-                source={{uri: paypalUrl}}
-                onNavigationStateChange={this._onNavigationStateChange}
-                javaScriptEnabled={true}
-                domStorageEnabled={true}
-                webviewDebuggingEnabled={true}
-                startInLoadingState={false}
-                onLoadStart={onWebviewLoadStart}
-                onMessage={handleWebViewMessage}
-                onLoadEnd={() => SetIsWebViewLoading(false)}
-              />
-            </View>
-          ) : (
-            <View style={styles.paymentProcessing}>
-              <Text style={styles.Textstyle}>
-                Please wait while we are processing ...
-              </Text>
-              {/* <CoinLoader /> */}
-            </View>
-          )}
+        <RowContainer style={{flex: 1}}>
+          {
+            paypalUrl || !isWebViewLoading ? (
+              <View style={[styles.webview, {height: '90%'}]}>
+                {showInfo && (
+                  <View
+                    style={{
+                      backgroundColor: '#ff0000',
+                      paddingVertical: 15,
+                      paddingLeft: 25,
+                      // paddingHorizontal: 10
+                    }}>
+                    <Text
+                      style={{fontSize: 18, fontWeight: 'bold', color: '#fff'}}>
+                      Please don't go back during payment is inProcess.
+                    </Text>
+                  </View>
+                )}
+                <WebView
+                  style={styles.webView}
+                  source={{uri: paypalUrl}}
+                  onNavigationStateChange={this._onNavigationStateChange}
+                  javaScriptEnabled={true}
+                  domStorageEnabled={true}
+                  webviewDebuggingEnabled={true}
+                  startInLoadingState={false}
+                  onLoadStart={onWebviewLoadStart}
+                  onMessage={handleWebViewMessage}
+                  onLoadEnd={() => SetIsWebViewLoading(false)}
+                />
+              </View>
+            ) : null
+            // <View style={styles.paymentProcessing}>
+            //   <Text style={styles.Textstyle}>
+            //     Please wait while we are processing ...
+            //   </Text>
+            //   {/* <CoinLoader /> */}
+            // </View>
+          }
           {isWebViewLoading ? (
             <View style={styles.paymentProcessing}>
               <Text style={styles.Textstyle}>
@@ -237,7 +233,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
               {/* <CoinLoader /> */}
             </View>
           ) : null}
-        </View>
+        </RowContainer>
       )}
     </React.Fragment>
   );

@@ -12,6 +12,7 @@ import axios from 'axios';
 import styles from './styles';
 import {auth, PAYMENT_URL, RETURN_URL} from '../../../../_constant/Config';
 import axiosInstance from '../../../../_services/axiosInstance';
+import {RowContainer} from '../../../../components';
 
 const PaypalPayment = ({route, navigation}) => {
   const [ammount, setammount] = useState('');
@@ -222,7 +223,7 @@ const PaypalPayment = ({route, navigation}) => {
   return (
     <React.Fragment>
       {isPayProgress == false ? (
-        <View style={styles.container}>
+        <RowContainer style={styles.container}>
           <Text style={styles.Textstyle}>Success !</Text>
           <Text style={styles.Textstyle}>Payment done successfully.</Text>
           {/* <LottieView
@@ -231,9 +232,9 @@ const PaypalPayment = ({route, navigation}) => {
             source={payment_done}
             loop={false}
           /> */}
-        </View>
+        </RowContainer>
       ) : (
-        <View style={{flex: 1}}>
+        <RowContainer style={{flex: 1}}>
           {paypalUrl || !isWebViewLoading ? (
             <View style={styles.webview}>
               <WebView
@@ -250,20 +251,26 @@ const PaypalPayment = ({route, navigation}) => {
           ) : (
             <View style={styles.paymentProcessing}>
               <Text style={styles.Textstyle}>
-                Please wait while we are processing ...
-              </Text>
-              {/* <CoinLoader /> */}
-            </View>
-          )}
-          {isWebViewLoading ? (
-            <View style={styles.paymentProcessing}>
-              <Text style={styles.Textstyle}>
                 Redirecting to payment page ...
               </Text>
               {/* <CoinLoader /> */}
             </View>
-          ) : null}
-        </View>
+            // <View style={styles.paymentProcessing}>
+            //   <Text style={styles.Textstyle}>
+            //     Please wait while we are processing ...
+            //   </Text>
+            //   {/* <CoinLoader /> */}
+            // </View>
+          )}
+          {/* {isWebViewLoading ? (
+            <View style={styles.paymentProcessing}>
+              <Text style={styles.Textstyle}>
+                Redirecting to payment page ...
+              </Text>
+             
+            </View>
+          ) : null} */}
+        </RowContainer>
       )}
     </React.Fragment>
   );
