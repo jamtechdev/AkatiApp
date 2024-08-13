@@ -128,7 +128,7 @@ const DrawerContent = props => {
           padding: 20,
           backgroundColor: Colors.primary,
         }}>
-        <Button title="Logout" onPress={()=>toggleModel()}></Button>
+        <Button title="Logout" onPress={() => toggleModel()}></Button>
       </View>
     </>
   );

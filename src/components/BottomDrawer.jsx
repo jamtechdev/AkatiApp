@@ -31,11 +31,7 @@ const BottomDrawer = ({
       onRequestClose={onClose}
       animationType="none" // Disable the default animation
     >
-      <View
-        style={[
-          styles.overlay,
-          {backgroundColor: textSettings?.backgroundColor},
-        ]}>
+      <View style={[styles.overlay]}>
         <Animated.View
           style={[
             styles.modal,
