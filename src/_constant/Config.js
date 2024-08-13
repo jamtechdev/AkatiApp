@@ -6,7 +6,8 @@ export const CINETPAY_API_ID = '695644265ece900561f2c6.42532258';
 // '25656480763908bd3ae0221.11237117';
 export const CINETPAY_SITE_ID = '5876262';
 export const RETURN_URL = 'https://feupsontec.com/payment/';
-export const PAYMENT_URL = 'https://api.sandbox.paypal.com/';
+export const PAYMENT_URL = 'https://api.paypal.com/'; //LIVE PAYMENT URL
+// export const PAYMENT_URL = 'https://api.sandbox.paypal.com/'; //DEVELOPMENT PAYMENT URL
 export const auth = {
   Username:
     'Afpdigg4ddVECCQifzGXScb9n5mhkOkdEvh-RSL8fTh4g0xpUsRdXmHT7A64wcmten_YIsRI38h6jR0s', //"your_paypal-app-client-ID", ----->LIVE

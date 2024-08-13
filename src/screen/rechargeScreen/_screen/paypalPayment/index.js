@@ -113,7 +113,7 @@ const PaypalPayment = ({route, navigation}) => {
     const authHeader = 'Basic ' + btoa(`${clientId}:${clientSecret}`);
     axios
       .post(
-        'https://api.paypal.com/v1/oauth2/token',
+        `${PAYMENT_URL}v1/oauth2/token`,
         {grant_type: 'client_credentials'},
         {
           headers: {
@@ -132,9 +132,10 @@ const PaypalPayment = ({route, navigation}) => {
   };
 
   const createPayment = async (accessToken, amount) => {
+    
     try {
       const response = await axios.post(
-        'https://api.paypal.com/v1/payments/payment',
+        `${PAYMENT_URL}v1/payments/payment`,
         {
           intent: 'sale',
           redirect_urls: {
