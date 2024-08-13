@@ -32,7 +32,6 @@ import ChapterBottomDrawer from './_components/ChapterBottomDrawer';
 import FilterBottomDrawer from './_components/FilterBottomDrawer';
 import CommentsList from '../../components/comment/CommentsList';
 import LinearGradient from 'react-native-linear-gradient';
-import CommentsBottomDrawer from './_components/CommentBottomDrawer';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
@@ -320,25 +319,26 @@ function ReadingScreen({navigation, route}) {
       </ScrollView>
       {showOptions && (
         <View
-          style={[styles.chapterNum, {backgroundColor: textSettings.color}]}>
+          style={[
+            styles.chapterNum,
+            {backgroundColor: textSettings.backgroundColorSecondary},
+          ]}>
           <TouchableText
-            style={{color: textSettings.backgroundColor}}
+            style={{color: textSettings.color}}
             onPress={handlePrevChapter}>
             Prev
           </TouchableText>
-          <CustomText style={{color: textSettings.backgroundColor}}>
+          <CustomText style={{color: textSettings.color}}>
             Chapter {currentChapterIndex + 1} of {chapters.length}
           </CustomText>
           {currentChapterIndex + 1 !== chapters.length ? (
             <TouchableText
-              style={{color: textSettings.backgroundColor}}
+              style={{color: textSettings.color}}
               onPress={handleNextChapter}>
               Next
             </TouchableText>
           ) : (
-            <TouchableText style={{color: textSettings.backgroundColor}}>
-              {' '}
-            </TouchableText>
+            <TouchableText style={{color: textSettings.color}}> </TouchableText>
           )}
         </View>
       )}
@@ -358,7 +358,7 @@ function ReadingScreen({navigation, route}) {
         filterState={textSettings}
         setFilterState={setTextSettings}
       />
-      <CommentsBottomDrawer
+      <BottomDrawer
         visible={showComments}
         onClose={() => setShowComments(false)}
         title={'Comments'}
@@ -370,7 +370,7 @@ function ReadingScreen({navigation, route}) {
             textSettings={textSettings}
           />
         </View>
-      </CommentsBottomDrawer>
+      </BottomDrawer>
     </RowContainer>
   );
 }

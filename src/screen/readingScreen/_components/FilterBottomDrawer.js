@@ -92,6 +92,8 @@ const filterOptions = [
       {value: '#fff', label: 'White'},
       {value: 'black', label: 'Black'},
       {value: '#ff0000', label: 'Red'},
+      {value: 'blue', label: 'Blue'},
+      {value: '#e4a101', label: 'Yellow'},
     ],
     tab: 'Themes',
   },
@@ -161,8 +163,10 @@ const FilterBottomDrawer = ({
       } else if (category === 'color') {
         if (value === 'black' && prevState.backgroundColor === '#18181b') {
           updatedState.backgroundColor = '#fff';
+          updatedState.backgroundColorSecondary = '#efefef';
         } else if (value === '#fff' && prevState.backgroundColor === '#fff') {
           updatedState.backgroundColor = '#18181b';
+          updatedState.backgroundColorSecondary = '#242424';
         }
       }
 
