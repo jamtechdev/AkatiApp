@@ -125,7 +125,7 @@ const CommentsList = ({token, chapterDetails, textSettings}) => {
     <View
       style={[
         styles.container,
-        {backgroundColor: textSettings?.backgroundColor},
+        {backgroundColor: textSettings?.backgroundColorSecondary},
       ]}>
       <View style={styles.emojiContainer}>
         <TouchableOpacity onPress={() => setShowEmojiPicker(!showEmojiPicker)}>
