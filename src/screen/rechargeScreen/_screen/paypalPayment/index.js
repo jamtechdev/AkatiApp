@@ -1,37 +1,24 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Text, View} from 'react-native';
-import {WebView} from 'react-native-webview';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, View } from 'react-native';
+import { WebView } from 'react-native-webview';
 import axios from 'axios';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import qs from 'qs';
-// import {decode, encode} from 'base-64';
-// import api, {baseURL} from '../../services/api';
-// import LottieView from 'lottie-react-native';
-// import {payment_done} from '../../config/images';
-// import CoinLoader from '../../components/CoinLoader';
 import styles from './styles';
-import {auth, PAYMENT_URL, RETURN_URL} from '../../../../_constant/Config';
+import { auth, PAYMENT_URL, RETURN_URL } from '../../../../_constant/Config';
 import axiosInstance from '../../../../_services/axiosInstance';
-import {RowContainer} from '../../../../components';
+import { RowContainer } from '../../../../components';
 
-const PaypalPayment = ({route, navigation}) => {
+const PaypalPayment = ({ route, navigation }) => {
   const [ammount, setammount] = useState('');
   const [isWebViewLoading, SetIsWebViewLoading] = useState(true);
   const [paypalUrl, setPaypalUrl] = useState('');
   const [isPayProgress, setispayprogress] = useState(true);
   const [accessToken, setAccessToken] = useState('');
   const [coin, setcoin] = useState('coins');
-  const {coins, rechargeAmount} = route.params;
+  const { coins, rechargeAmount } = route.params;
   const ref = useRef();
 
   useEffect(() => {
     _retrieveData();
-    // if (!global.btoa) {
-    //   global.btoa = encode;
-    // }
-    // if (!global.atob) {
-    //   global.atob = decode;
-    // }
   }, []);
   const _retrieveData = async () => {
     try {
@@ -45,7 +32,7 @@ const PaypalPayment = ({route, navigation}) => {
       alert(error);
     }
   };
-  savePaymentDetails = async paymentResponse => {
+  const savePaymentDetails = async paymentResponse => {
     const body = {
       coins: coins,
       transaction_id:
@@ -57,7 +44,7 @@ const PaypalPayment = ({route, navigation}) => {
     };
 
     // console.log('body', JSON.stringify(body));
-    const {data} = await api
+    const { data } = await axiosInstance
       .post('PaypalTransactionHistory', body)
       .catch(err => {
         console.log('Error when updating payment history api:', err);
@@ -72,7 +59,7 @@ const PaypalPayment = ({route, navigation}) => {
       }, 2000);
     } else {
       alert('Something went wrong.');
-    navigation.goBack();
+      navigation.goBack();
     }
   };
   // on payment success
@@ -114,7 +101,7 @@ const PaypalPayment = ({route, navigation}) => {
     axios
       .post(
         `${PAYMENT_URL}v1/oauth2/token`,
-        {grant_type: 'client_credentials'},
+        { grant_type: 'client_credentials' },
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -132,7 +119,6 @@ const PaypalPayment = ({route, navigation}) => {
   };
 
   const createPayment = async (accessToken, amount) => {
-    
     try {
       const response = await axios.post(
         `${PAYMENT_URL}v1/payments/payment`,
@@ -162,7 +148,7 @@ const PaypalPayment = ({route, navigation}) => {
           },
         },
       );
-      const {links} = response.data;
+      const { links } = response.data;
       const approvalUrl = links.find(data => data.rel == 'approval_url').href;
       setPaypalUrl(approvalUrl);
     } catch (error) {
@@ -191,10 +177,10 @@ const PaypalPayment = ({route, navigation}) => {
       const urlArr = webViewState.url.split(/(=|&)/);
       const paymentId = urlArr[2];
       const payerId = urlArr[10];
-      axiosInstance
+      axios
         .post(
           `${PAYMENT_URL}v1/payments/payment/${paymentId}/execute`,
-          {payer_id: payerId},
+          { payer_id: payerId },
           {
             headers: {
               'Content-Type': 'application/json',
@@ -216,7 +202,7 @@ const PaypalPayment = ({route, navigation}) => {
         })
         .catch(err => {
           setShouldShowWebviewLoading(true);
-          console.log({...err});
+          console.log({ ...err });
         });
     }
   };
@@ -227,20 +213,14 @@ const PaypalPayment = ({route, navigation}) => {
         <RowContainer style={styles.container}>
           <Text style={styles.Textstyle}>Success !</Text>
           <Text style={styles.Textstyle}>Payment done successfully.</Text>
-          {/* <LottieView
-            style={styles.lottieStyle}
-            ref={ref}
-            source={payment_done}
-            loop={false}
-          /> */}
         </RowContainer>
       ) : (
-        <RowContainer style={{flex: 1}}>
+        <RowContainer style={{ flex: 1 }}>
           {paypalUrl || !isWebViewLoading ? (
             <View style={styles.webview}>
               <WebView
                 style={styles.webView}
-                source={{uri: paypalUrl}}
+                source={{ uri: paypalUrl }}
                 onNavigationStateChange={_onNavigationStateChange}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
@@ -252,7 +232,7 @@ const PaypalPayment = ({route, navigation}) => {
           ) : (
             <View style={styles.paymentProcessing}>
               <Text style={styles.Textstyle}>
-                Redirecting to payment page ...
+                Please wait while we are processing ...
               </Text>
               {/* <CoinLoader /> */}
             </View>
@@ -268,7 +248,7 @@ const PaypalPayment = ({route, navigation}) => {
               <Text style={styles.Textstyle}>
                 Redirecting to payment page ...
               </Text>
-             
+
             </View>
           ) : null} */}
         </RowContainer>

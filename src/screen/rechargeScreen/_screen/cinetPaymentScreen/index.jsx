@@ -1,12 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Text, View, Alert} from 'react-native';
 import {WebView} from 'react-native-webview';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// import LottieView from 'lottie-react-native';
-import {payment_done} from '../../config/images';
-// import CoinLoader from '../../components/CoinLoader';
 import styles from './styles';
+import axios from 'axios'
 import {
   CINETPAY_API_ID,
   CINETPAY_SITE_ID,
@@ -69,7 +65,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
       lang: 'en',
       mode: 'PRODUCTION',
     };
-    axiosInstance
+    axios
       .post(`https://api-checkout.cinetpay.com/v2/payment`, dataDetail, {
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +82,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
       });
   };
 
-  savePaymentDetails = async paymentResponse => {
+  const savePaymentDetails = async paymentResponse => {
     const body = {
       coins: coins,
       transaction_id: transactionId,
@@ -118,8 +114,8 @@ const CinetPaymentScreen = ({route, navigation}) => {
 
   const checkPaymentProcess = () => {
     const formdata = new FormData();
-    formdata.append('apikey', '695644265ece900561f2c6.42532258');
-    formdata.append('site_id', '454000');
+    formdata.append('apikey', CINETPAY_API_ID);
+    formdata.append('site_id', CINETPAY_SITE_ID);
     formdata.append('transaction_id', transactionId);
     // console.log(formdata, transactionId, typeof transactionId);
     const requestOptions = {
@@ -138,7 +134,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
         } else {
           Alert.alert(
             'Payment Status',
-            "Your payment wasn't completed" + 'status :' + response?.message,
+            "Your payment wasn't completed " + ' status :' + response?.message,
           );
           return navigation.goBack();
         }
@@ -149,13 +145,13 @@ const CinetPaymentScreen = ({route, navigation}) => {
       });
   };
 
-  onWebviewLoadStart = () => {
+  const onWebviewLoadStart = () => {
     if (shouldShowWebViewLoading) {
       SetIsWebViewLoading(true);
     }
   };
 
-  _onNavigationStateChange = webViewState => {
+  const _onNavigationStateChange = webViewState => {
     // console.log('webViewState', webViewState);
     setShowInfo(false);
     if (webViewState.title == '') {
@@ -228,9 +224,8 @@ const CinetPaymentScreen = ({route, navigation}) => {
           {isWebViewLoading ? (
             <View style={styles.paymentProcessing}>
               <Text style={styles.Textstyle}>
-                Redirecting to CinetPay payment page ...
+              Please wait while we are processing CinetPay payment ...
               </Text>
-              {/* <CoinLoader /> */}
             </View>
           ) : null}
         </RowContainer>
