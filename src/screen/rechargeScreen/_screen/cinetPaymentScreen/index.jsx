@@ -106,13 +106,13 @@ const CinetPaymentScreen = ({route, navigation}) => {
     if (data.success) {
       setispayprogress(false);
       // resetCoins(response.data.coins);
-      ref.current.play();
+      // ref.current.play();
       setTimeout(() => {
-        props.navigation.goBack();
+        navigation.goBack();
       }, 2000);
     } else {
       alert('Something went wrong.');
-      props.navigation.goBack();
+      navigation.goBack();
     }
   };
 
@@ -140,7 +140,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
             'Payment Status',
             "Your payment wasn't completed" + 'status :' + response?.message,
           );
-          return props.navigation.goBack();
+          return navigation.goBack();
         }
       })
       .catch(err => {
@@ -166,7 +166,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
     }
     if (webViewState.url.includes(`${RETURN_URL}failed`)) {
       setShowInfo(false);
-      return props.navigation.goBack();
+      return navigation.goBack();
     }
     if (webViewState.url.includes(`${RETURN_URL}success`)) {
       setShowInfo(false);
@@ -207,7 +207,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
                 <WebView
                   style={styles.webView}
                   source={{uri: paypalUrl}}
-                  onNavigationStateChange={this._onNavigationStateChange}
+                  onNavigationStateChange={_onNavigationStateChange}
                   javaScriptEnabled={true}
                   domStorageEnabled={true}
                   webviewDebuggingEnabled={true}
