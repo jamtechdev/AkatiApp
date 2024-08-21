@@ -79,7 +79,7 @@ export default function LibraryScreen({navigation}) {
       bookId => selectedBooks[bookId],
     );
     if (booksToDelete.length === 0) {
-      showToast('Please select at least one book to delete.', 'error');
+      showToast(t('screens.library.selectBook'), 'error');
       return;
     }
     const selectAll = allSelected ? 1 : 0;
@@ -92,11 +92,11 @@ export default function LibraryScreen({navigation}) {
         setSelectedBooks({});
         setAllSelected(false);
         setEditMode(false);
-        showToast('Selected books have been deleted successfully.');
+        showToast(t('screens.library.deleteToast'));
       })
       .catch(error => {
         console.log(error);
-        showToast('An error occurred while deleting the books.', 'error');
+        showToast(t('screens.library.errorDeleteToast'), 'error');
       });
   };
 

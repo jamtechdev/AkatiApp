@@ -101,7 +101,10 @@
       "cancel": "Cancel",
       "edit": "Edit",
       "textLib": "You have no books in your library yet. Let's embark together on the journey...",
-      "discover": "Discover"
+      "discover": "Discover",
+      "deleteToast":"Selected books have been deleted successfully.",
+      "errorDeleteToast":"An error occurred while deleting the books.",
+      "selectBook":"Please select at least one book to delete."
     },
     "profile": {
       "profile": "Profile",

@@ -99,7 +99,10 @@
       "cancel": "Abbrechen",
       "edit": "Bearbeiten",
       "textLib": "Sie haben noch keine Bücher in Ihrer Bibliothek. Lassen Sie uns gemeinsam auf die Reise gehen...",
-      "discover": "Entdecken"
+      "discover": "Entdecken",
+      "deleteToast": "Ausgewählte Bücher wurden erfolgreich gelöscht.",
+      "errorDeleteToast": "Beim Löschen der Bücher ist ein Fehler aufgetreten.",
+      "selectBook": "Bitte wählen Sie mindestens ein Buch zum Löschen aus."
     },
     "profile": {
       "profile": "Profil",
