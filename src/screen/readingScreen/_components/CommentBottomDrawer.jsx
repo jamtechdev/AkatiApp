@@ -37,7 +37,7 @@ const CommentsBottomDrawer = ({
             styles.modal,
             style,
             {transform: [{translateY}]},
-            {backgroundColor: textSettings?.backgroundColor},
+            {backgroundColor: textSettings?.backgroundColorSecondary},
           ]}>
           <GradientView style={styles.header} onPress={onClose}>
             <Icons name={'close'} size={20} color={Colors.white} />

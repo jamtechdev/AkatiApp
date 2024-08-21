@@ -149,9 +149,9 @@ export default function RechargeScreen({navigation}) {
           }}
           title={t('screens.recharge.addCoin')}
           style={{
-            paddingHorzontal: 25,
+            paddingHorizontal: 15,
             paddingVertical: 5,
-            width: 80,
+            // width:'0%',
           }}
           textStyle={{
             fontSize: 12,

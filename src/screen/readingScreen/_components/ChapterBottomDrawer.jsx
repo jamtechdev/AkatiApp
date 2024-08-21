@@ -46,7 +46,7 @@ const ChapterBottomDrawer = ({
         <Animated.View
           style={[
             styles.modal,
-            {backgroundColor: textSettings.backgroundColor},
+            {backgroundColor: textSettings.backgroundColorSecondary},
             {transform: [{translateY}]},
           ]}>
           <GradientView style={styles.header} onPress={onClose}>

@@ -164,7 +164,7 @@ export default function LibraryScreen({navigation}) {
           />
           <CustomText>{t('screens.library.textLib')}</CustomText>
           <Button
-            title={'Discover'}
+            title={t('screens.library.discover')}
             onPress={() => navigation.navigate('Home')}
             style={{width: '100%', paddingHorizontal: 50, marginTop: 20}}
           />
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 15,
+    borderRadius : 20,
   },
   imgData: {
     height: '60%',
