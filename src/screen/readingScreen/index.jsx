@@ -32,11 +32,13 @@ import ChapterBottomDrawer from './_components/ChapterBottomDrawer';
 import FilterBottomDrawer from './_components/FilterBottomDrawer';
 import CommentsList from '../../components/comment/CommentsList';
 import LinearGradient from 'react-native-linear-gradient';
+import {useTranslation} from 'react-i18next';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
   const {bookId, chapters, BookDetails, categories} = params;
   const {coins} = useSelector(getAuth);
+  const {t} = useTranslation();
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [showComments, setShowComments] = useState([]);
   const [autoUnlock, setAutoUnlock] = useState(false);
@@ -247,7 +249,7 @@ function ReadingScreen({navigation, route}) {
                       textAlign: 'center',
                       color: textSettings.color,
                     }}>
-                    Thanks for reading!{' '}
+                    {t('screens.reading.thanksForReading')}
                   </CustomText>
                 </View>
                 <View style={{paddingVertical: 10, paddingBottom: 50}}>
@@ -260,12 +262,14 @@ function ReadingScreen({navigation, route}) {
                           fontWeight: 'bold',
                           textAlign: 'center',
                         }}>
-                        {' '}
-                        Stay Tuned, more chapters are coming soon...
+                        {t('screens.reading.stayTuned')}
                       </CustomText>
                     )
                   ) : (
-                    <Button title="Next Chapter" onPress={handleNextChapter} />
+                    <Button
+                      title={t('screens.reading.nextChapter')}
+                      onPress={handleNextChapter}
+                    />
                   )}
                 </View>
               </View>
@@ -277,11 +281,10 @@ function ReadingScreen({navigation, route}) {
                     textAlign: 'center',
                     color: textSettings.color,
                   }}>
-                  The story of this chapter is full of surprises. May you enjoy
-                  your time when reading it.
+                  {t('screens.reading.story')}
                 </CustomText>
                 <Button
-                  title="Unlock This Chapter"
+                  title={t('screens.reading.unlockThisChapter')}
                   onPress={handleUnlockChapter}
                   style={{marginTop: 50}}
                 />
@@ -294,7 +297,7 @@ function ReadingScreen({navigation, route}) {
                     marginVertical: 30,
                     color: textSettings.color,
                   }}>
-                  Price :{' '}
+                  {t('screens.reading.price')}{' '}
                   <Icons
                     name={'dollar'}
                     size={15}
@@ -307,7 +310,7 @@ function ReadingScreen({navigation, route}) {
             )}
             <View>
               <HeadingText style={{color: textSettings.color}}>
-                {'Must Read'}
+                {t('screens.reading.mustRead')}
               </HeadingText>
               {!mustReadBooks && (
                 <Skeleton isLoading={true} count={3} numColumns={3} />
@@ -326,16 +329,17 @@ function ReadingScreen({navigation, route}) {
           <TouchableText
             style={{color: textSettings.color}}
             onPress={handlePrevChapter}>
-            Prev
+            {t('screens.reading.previous')}
           </TouchableText>
           <CustomText style={{color: textSettings.color}}>
-            Chapter {currentChapterIndex + 1} of {chapters.length}
+            {t('screens.reading.chapter')} {currentChapterIndex + 1} of{' '}
+            {chapters.length}
           </CustomText>
           {currentChapterIndex + 1 !== chapters.length ? (
             <TouchableText
               style={{color: textSettings.color}}
               onPress={handleNextChapter}>
-              Next
+              {t('screens.reading.next')}
             </TouchableText>
           ) : (
             <TouchableText style={{color: textSettings.color}}> </TouchableText>
@@ -354,14 +358,14 @@ function ReadingScreen({navigation, route}) {
       <FilterBottomDrawer
         visible={filterVisible}
         onClose={() => setFilterVisible(false)}
-        title={'Filter'}
+        title={t('screens.reading.filter')}
         filterState={textSettings}
         setFilterState={setTextSettings}
       />
       <BottomDrawer
         visible={showComments}
         onClose={() => setShowComments(false)}
-        title={'Comments'}
+        title={t('screens.reading.comment')}
         textSettings={textSettings}
         style={{height: '85%'}}>
         <View style={{height: '100%'}}>

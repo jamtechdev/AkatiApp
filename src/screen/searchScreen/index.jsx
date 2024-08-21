@@ -23,6 +23,7 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import {booksService} from '../../_services/book.service';
 import {commonServices} from '../../_services/common.service';
 import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 export default function SearchScreen() {
   const [searchTerms, setSearchTerms] = useState('');
@@ -34,6 +35,7 @@ export default function SearchScreen() {
   const [showCategories, setShowCategories] = useState(true);
   const [showVariant, setShowVariant] = useState(true);
   const [selectedCatName, setSelectedCatName] = useState('All');
+  const {t} = useTranslation();
 
   useEffect(() => {
     getBookCategories();
@@ -113,7 +115,7 @@ export default function SearchScreen() {
       {showCategories && (
         <>
           <View>
-            <HeadingText>Categories</HeadingText>
+            <HeadingText>{t('screens.searching.category')}</HeadingText>
             <View style={styles.categoryContainer}>
               <TextBadge
                 title={'All'}
@@ -144,7 +146,7 @@ export default function SearchScreen() {
             </View>
           </View>
           <View>
-            <HeadingText>Hot search</HeadingText>
+            <HeadingText>{t('screens.searching.hotSearch')}</HeadingText>
             <View style={styles.categoryContainer}>
               {hotSearch.length >= 0 ? (
                 hotSearch.map((hot, index) => (
@@ -161,11 +163,11 @@ export default function SearchScreen() {
                 </>
               )}
               {hotSearch.length == 0 && (
-                <CustomText> No search hot search keys found </CustomText>
+                <CustomText>{t('screens.searching.noData')}</CustomText>
               )}
             </View>
             {recentSearch.length !== 0 && (
-              <HeadingText>Recent search</HeadingText>
+              <HeadingText>{t('screens.searching.recentSearch')}</HeadingText>
             )}
             <View style={{marginVertical: 10}}>
               {recentSearch.length >= 0 ? (
@@ -190,13 +192,15 @@ export default function SearchScreen() {
                 <Skeleton isLoading={true} count={4} isList />
               )}
               {recentSearch.length == 0 && (
-                <CustomText> No search history found </CustomText>
+                <CustomText>{t('screens.searching.noData')}</CustomText>
               )}
             </View>
           </View>
         </>
       )}
-      {foundItems.length > 0 && <HeadingText>Search Results</HeadingText>}
+      {foundItems.length > 0 && (
+        <HeadingText>{t('screens.searching.results')}</HeadingText>
+      )}
     </View>
   );
 
@@ -210,28 +214,6 @@ export default function SearchScreen() {
 
   return (
     <RowContainer>
-      {/* <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-        <View style={styles.searchBar}>
-          <TextInput
-            style={{color: Colors.white, width: '85%'}}
-            placeholder="Which book would you like to read today..."
-            placeholderTextColor={Colors.darkGray}
-            onChangeText={setSearchTerms}
-            value={searchTerms}
-          />
-          <GradientView onPress={handleSearch} style={styles.searchIcon}>
-            <Icons size={25} color={Colors.white} name={'search'} />
-          </GradientView>
-        </View>
-        <GradientView onPress={handleSearch} style={styles.filterIcons}>
-          <Icon
-            size={30}
-            color={Colors.white}
-            name={showCategories ? 'filter' : 'filter-off'}
-            onPress={() => setShowCategories(prev => !prev)}
-          />
-        </GradientView>
-      </View> */}
       <View
         style={{
           flexDirection: 'row',
@@ -243,7 +225,7 @@ export default function SearchScreen() {
         }}>
         <TextInputWithIcon
           iconName={'search'}
-          placeholder="Which book would you like to read today..."
+          placeholder={t('screens.searching.searchPlaceholder')}
           placeholderTextColor={Colors.darkGray}
           onChangeText={setSearchTerms}
           value={searchTerms}
@@ -251,14 +233,14 @@ export default function SearchScreen() {
           style={{flex: 1}}
           onIconPress={handleSearch}
         />
-        <GradientView onPress={handleSearch}
-        style={{
-          height : 35,
-          justifyContent: 'center',
-          alignItems:'center',
-          borderRadius: 4
-        }}
-        >
+        <GradientView
+          onPress={handleSearch}
+          style={{
+            height: 35,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 4,
+          }}>
           <Icon
             size={30}
             color={Colors.white}
@@ -268,25 +250,6 @@ export default function SearchScreen() {
         </GradientView>
       </View>
 
-      {/* <View style={styles.filterContainer}>
-        <CustomText style={{fontWeight: '600', fontSize: 20}}>
-          Search Terms
-        </CustomText>
-        <View style={styles.filterIcons}>
-          <Icon
-            size={25}
-            color={Colors.white}
-            name={showCategories ? 'filter' : 'filter-off'}
-            onPress={() => setShowCategories(prev => !prev)}
-          />
-          <Icon
-            size={25}
-            color={Colors.white}
-            name={showVariant ? 'filter-variant' : 'filter-variant-remove'}
-            onPress={() => setShowVariant(prev => !prev)}
-          />
-        </View>
-      </View> */}
       <FlatList
         ListHeaderComponent={renderHeader}
         data={foundItems}

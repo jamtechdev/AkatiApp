@@ -8,10 +8,19 @@ import TabNavigator from './TabNavigator';
 import {StatusBar} from 'react-native';
 import {CustomHeader, DrawerContent} from '../components';
 import DrawerNavigator from './DrawerNavigator';
-import {BookDetailsScreen, CinetPaymentScreen, NotificationScreen, PaypalPayment, PrivacyScreen, ProfileScreen, ReadingScreen, TermsScreen} from '../screen';
+import {
+  BookDetailsScreen,
+  CinetPaymentScreen,
+  NotificationScreen,
+  PaypalPayment,
+  PrivacyScreen,
+  ProfileScreen,
+  ReadingScreen,
+  TermsScreen,
+} from '../screen';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../_store/_reducers/auth';
-
+import '../localization/i18n';
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {

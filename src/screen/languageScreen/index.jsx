@@ -13,13 +13,14 @@ import {getAuth, getLanguage, languageSet} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
 import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
+import {useTranslation} from 'react-i18next';
 
 export default function LanguageScreen() {
   const {showToast, showLoader, hideLoader} = useAppContext();
   const [languages, setLanguages] = useState();
   const language = useSelector(getLanguage);
   const dispatch = useDispatch();
-
+  const {t} = useTranslation();
   useEffect(() => {
     commonServices
       .getLanguage()
@@ -71,7 +72,7 @@ export default function LanguageScreen() {
   return (
     <RowContainer>
       <View style={{paddingBottom: 20}}>
-        <HeadingText>Languages </HeadingText>
+        <HeadingText>{t('screens.language.title')} </HeadingText>
       </View>
       {languages && languages.length > 0 ? (
         <FlatList

@@ -16,6 +16,7 @@ import {commonServices} from '../../_services/common.service';
 import {useAppContext} from '../../_customContext/AppProvider';
 import {Colors} from '../../_utils/GlobalStyle';
 import NoDataFound from '../NoDataFound';
+import {useTranslation} from 'react-i18next';
 
 const defaultEmojis = ['😀', '😂', '😍', '👍', '😎', '🥳', '🙌', '🔥'];
 
@@ -31,6 +32,7 @@ const CommentsList = ({token, chapterDetails, textSettings}) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState(getRandomEmojis(4));
   const [loadingComments, setLoadingComments] = useState(true);
+  const {t} = useTranslation();
 
   useEffect(() => {
     fetchComments();
@@ -195,8 +197,7 @@ const CommentsList = ({token, chapterDetails, textSettings}) => {
                 alignItems: 'center',
               }}>
               <Text style={{fontSize: 15, fontWeight: 'bold', marginTop: 50}}>
-                {/* No comments available. */}
-                <NoDataFound description={'No comments available.'} />
+                <NoDataFound description={t('screens.reading.noComment')} />
               </Text>
             </View>
           )

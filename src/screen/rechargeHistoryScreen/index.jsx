@@ -15,11 +15,13 @@ import {commonServices} from '../../_services/common.service';
 import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
 import coin from '../../images/coin.png';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import NoDataFound from '../../components/NoDataFound';
+import {useTranslation} from 'react-i18next';
 export default function RechargeHistoryScreen() {
   const {showToast, showLoader, hideLoader} = useAppContext();
   const [histories, setHistories] = useState();
+  const {t} = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
@@ -27,14 +29,14 @@ export default function RechargeHistoryScreen() {
     }, []),
   );
 
-  const fetchHistory = ()=>{
+  const fetchHistory = () => {
     commonServices
-    .getTransactionHistory()
-    .then(res => {
-      setHistories(res.data.list);
-    })
-    .catch(err => console.log(err.message));
-  }
+      .getTransactionHistory()
+      .then(res => {
+        setHistories(res.data.list);
+      })
+      .catch(err => console.log(err.message));
+  };
 
   const renderHistoriesItem = ({item}) => {
     return (
@@ -43,12 +45,12 @@ export default function RechargeHistoryScreen() {
           <Image source={coin} style={styles.image} />
           <View>
             <CustomText style={{fontWeight: 700}}>
-              {item?.coins} Coins
+              {item?.coins} {t('screens.history.coin')}
             </CustomText>
             {/* <CustomText>{new Date(item?.created_at).toLocaleString()}</CustomText> */}
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <CustomText style={{fontSize: 12, color: Colors.gray}}>
-                TXN ID :{' '}
+                {t('screens.history.transactionid')} :{' '}
               </CustomText>
               <CustomText style={{fontSize: 12}}>
                 {item?.transaction_id}{' '}
@@ -66,12 +68,12 @@ export default function RechargeHistoryScreen() {
   return (
     <RowContainer>
       <View style={{paddingBottom: 20}}>
-        <HeadingText>Recharge History</HeadingText>
+        <HeadingText>{t('screens.history.history')}</HeadingText>
       </View>
       {!histories ? (
-        <Skeleton isLoading={true} isList/>
+        <Skeleton isLoading={true} isList />
       ) : histories.length == 0 ? (
-        <NoDataFound description={'History not found'} />
+        <NoDataFound description={t('screens.history.notfound')} />
       ) : (
         <FlatList
           data={histories}

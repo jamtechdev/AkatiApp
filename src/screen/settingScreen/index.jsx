@@ -12,12 +12,13 @@ import {commonServices} from '../../_services/common.service';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../../_store/_reducers/auth';
 import {useAppContext} from '../../_customContext/AppProvider';
+import {useTranslation} from 'react-i18next';
 
 export default function SettingScreen({navigation}) {
   const {showToast, showLoader, hideLoader} = useAppContext();
   const {email} = useSelector(getAuth);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const {t} = useTranslation();
   const handleDeleteAcc = () => {
     commonServices
       .deleteAccount(email)
@@ -33,37 +34,35 @@ export default function SettingScreen({navigation}) {
   return (
     <RowContainer>
       <View style={{paddingBottom: 20}}>
-        <HeadingText>Settings </HeadingText>
+        <HeadingText>{t('screens.setting.title')}</HeadingText>
       </View>
       <View>
         <TouchableText
           style={styles.text}
-          onPress={() => showToast('Already Updated', 'info')}>
-          Check For Updates
+          onPress={() => showToast(t('screens.setting.updated'), 'info')}>
+          {t('screens.setting.checkUpdate')}
         </TouchableText>
         <TouchableText
           style={styles.text}
           onPress={() => navigation.navigate('Terms')}>
-          Terms & Conditions
+          {t('screens.setting.terms')}
         </TouchableText>
         <TouchableText
           style={styles.text}
           onPress={() => navigation.navigate('Privacy')}>
-          Privacy & Policy
+          {t('screens.setting.privacy')}
         </TouchableText>
         <TouchableText
           style={styles.text}
           onPress={() => setModalVisible(true)}>
-          Delete Account
+          {t('screens.setting.delete')}
         </TouchableText>
       </View>
       <AlertModal
         visible={modalVisible}
         image={require('../../images/akati-logo.png')}
-        title={'Are you sure to delete your account?'}
-        description={
-          'Will you really want to delete your account? All your userdata will be deleted and can not be recovered.'
-        }
+        title={t('screens.setting.sure')}
+        description={t('screens.setting.confirmation')}
         onOkay={() => {
           setModalVisible(false);
           handleDeleteAcc();

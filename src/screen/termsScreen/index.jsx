@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {
   CustomHeader,
   CustomText,
@@ -7,13 +7,15 @@ import {
   RowContainer,
   Skeleton,
 } from '../../components';
-import { commonServices } from '../../_services/common.service';
-import { useAppContext } from '../../_customContext/AppProvider';
-import { Colors } from '../../_utils/GlobalStyle';
+import {commonServices} from '../../_services/common.service';
+import {useAppContext} from '../../_customContext/AppProvider';
+import {Colors} from '../../_utils/GlobalStyle';
+import {useTranslation} from 'react-i18next';
 
 function TermsScreen() {
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showToast, showLoader, hideLoader} = useAppContext();
   const [terms, setTerms] = useState();
+  const {t} = useTranslation();
 
   useEffect(() => {
     // showLoader();
@@ -29,14 +31,12 @@ function TermsScreen() {
   }, []);
 
   const renderItem = () => (
-    <CustomText style={styles.text}>
-      {terms?.content}
-    </CustomText>
+    <CustomText style={styles.text}>{terms?.content}</CustomText>
   );
 
   return (
     <RowContainer style={styles.container}>
-      <HeadingText>Terms & Conditions</HeadingText>
+      <HeadingText>{t('screens.setting.terms')}</HeadingText>
       <FlatList
         data={terms ? [terms] : []}
         renderItem={renderItem}

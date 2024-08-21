@@ -6,8 +6,10 @@ import Icons from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../_store/_reducers/auth';
 import {CustomText, GradientView} from '.';
+import {useTranslation} from 'react-i18next';
 const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
   const {avatar} = useSelector(getAuth);
+  const {t} = useTranslation();
   return (
     <View style={styles.header}>
       {showBack && (
@@ -35,12 +37,10 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <GradientView style={styles.iconButton}  onPress={() => navigation.navigate('notification')}>
-          <Ionicons
-            name={'notifications'}
-            size={20}
-            color={'white'}
-          />
+        <GradientView
+          style={styles.iconButton}
+          onPress={() => navigation.navigate('notification')}>
+          <Ionicons name={'notifications'} size={20} color={'white'} />
         </GradientView>
         <GradientView
           style={styles.iconButton}
