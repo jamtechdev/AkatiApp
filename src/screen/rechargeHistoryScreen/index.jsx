@@ -50,7 +50,7 @@ export default function RechargeHistoryScreen() {
             {/* <CustomText>{new Date(item?.created_at).toLocaleString()}</CustomText> */}
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <CustomText style={{fontSize: 12, color: Colors.gray}}>
-                {t('screens.history.transactionid')} :{' '}
+                TXN ID :{' '}
               </CustomText>
               <CustomText style={{fontSize: 12}}>
                 {item?.transaction_id}{' '}

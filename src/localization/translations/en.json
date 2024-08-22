@@ -138,7 +138,11 @@
       "withCinetpay": "With CinetPay",
       "cinetPay": "cinetpay",
       "pay": "Pay Now",
-      "payPal": "paypal"
+      "payPal": "paypal",
+      "paymentInit": "Please wait while we are processing payment...",
+      "process": "Please don't go back during payment is inProcess.",
+      "success": "Success",
+      "successfully": "Payment done successfully."
     },
     "history": {
       "history": "Recharge History",

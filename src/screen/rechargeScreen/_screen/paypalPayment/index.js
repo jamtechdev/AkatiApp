@@ -1,20 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Text, View } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, View} from 'react-native';
+import {WebView} from 'react-native-webview';
 import axios from 'axios';
 import styles from './styles';
-import { auth, PAYMENT_URL, RETURN_URL } from '../../../../_constant/Config';
+import {auth, PAYMENT_URL, RETURN_URL} from '../../../../_constant/Config';
 import axiosInstance from '../../../../_services/axiosInstance';
-import { RowContainer } from '../../../../components';
+import {RowContainer} from '../../../../components';
+import {useTranslation} from 'react-i18next';
 
-const PaypalPayment = ({ route, navigation }) => {
+const PaypalPayment = ({route, navigation}) => {
+  const {t} = useTranslation();
   const [ammount, setammount] = useState('');
   const [isWebViewLoading, SetIsWebViewLoading] = useState(true);
   const [paypalUrl, setPaypalUrl] = useState('');
   const [isPayProgress, setispayprogress] = useState(true);
   const [accessToken, setAccessToken] = useState('');
   const [coin, setcoin] = useState('coins');
-  const { coins, rechargeAmount } = route.params;
+  const {coins, rechargeAmount} = route.params;
   const ref = useRef();
 
   useEffect(() => {
@@ -44,7 +46,7 @@ const PaypalPayment = ({ route, navigation }) => {
     };
 
     // console.log('body', JSON.stringify(body));
-    const { data } = await axiosInstance
+    const {data} = await axiosInstance
       .post('PaypalTransactionHistory', body)
       .catch(err => {
         console.log('Error when updating payment history api:', err);
@@ -101,7 +103,7 @@ const PaypalPayment = ({ route, navigation }) => {
     axios
       .post(
         `${PAYMENT_URL}v1/oauth2/token`,
-        { grant_type: 'client_credentials' },
+        {grant_type: 'client_credentials'},
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -148,7 +150,7 @@ const PaypalPayment = ({ route, navigation }) => {
           },
         },
       );
-      const { links } = response.data;
+      const {links} = response.data;
       const approvalUrl = links.find(data => data.rel == 'approval_url').href;
       setPaypalUrl(approvalUrl);
     } catch (error) {
@@ -180,7 +182,7 @@ const PaypalPayment = ({ route, navigation }) => {
       axios
         .post(
           `${PAYMENT_URL}v1/payments/payment/${paymentId}/execute`,
-          { payer_id: payerId },
+          {payer_id: payerId},
           {
             headers: {
               'Content-Type': 'application/json',
@@ -202,7 +204,7 @@ const PaypalPayment = ({ route, navigation }) => {
         })
         .catch(err => {
           setShouldShowWebviewLoading(true);
-          console.log({ ...err });
+          console.log({...err});
         });
     }
   };
@@ -211,16 +213,18 @@ const PaypalPayment = ({ route, navigation }) => {
     <React.Fragment>
       {isPayProgress == false ? (
         <RowContainer style={styles.container}>
-          <Text style={styles.Textstyle}>Success !</Text>
-          <Text style={styles.Textstyle}>Payment done successfully.</Text>
+          <Text style={styles.Textstyle}>{t('screens.recharge.success')}</Text>
+          <Text style={styles.Textstyle}>
+            {t('screens.recharge.successfully')}
+          </Text>
         </RowContainer>
       ) : (
-        <RowContainer style={{ flex: 1 }}>
+        <RowContainer style={{flex: 1}}>
           {paypalUrl || !isWebViewLoading ? (
             <View style={styles.webview}>
               <WebView
                 style={styles.webView}
-                source={{ uri: paypalUrl }}
+                source={{uri: paypalUrl}}
                 onNavigationStateChange={_onNavigationStateChange}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
@@ -232,7 +236,7 @@ const PaypalPayment = ({ route, navigation }) => {
           ) : (
             <View style={styles.paymentProcessing}>
               <Text style={styles.Textstyle}>
-                Please wait while we are processing ...
+                {t('screens.recharge.process')}
               </Text>
               {/* <CoinLoader /> */}
             </View>

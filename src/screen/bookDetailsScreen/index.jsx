@@ -407,7 +407,7 @@ function BookDetailsScreen({navigation, route}) {
             </Text>
             <Text
               style={{color: Colors.darkGray, fontWeight: '400', fontSize: 12}}>
-              Author: {BookDetails?.author}
+              {t('screens.bookDetails.bookAuthor')}: {BookDetails?.author}
             </Text>
 
             {!rating_average ? null : (

@@ -87,7 +87,7 @@ export default function ReviewScreen() {
 
   const handlePostReview = () => {
     if (starCount === 0 || reviews.trim() === '') {
-      showToast('Please provide both a rating and a review!', 'info');
+      showToast(t('screens.review.warning'), 'info');
       return;
     }
 
@@ -108,7 +108,7 @@ export default function ReviewScreen() {
         showToast(t('screens.review.success'), 'success');
       })
       .catch(error => {
-        showToast('Something went wrong!', 'error');
+        showToast(error, 'error');
         console.log('Error submitting review:', error);
       });
   };
