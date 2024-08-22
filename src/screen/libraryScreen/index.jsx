@@ -79,7 +79,7 @@ export default function LibraryScreen({navigation}) {
       bookId => selectedBooks[bookId],
     );
     if (booksToDelete.length === 0) {
-      showToast(t('screens.library.warning'), 'error');
+      showToast(t('screens.library.selectBook'), 'error');
       return;
     }
     const selectAll = allSelected ? 1 : 0;
@@ -92,11 +92,11 @@ export default function LibraryScreen({navigation}) {
         setSelectedBooks({});
         setAllSelected(false);
         setEditMode(false);
-        showToast(t('screens.library.success'));
+        showToast(t('screens.library.deleteToast'));
       })
       .catch(error => {
         console.log(error);
-        showToast(error, 'error');
+        showToast(t('screens.library.errorDeleteToast'), 'error');
       });
   };
 

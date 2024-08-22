@@ -26,9 +26,11 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
           <Icons name={'outdent'} size={20} color={'white'} />
         </GradientView>
       )}
+      {title && (
       <View style={{paddingLeft: 20}}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{t(`screens.header.${title}`)}</Text>
       </View>
+      )}
 
       <View
         style={{
