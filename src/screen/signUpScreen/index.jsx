@@ -32,9 +32,11 @@ import {
 } from 'react-native-fbsdk-next';
 import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
 import {AlertModal, TouchableText} from '../../components/index.js';
+import {useTranslation} from 'react-i18next';
 
 export default function SignupScreen({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
+  const {t} = useTranslation();
 
   const validationSchema = Yup.object().shape({
     first_name: Yup.string().required('First Name Required'),
@@ -88,57 +90,59 @@ export default function SignupScreen({navigation}) {
       <ContainerCenter>
         <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
         <View style={{gap: 8}}>
-          <CustomText style={styles.signInHeading}>Sign Up</CustomText>
+          <CustomText style={styles.signInHeading}>
+            {t('screens.signUp.signup')}
+          </CustomText>
           <CustomText style={styles.signInSubHeading}>
-            Please fill the below details
+            {t('screens.signUp.details')}
           </CustomText>
         </View>
         <View style={{gap: 15, paddingTop: 20}}>
           <Input
-            placeholder="Enter First Name"
+            placeholder={t('screens.signUp.firstNamePlaceholder')}
             control={control}
             errors={errors}
             name="first_name"
           />
           <Input
-            placeholder="Enter Last Name"
+            placeholder={t('screens.signUp.lastNamePlaceholder')}
             control={control}
             errors={errors}
             name="last_name"
           />
           <Input
-            placeholder="Enter Email Address"
+            placeholder={t('screens.signUp.emailPlaceholder')}
             control={control}
             errors={errors}
             name="email"
           />
           <Input
-            placeholder="Enter Language"
+            placeholder={t('screens.signUp.language')}
             control={control}
             errors={errors}
             name="language"
           />
           <Input
-            placeholder="Enter Country Name"
+            placeholder={t('screens.signUp.country')}
             control={control}
             errors={errors}
             name="country"
           />
           <Input
-            placeholder="Enter Your Birthday"
+            placeholder={t('screens.signUp.birthdayPlaceholder')}
             control={control}
             errors={errors}
             name="birthday"
           />
           <Input
-            placeholder="Enter your Password"
+            placeholder={t('screens.signUp.passwordPlaceholder')}
             control={control}
             errors={errors}
             name="password"
             secureTextEntry={true}
           />
           <Input
-            placeholder="Confirm Password"
+            placeholder={t('screens.signUp.confirmPasswordPlaceholder')}
             control={control}
             errors={errors}
             name="confirm_password"
@@ -156,14 +160,17 @@ export default function SignupScreen({navigation}) {
             defaultValue={false}
             render={({field: {onChange, value}}) => (
               <Checkbox
-                label="I agree to the terms & conditions"
+                label={t('screens.signUp.checkbox')}
                 checked={value}
                 onChange={() => onChange(!value)}
               />
             )}
           />
         </RowContainer>
-        <Button title="Sign Up" onPress={handleSubmit(handleFormSubmit)} />
+        <Button
+          title={t('screens.signUp.signup')}
+          onPress={handleSubmit(handleFormSubmit)}
+        />
         <View
           style={{
             marginVertical: 25,
@@ -174,14 +181,14 @@ export default function SignupScreen({navigation}) {
           <TouchableText
             style={styles.forgetText}
             onPress={() => navigation.navigate('login')}>
-            Already account? Sign in
+            {t('screens.signUp.existacc')}
           </TouchableText>
         </View>
         <AlertModal
           // title={'Modal'}
           // image={require('../../images/akati-logo.png')}
           visible={modalVisible}
-          description="Check your mail Id. We have sent you an email to verify your mail."
+          description={t('screens.signUp.check')}
           onOkay={() => {
             setModalVisible(false);
             navigation.navigate('login');

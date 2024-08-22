@@ -19,99 +19,10 @@ import {
 import {Colors} from '../../../_utils/GlobalStyle';
 import Slider from '@react-native-community/slider';
 import NoDataFound from '../../../components/NoDataFound';
+import {useTranslation} from 'react-i18next';
 
 const {height: screenHeight} = Dimensions.get('window');
 
-const filterOptions = [
-  {
-    category: 'Font Size',
-    type: 'range',
-    categoryValue: 'fontSize',
-    currentValue: 18,
-    minValue: 10,
-    maxValue: 40,
-    tab: 'Layout',
-  },
-  {
-    category: 'Text Alignment',
-    categoryValue: 'textAlign',
-    type: 'list',
-    currentValue: 'left',
-    options: [
-      {value: 'left', label: 'Left'},
-      {value: 'right', label: 'Right'},
-      {value: 'center', label: 'Center'},
-      {value: 'justify', label: 'Justify'},
-    ],
-    tab: 'Layout',
-  },
-  {
-    category: 'Text Weight',
-    categoryValue: 'fontWeight',
-    type: 'list',
-    currentValue: 'normal',
-    options: [
-      {value: 'normal', label: 'Normal'},
-      {value: '500', label: '500'},
-      {value: '600', label: '600'},
-      {value: 'bold', label: 'Bold'},
-    ],
-    tab: 'Layout',
-  },
-  {
-    category: 'Line Height',
-    categoryValue: 'lineHeight',
-    type: 'list',
-    currentValue: 40,
-    options: [
-      {value: 20, label: '20'},
-      {value: 30, label: '30'},
-      {value: 40, label: '40'},
-      {value: 50, label: '50'},
-    ],
-    tab: 'Layout',
-  },
-  {
-    category: 'Font Style',
-    categoryValue: 'fontFamily',
-    type: 'list',
-    currentValue: 'default',
-    options: [
-      {value: 'baskerville', label: 'Baskerville'},
-      {value: 'Helvetica', label: 'Helvetica'},
-      {value: 'Verdana', label: 'Verdana'},
-    ],
-    tab: 'Themes',
-  },
-  {
-    category: 'Font Color',
-    categoryValue: 'color',
-    type: 'list',
-    currentValue: 'white',
-    options: [
-      {value: '#fff', label: 'White'},
-      {value: 'black', label: 'Black'},
-      {value: '#ff0000', label: 'Red'},
-      {value: 'blue', label: 'Blue'},
-      {value: '#e4a101', label: 'Yellow'},
-    ],
-    tab: 'Themes',
-  },
-  {
-    category: 'Background Color',
-    categoryValue: 'backgroundColor',
-    type: 'list',
-    currentValue: '#18181b',
-    options: [
-      {value: '#18181b', label: 'Black'},
-      {value: '#fff', label: 'White'},
-      {value: 'gray', label: 'Gray'},
-      {value: '#d4e6dd', label: 'Light Blue'},
-      {value: '#d0ba95', label: 'Light Yellow'},
-    ],
-    tab: 'Themes',
-  },
-];
 const FilterBottomDrawer = ({
   visible,
   onClose,
@@ -120,7 +31,97 @@ const FilterBottomDrawer = ({
   filterState,
 }) => {
   const translateY = useRef(new Animated.Value(screenHeight)).current;
-
+  const {t} = useTranslation();
+  const filterOptions = [
+    {
+      category: t('screens.reading.fontSize'),
+      type: 'range',
+      categoryValue: 'fontSize',
+      currentValue: 18,
+      minValue: 10,
+      maxValue: 40,
+      tab: 'Layout',
+    },
+    {
+      category: t('screens.reading.textAlignment'),
+      categoryValue: 'textAlign',
+      type: 'list',
+      currentValue: 'left',
+      options: [
+        {value: 'left', label: t('screens.reading.left')},
+        {value: 'right', label: t('screens.reading.right')},
+        {value: 'center', label: t('screens.reading.center')},
+        {value: 'justify', label: t('screens.reading.justify')},
+      ],
+      tab: 'Layout',
+    },
+    {
+      category: t('screens.reading.textWeight'),
+      categoryValue: 'fontWeight',
+      type: 'list',
+      currentValue: 'normal',
+      options: [
+        {value: 'normal', label: t('screens.reading.normal')},
+        {value: '500', label: t('screens.reading.500')},
+        {value: '600', label: t('screens.reading.600')},
+        {value: 'bold', label: t('screens.reading.700')},
+      ],
+      tab: 'Layout',
+    },
+    {
+      category: t('screens.reading.lineHeight'),
+      categoryValue: 'lineHeight',
+      type: 'list',
+      currentValue: 40,
+      options: [
+        // {value: 20, label: '20'},
+        {value: 30, label: t('screens.reading.30')},
+        {value: 40, label: t('screens.reading.40')},
+        {value: 50, label: t('screens.reading.50')},
+      ],
+      tab: 'Layout',
+    },
+    {
+      category: t('screens.reading.fontStyle'),
+      categoryValue: 'fontFamily',
+      type: 'list',
+      currentValue: 'default',
+      options: [
+        // {value: 'baskerville', label: t('screens.reading.Verdana')},
+        {value: 'Helvetica', label: t('screens.reading.Helvetica')},
+        {value: 'Verdana', label: t('screens.reading.Verdana')},
+      ],
+      tab: 'Themes',
+    },
+    {
+      category: t('screens.reading.fontColor'),
+      categoryValue: 'color',
+      type: 'list',
+      currentValue: 'white',
+      options: [
+        {value: '#fff', label: t('screens.reading.white')},
+        {value: 'black', label: t('screens.reading.black')},
+        {value: '#ff0000', label: t('screens.reading.red')},
+        {value: 'blue', label: t('screens.reading.blue')},
+        {value: '#e4a101', label: t('screens.reading.yellow')},
+      ],
+      tab: 'Themes',
+    },
+    {
+      category: t('screens.reading.backgroundColor'),
+      categoryValue: 'backgroundColor',
+      type: 'list',
+      currentValue: '#18181b',
+      options: [
+        {value: '#18181b', label: t('screens.reading.black')},
+        {value: '#fff', label: t('screens.reading.white')},
+        {value: 'gray', label: t('screens.reading.gray')},
+        {value: '#d4e6dd', label: t('screens.reading.lightBlue')},
+        {value: '#d0ba95', label: t('screens.reading.lightYellow')},
+      ],
+      tab: 'Themes',
+    },
+  ];
   useEffect(() => {
     Animated.timing(translateY, {
       toValue: visible ? screenHeight * 0.3 : screenHeight,
@@ -234,12 +235,12 @@ const FilterBottomDrawer = ({
   const tabs = [
     {
       key: 'Layout',
-      title: 'Layout',
+      title: t('screens.reading.layout'),
       content: renderTabContent('Layout'),
     },
     {
       key: 'Themes',
-      title: 'Themes',
+      title: t('screens.reading.theme'),
       content: renderTabContent('Themes'),
     },
   ];

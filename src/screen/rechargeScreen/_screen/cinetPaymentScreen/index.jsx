@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Text, View, Alert} from 'react-native';
 import {WebView} from 'react-native-webview';
 import styles from './styles';
-import axios from 'axios'
+import axios from 'axios';
 import {
   CINETPAY_API_ID,
   CINETPAY_SITE_ID,
@@ -12,8 +12,10 @@ import axiosInstance from '../../../../_services/axiosInstance';
 import {useSelector} from 'react-redux';
 import {getAuth} from '../../../../_store/_reducers/auth';
 import {RowContainer} from '../../../../components';
+import {useTranslation} from 'react-i18next';
 
 const CinetPaymentScreen = ({route, navigation}) => {
+  const {t} = useTranslation();
   const [ammount, setammount] = useState('');
   const [showInfo, setShowInfo] = useState(false);
   const [paymentToken, setPaymentToken] = useState('');
@@ -28,7 +30,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
     useState(true);
   const {coins, rechargeAmount} = route.params;
   const ref = useRef();
-  const {token} = useSelector(getAuth);
+  const auth = useSelector(getAuth);
 
   useEffect(() => {
     _retrieveData();
@@ -49,7 +51,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
 
   const buyPlan = async => {
     const trans_id = 'cinet_pay_' + Date.now();
-    const amount = rechargeAmount * 610;
+    const amount = rechargeAmount * 600;
     setTransactionId(trans_id);
     setammount(amount);
     const dataDetail = {
@@ -57,13 +59,22 @@ const CinetPaymentScreen = ({route, navigation}) => {
       site_id: CINETPAY_SITE_ID,
       transaction_id: trans_id,
       amount: amount,
-      currency: 'XAF',
+      currency: 'XOF',
       description: 'TEST INTEGRATION ',
       return_url: `${RETURN_URL}success`,
       notify_url: `${RETURN_URL}success`,
       channels: 'ALL',
       lang: 'en',
       mode: 'PRODUCTION',
+      customer_name: auth?.user, //Customer name
+      customer_surname: auth?.user, //The customer's first name
+      customer_email: auth?.email, //the customer's email
+      customer_phone_number: '088767611', //the customer's email
+      customer_address: 'BP 0024', //customer address
+      customer_city: 'Antananarivo', // The customer's city
+      customer_country: 'CM', // the ISO code of the country
+      customer_state: 'CM', // the ISO state code
+      customer_zip_code: '06510', // postcode
     };
     axios
       .post(`https://api-checkout.cinetpay.com/v2/payment`, dataDetail, {
@@ -178,8 +189,10 @@ const CinetPaymentScreen = ({route, navigation}) => {
     <React.Fragment>
       {isPayProgress == false ? (
         <RowContainer style={styles.container}>
-          <Text style={styles.Textstyle}>Success !</Text>
-          <Text style={styles.Textstyle}>Payment done successfully.</Text>
+          <Text style={styles.Textstyle}>{t('screens.recharge.success')}</Text>
+          <Text style={styles.Textstyle}>
+            {t('screens.recharge.successfully')}
+          </Text>
         </RowContainer>
       ) : (
         <RowContainer style={{flex: 1}}>
@@ -196,7 +209,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
                     }}>
                     <Text
                       style={{fontSize: 18, fontWeight: 'bold', color: '#fff'}}>
-                      Please don't go back during payment is inProcess.
+                      {t('screens.recharge.process')}
                     </Text>
                   </View>
                 )}
@@ -224,7 +237,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
           {isWebViewLoading ? (
             <View style={styles.paymentProcessing}>
               <Text style={styles.Textstyle}>
-              Please wait while we are processing CinetPay payment ...
+                {t('screens.recharge.paymentInit')}
               </Text>
             </View>
           ) : null}

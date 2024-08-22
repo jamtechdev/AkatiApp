@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { CustomText, HeadingText, RowContainer, Skeleton } from '../../components';
-import { commonServices } from '../../_services/common.service';
-import { useAppContext } from '../../_customContext/AppProvider';
-import { Colors } from '../../_utils/GlobalStyle';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {
+  CustomText,
+  HeadingText,
+  RowContainer,
+  Skeleton,
+} from '../../components';
+import {commonServices} from '../../_services/common.service';
+import {useAppContext} from '../../_customContext/AppProvider';
+import {Colors} from '../../_utils/GlobalStyle';
+import {useTranslation} from 'react-i18next';
 
 function PrivacyScreen() {
-  const { showLoader, hideLoader } = useAppContext();
+  const {showLoader, hideLoader} = useAppContext();
   const [policy, setPolicy] = useState();
+  const {t} = useTranslation();
 
   useEffect(() => {
     // showLoader();
@@ -23,14 +30,12 @@ function PrivacyScreen() {
   }, []);
 
   const renderItem = () => (
-    <CustomText style={styles.text}>
-      {policy?.content}
-    </CustomText>
+    <CustomText style={styles.text}>{policy?.content}</CustomText>
   );
 
   return (
     <RowContainer style={styles.container}>
-      <HeadingText>Privacy & Policy</HeadingText>
+      <HeadingText>{t('screens.setting.privacy')}</HeadingText>
       <FlatList
         data={policy ? [policy] : []}
         renderItem={renderItem}

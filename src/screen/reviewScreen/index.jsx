@@ -19,12 +19,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
 import {commonServices} from '../../_services/common.service';
 import {useAppContext} from '../../_customContext/AppProvider';
+import {useTranslation} from 'react-i18next';
 
 export default function ReviewScreen() {
   const [reviews, setReviews] = useState('');
   const [starCount, setStarCount] = useState(0);
   const [ratingDetails, setRatingDetails] = useState();
   const {showToast, showLoader, hideLoader} = useAppContext();
+  const {t} = useTranslation();
 
   useEffect(() => {
     getAppReviews();
@@ -85,7 +87,7 @@ export default function ReviewScreen() {
 
   const handlePostReview = () => {
     if (starCount === 0 || reviews.trim() === '') {
-      showToast('Please provide both a rating and a review!', 'info');
+      showToast(t('screens.review.warning'), 'info');
       return;
     }
 
@@ -103,17 +105,19 @@ export default function ReviewScreen() {
         getAppReviews();
         setStarCount(0);
         setReviews('');
-        showToast('Thanks for submitting your app review.', 'success');
+        showToast(t('screens.review.success'), 'success');
       })
       .catch(error => {
-        showToast('Something went wrong!', 'error');
+        showToast(error, 'error');
         console.log('Error submitting review:', error);
       });
   };
 
   const renderReviewItem = ({item, index}) => (
     <View style={styles.reviewItem} key={index}>
-      <CustomText style={styles.reviewText}>{index + 1} Star</CustomText>
+      <CustomText style={styles.reviewText}>
+        {index + 1} {t('screens.review.star')}
+      </CustomText>
       <View style={styles.containerAni}>
         <Animated.View
           style={[
@@ -128,7 +132,7 @@ export default function ReviewScreen() {
 
   return (
     <RowContainer style={styles.container}>
-      <HeadingText>App Reviews & Ratings</HeadingText>
+      <HeadingText>{t('screens.review.reviewrating')}</HeadingText>
       {ratingDetails ? (
         <>
           <FlatList
@@ -146,14 +150,15 @@ export default function ReviewScreen() {
                     rate={ratingDetails?.avgReviewPoint.toFixed(1)}
                   />
                   <CustomText style={styles.rateText}>
-                    Based on {ratingDetails?.reviewLength} ratings
+                    {t('screens.review.based')} {ratingDetails?.reviewLength}{' '}
+                    {t('screens.review.rating')}
                   </CustomText>
                 </View>
               </View>
             }
             ListFooterComponent={
               <View style={styles.footerContainer}>
-                <HeadingText>Add Review</HeadingText>
+                <HeadingText>{t('screens.review.addReview')}</HeadingText>
                 <View style={styles.reviewInputContainer}>
                   <View style={styles.starView}>
                     <CustomStarRating
@@ -166,7 +171,7 @@ export default function ReviewScreen() {
                   <TextInput
                     multiline
                     style={styles.inputView}
-                    placeholder="Enter your review here..."
+                    placeholder={t('screens.review.reviewPlaceholder')}
                     onChangeText={handleChange}
                     value={reviews}
                     placeholderTextColor={Colors.white}
@@ -176,7 +181,10 @@ export default function ReviewScreen() {
                     autoCorrect={false}
                   />
                 </View>
-                <Button title={'Submit'} onPress={handlePostReview} />
+                <Button
+                  title={t('screens.review.submit')}
+                  onPress={handlePostReview}
+                />
               </View>
             }
           />

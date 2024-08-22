@@ -12,6 +12,7 @@ import {
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../../../_utils/GlobalStyle';
 import {GradientView, HeadingText} from '../../../components';
+import {useTranslation} from 'react-i18next';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -25,7 +26,7 @@ const ChapterBottomDrawer = ({
   textSettings,
 }) => {
   const translateY = useRef(new Animated.Value(screenHeight)).current;
-
+  const {t} = useTranslation();
   useEffect(() => {
     Animated.timing(translateY, {
       toValue: visible ? 0 : screenHeight,
@@ -45,7 +46,7 @@ const ChapterBottomDrawer = ({
         <Animated.View
           style={[
             styles.modal,
-            {backgroundColor: textSettings.backgroundColor},
+            {backgroundColor: textSettings.backgroundColorSecondary},
             {transform: [{translateY}]},
           ]}>
           <GradientView style={styles.header} onPress={onClose}>
@@ -71,7 +72,7 @@ const ChapterBottomDrawer = ({
                           styles.chapterTitle,
                           {color: textSettings.color},
                         ]}>
-                        Chapter {index + 1}
+                        {t('screens.reading.chapter')} {index + 1}
                       </Text>
                       {chapter.unlock !== 1 && (
                         <Icons
@@ -88,7 +89,9 @@ const ChapterBottomDrawer = ({
                   </Pressable>
                 ))
               ) : (
-                <Text style={styles.description}>No chapters available.</Text>
+                <Text style={styles.description}>
+                  {t('screens.bookDetail.noChapter')}
+                </Text>
               )}
             </View>
           </ScrollView>

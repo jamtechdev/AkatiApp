@@ -9,8 +9,10 @@ import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
 import avatar from '../../images/avtar.png';
 import {Colors} from '../../_utils/GlobalStyle';
 import {authService} from '../../_services/auth.service';
+import {useTranslation} from 'react-i18next';
 function ProfileScreen() {
   const [userDetails, setUserDetails] = useState();
+  const {t} = useTranslation();
 
   const [languages, setLanguages] = useState([
     {label: 'English', value: '1'},
@@ -48,8 +50,7 @@ function ProfileScreen() {
               borderRadius: 50,
             }}>
             <Text style={{color: Colors.white}}>
-              {' '}
-              Coins : {userDetails?.coins}
+              {t('screens.profile.coin')} : {userDetails?.coins}
             </Text>
           </GradientView>
         </View>
@@ -73,7 +74,25 @@ function ProfileScreen() {
             }}>
             <Text
               style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
-              First Name :
+              {t('screens.profile.firstName')} :
+            </Text>
+            <Text style={{color: Colors.white, fontSize: 14}}>
+              {userDetails?.first_name}
+            </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: Colors.tertiary,
+              width: '100%',
+              padding: 20,
+              borderRadius: 10,
+              gap: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
+              {t('screens.profile.lastName')} :
             </Text>
             <Text style={{color: Colors.white, fontSize: 14}}>
               {userDetails?.last_name}
@@ -91,25 +110,7 @@ function ProfileScreen() {
             }}>
             <Text
               style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
-              Last Name :
-            </Text>
-            <Text style={{color: Colors.white, fontSize: 14}}>
-              {userDetails?.last_name}
-            </Text>
-          </View>
-          <View
-            style={{
-              backgroundColor: Colors.tertiary,
-              width: '100%',
-              padding: 20,
-              borderRadius: 10,
-              gap: 10,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
-              Email :
+              {t('screens.profile.email')} :
             </Text>
             <Text style={{color: Colors.white, fontSize: 14}}>
               {userDetails?.email}
@@ -128,7 +129,7 @@ function ProfileScreen() {
             }}>
             <Text
               style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
-              Country :
+              {t('screens.profile.language')} :
             </Text>
             <Text style={{color: Colors.white, fontSize: 14}}>
               {
@@ -149,7 +150,7 @@ function ProfileScreen() {
             }}>
             <Text
               style={{color: Colors.secondary, fontWeight: 700, fontSize: 16}}>
-              Country :
+              {t('screens.profile.country')} :
             </Text>
             <Text style={{color: Colors.white, fontSize: 14}}>
               {userDetails?.country}

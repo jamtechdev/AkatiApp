@@ -13,6 +13,7 @@ import {booksService} from '../../_services/book.service';
 import {useFocusEffect} from '@react-navigation/native';
 import {getLanguage} from '../../_store/_reducers/auth';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
 export default function DiscoverScreen() {
   const [loading, setLoading] = useState(true);
@@ -22,6 +23,7 @@ export default function DiscoverScreen() {
   const [alsoLikeBooks, setAlsoLikeBooks] = useState([]);
   const [categoryBook, setCategoryBook] = useState([]);
   const language = useSelector(getLanguage);
+  const {t} = useTranslation();
   useFocusEffect(
     useCallback(() => {
       fetchLibraryBook();
@@ -82,7 +84,7 @@ export default function DiscoverScreen() {
         isCircleCard={isCircle}
       />
     ) : data.length === 0 ? (
-      key !== 'libraryBooks' && <Text>No data found</Text>
+      key !== 'libraryBooks' && <Text>{t('screens.language.dataNull')}</Text>
     ) : (
       <HorizontalScrollView data={data} isCircle={isCircle} />
     );
@@ -92,15 +94,23 @@ export default function DiscoverScreen() {
       <FlatList
         data={[
           {
-            title: 'From Your Library',
+            title: t('screens.dashboardPage.fromLibrary'),
             data: libraryBooks,
             key: 'libraryBooks',
             isCircle: true,
           },
-          {title: 'New In Akati', data: newBooks, key: 'newBooks'},
-          {title: 'Must Read', data: mustReadBooks, key: 'mustReadBooks'},
           {
-            title: 'You may also like',
+            title: t('screens.dashboardPage.new'),
+            data: newBooks,
+            key: 'newBooks',
+          },
+          {
+            title: t('screens.dashboardPage.must'),
+            data: mustReadBooks,
+            key: 'mustReadBooks',
+          },
+          {
+            title: t('screens.dashboardPage.like'),
             data: alsoLikeBooks,
             key: 'alsoLikeBooks',
           },

@@ -15,7 +15,8 @@ import GlobalStyles, {Colors} from '../../_utils/GlobalStyle.js';
 import {emailRegex, passwordRegex} from '../../_helpers/form.helper.js';
 import {ContainerCenter, CustomText, Button, Input} from '../../components';
 import BackButton from '../../components/core/BackButton.js';
-import { useAppContext } from '../../_customContext/AppProvider.js';
+import {useAppContext} from '../../_customContext/AppProvider.js';
+import {useTranslation} from 'react-i18next';
 
 export default function ForgotScreen({navigation}) {
   const [otp, setOtp] = useState('');
@@ -24,7 +25,8 @@ export default function ForgotScreen({navigation}) {
   const [isVerified, setIsVerified] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [msg, setMsg] = useState('');
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showToast, showLoader, hideLoader} = useAppContext();
+  const {t} = useTranslation();
   const validationSchema = Yup.object().shape({
     password: Yup.string()
       .required('newPasswordRequired')
@@ -49,7 +51,7 @@ export default function ForgotScreen({navigation}) {
   const handleSendOtp = () => {
     showLoader();
     if (emailRegex.test(mail) === false) {
-      showToast('Please enter a valid email.', 'info');
+      showToast(t('screens.formValidation.emailRequiredFormat'), 'info');
       hideLoader();
     } else {
       authService
@@ -57,7 +59,7 @@ export default function ForgotScreen({navigation}) {
         .then(res => {
           if (res.data.status) {
             setIsSent(true);
-            showToast('OTP Sent on your mail.', 'success');
+            showToast(t('screens.forget.otpSent'), 'success');
           } else {
             console.log(res.data.email[0]);
             showToast(res.data.email[0], 'error');
@@ -83,7 +85,7 @@ export default function ForgotScreen({navigation}) {
         .then(res => {
           if (res.data.success) {
             setIsVerified(true);
-            showToast('OTP Verified.', 'success');
+            showToast(t('screens.forget.verified'), 'success');
           } else {
             console.log(res.data?.message);
             showToast(res.data?.message, 'info');
@@ -111,7 +113,7 @@ export default function ForgotScreen({navigation}) {
       .resetPassword(formData)
       .then(res => {
         if (res.data.success) {
-          showToast('Password Changed Successfully', 'success');
+          showToast(t('screens.forget.success'), 'success');
           setTimeout(() => {
             navigation.navigate('login');
           }, 2000);
@@ -125,68 +127,73 @@ export default function ForgotScreen({navigation}) {
   };
 
   return (
-      <ContainerCenter>
-        <TouchableOpacity
-          style={{
-            marginVertical: 20,
-          }}
-          onPress={() => navigation.navigate('login')}>
-          <BackButton />
-        </TouchableOpacity>
-        <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
-        <View style={{gap: 8}}>
-          <CustomText style={styles.signInHeading}>Forgot Password</CustomText>
-          <CustomText style={styles.signInSubHeading}>
-            Please fill the below details
-          </CustomText>
+    <ContainerCenter>
+      <TouchableOpacity
+        style={{
+          marginVertical: 20,
+        }}
+        onPress={() => navigation.navigate('login')}>
+        <BackButton />
+      </TouchableOpacity>
+      <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
+      <View style={{gap: 8}}>
+        <CustomText style={styles.signInHeading}>
+          {t('screens.forget.forgetPassword')}
+        </CustomText>
+        <CustomText style={styles.signInSubHeading}>
+          {t('screens.forget.forgetDescription')}
+        </CustomText>
+      </View>
+      {!isSent ? (
+        <View style={{gap: 15, paddingTop: 25}}>
+          <TextInput
+            style={GlobalStyles.inputView}
+            placeholderTextColor={Colors.darkGray}
+            placeholder={t('screens.forget.emailPlaceholder')}
+            onChangeText={e => setMail(e)}
+            value={mail}
+            secureTextEntry={false}
+          />
+          <Button title={t('screens.forget.otp')} onPress={handleSendOtp} />
         </View>
-        {!isSent ? (
-          <View style={{gap: 15, paddingTop: 25}}>
-            <TextInput
-              style={GlobalStyles.inputView}
-              placeholderTextColor={Colors.darkGray}
-              placeholder={'Enter Your Email'}
-              onChangeText={e => setMail(e)}
-              value={mail}
-              secureTextEntry={false}
-            />
-            <Button title="Send OTP" onPress={handleSendOtp} />
-          </View>
-        ) : !isVerified ? (
-          <View style={{gap: 15, paddingTop: 25}}>
-            <TextInput
-              style={GlobalStyles.inputView}
-              placeholderTextColor={Colors.darkGray}
-              placeholder={'Enter OTP'}
-              onChangeText={e => setOtp(e)}
-              value={otp}
-              secureTextEntry={false}
-            />
-            <Button title="Verify OTP" onPress={() => handleVerifyOtp(otp)} />
-          </View>
-        ) : (
-          <View style={{gap: 15, paddingTop: 25}}>
-            <Input
-              placeholder="Enter your Password"
-              control={control}
-              errors={errors}
-              name="password"
-              secureTextEntry={true}
-            />
-            <Input
-              placeholder="Confirm Password"
-              control={control}
-              errors={errors}
-              name="confirm_password"
-              secureTextEntry={true}
-            />
-            <Button
-              title="Change Password"
-              onPress={handleSubmit(handlePasswordChange)}
-            />
-          </View>
-        )}
-      </ContainerCenter>
+      ) : !isVerified ? (
+        <View style={{gap: 15, paddingTop: 25}}>
+          <TextInput
+            style={GlobalStyles.inputView}
+            placeholderTextColor={Colors.darkGray}
+            placeholder={t('screens.forget.otpPlaceholder')}
+            onChangeText={e => setOtp(e)}
+            value={otp}
+            secureTextEntry={false}
+          />
+          <Button
+            title={t('screens.forget.verify')}
+            onPress={() => handleVerifyOtp(otp)}
+          />
+        </View>
+      ) : (
+        <View style={{gap: 15, paddingTop: 25}}>
+          <Input
+            placeholder={t('screens.forget.passwordPlaceholder')}
+            control={control}
+            errors={errors}
+            name="password"
+            secureTextEntry={true}
+          />
+          <Input
+            placeholder={t('screens.forget.cpasswordPlaceholder')}
+            control={control}
+            errors={errors}
+            name="confirm_password"
+            secureTextEntry={true}
+          />
+          <Button
+            title={t('screens.forget.reset')}
+            onPress={handleSubmit(handlePasswordChange)}
+          />
+        </View>
+      )}
+    </ContainerCenter>
   );
 }
 

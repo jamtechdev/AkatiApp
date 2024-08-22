@@ -6,8 +6,8 @@ import {
   Image,
   Platform,
   Alert,
-} from 'react-native'
-import React, {useEffect, useState} from 'react'
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {
   BottomDrawer,
   Button,
@@ -15,62 +15,64 @@ import {
   HeadingText,
   RowContainer,
   Skeleton,
-} from '../../components'
-import {Colors} from '../../_utils/GlobalStyle'
-import {useDispatch, useSelector} from 'react-redux'
-import {getAuth, getLanguage, languageSet} from '../../_store/_reducers/auth'
-import {commonServices} from '../../_services/common.service'
-import {getLanguageCode} from '../../_helpers'
-import {useAppContext} from '../../_customContext/AppProvider'
-import coin from '../../images/coin.png'
+} from '../../components';
+import {Colors} from '../../_utils/GlobalStyle';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAuth, getLanguage, languageSet} from '../../_store/_reducers/auth';
+import {commonServices} from '../../_services/common.service';
+import {getLanguageCode} from '../../_helpers';
+import {useAppContext} from '../../_customContext/AppProvider';
+import coin from '../../images/coin.png';
 import {
   initConnection,
   requestPurchase,
   getProducts,
   endConnection,
   clearTransactionIOS,
-} from 'react-native-iap'
+} from 'react-native-iap';
+import {useTranslation} from 'react-i18next';
 
-export default function RechargeScreen ({navigation}) {
-  const [rechargePlans, setRechargePlans] = useState()
-  const [selectedPlan, setSelectedPlan] = useState(null)
-  const [showModal, setShowModal] = useState(false)
-  const {showToast, showLoader, hideLoader} = useAppContext()
+export default function RechargeScreen({navigation}) {
+  const [rechargePlans, setRechargePlans] = useState();
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const {showToast, showLoader, hideLoader} = useAppContext();
+  const {t} = useTranslation();
 
   const itemSubs = [
     'com.akati.ebook.60.coin',
     'com.akati.ebook.300.coin',
     'com.akati.ebook.200.coin',
     'com.akati.ebook.100.coin',
-  ]
+  ];
 
   useEffect(() => {
     if (Platform.OS == 'ios') {
       initConnection()
         .then(() => {
           // console.log('IAP connection established');
-          getItems()
+          getItems();
         })
-        .catch(err => console.log('Error in establishing IAP connection', err))
+        .catch(err => console.log('Error in establishing IAP connection', err));
     }
 
     return () => {
       if (Platform.OS == 'ios') {
-        endConnection()
+        endConnection();
       }
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     commonServices
       .getRechargePlans()
       .then(res => {
-        setRechargePlans(res.data.list)
+        setRechargePlans(res.data.list);
       })
       .catch(error => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   const getItems = async () => {
     try {
@@ -78,54 +80,54 @@ export default function RechargeScreen ({navigation}) {
         .then(res => {
           // console.log('result', res);
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const handleGetItem = type => {
     if (type == 'paypal') {
       navigation.navigate('PayPalPaymentScreen', {
         coins: selectedPlan.coin_balance,
         rechargeAmount: selectedPlan.recharge_amount,
-      })
+      });
     } else if (type == 'apple') {
       _requestSubscription(
         `com.akati.ebook.${selectedPlan.coin_balance}.coin`,
         selectedPlan,
-      )
+      );
     } else {
       navigation.navigate('CinetPaymentScreen', {
         coins: selectedPlan.coin_balance,
         rechargeAmount: selectedPlan.recharge_amount,
-      })
+      });
     }
-  }
+  };
 
   const _requestSubscription = async (sku, item) => {
     try {
-      await clearTransactionIOS()
-      showLoader()
+      await clearTransactionIOS();
+      showLoader();
       const data = await requestPurchase({
         sku,
         flushFailedPurchasesCachedAsPendingAndroid: true,
-      })
-      console.log('data', data)
+      });
+      console.log('data', data);
       if (data?.transactionId) {
-        savePaymentDetails(data, item)
+        savePaymentDetails(data, item);
       }
     } catch (err) {
       if (err.code === 'E_USER_CANCELLED') {
-        showToast('Purchase is canceled by you', 'error')
+        showToast('Purchase is canceled by you', 'error');
       } else {
-        showToast(JSON.stringify(err?.message, null, 2), 'error')
-        console.warn(err.code, err.message)
+        showToast(JSON.stringify(err?.message, null, 2), 'error');
+        console.warn(err.code, err.message);
       }
     } finally {
-      hideLoader()
+      hideLoader();
     }
-  }
+  };
 
   const renderRechargeItem = ({item}) => {
     return (
@@ -134,7 +136,7 @@ export default function RechargeScreen ({navigation}) {
         <View>
           <CustomText
             style={{fontWeight: 700, fontSize: 16, color: Colors.secondary}}>
-            {item?.coin_balance} Coins
+            {item?.coin_balance} {t('screens.recharge.coin')}
           </CustomText>
         </View>
         <CustomText style={{fontWeight: 500, fontSize: 14}}>
@@ -142,32 +144,32 @@ export default function RechargeScreen ({navigation}) {
         </CustomText>
         <Button
           onPress={() => {
-            setSelectedPlan(item)
-            setShowModal(true)
+            setSelectedPlan(item);
+            setShowModal(true);
           }}
-          title={'Buy Now'}
+          title={t('screens.recharge.addCoin')}
           style={{
-            paddingHorzontal: 25,
+            paddingHorizontal: 15,
             paddingVertical: 5,
-            width: 80,
+            // width:'0%',
           }}
           textStyle={{
             fontSize: 12,
           }}
         />
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <RowContainer>
       <View style={{paddingBottom: 20}}>
-        <HeadingText>Recharge</HeadingText>
+        <HeadingText>{t('screens.recharge.recharge')}</HeadingText>
       </View>
       {!rechargePlans ? (
         <Skeleton isLoading={true} numColumns={2} isCard />
       ) : rechargePlans.length == 0 ? (
-        <CustomText> No data Found</CustomText>
+        <CustomText>{t('screens.history.notfound')}</CustomText>
       ) : (
         <FlatList
           data={rechargePlans}
@@ -182,15 +184,15 @@ export default function RechargeScreen ({navigation}) {
         <BottomDrawer
           visible={showModal}
           onClose={() => setShowModal(false)}
-          title={'Select Payment Method '}
+          title={t('screens.recharge.completePayment')}
           style={{height: '28%'}}>
           <View style={{width: '100%', paddingVertical: 25, gap: 10}}>
             {Platform.OS == 'ios' ? (
               <View>
                 <Button
                   onPress={() => {
-                    setShowModal(false)
-                    handleGetItem('apple')
+                    setShowModal(false);
+                    handleGetItem('apple');
                   }}
                   title={'Apple Pay'}
                 />
@@ -199,16 +201,16 @@ export default function RechargeScreen ({navigation}) {
               <View>
                 <Button
                   onPress={() => {
-                    setShowModal(false)
-                    handleGetItem('paypal')
+                    setShowModal(false);
+                    handleGetItem('paypal');
                   }}
-                  title={'Pay with PayPal'}
+                  title={t('screens.recharge.withPaypal')}
                 />
                 <Button
-                  title={'Pay with CinetPay'}
+                  title={t('screens.recharge.withCinetpay')}
                   onPress={() => {
-                    setShowModal(false)
-                    handleGetItem('CinetPay')
+                    setShowModal(false);
+                    handleGetItem('CinetPay');
                   }}
                   style={{backgroundColor: '#28a745'}}
                   gradient={false}
@@ -219,7 +221,7 @@ export default function RechargeScreen ({navigation}) {
         </BottomDrawer>
       )}
     </RowContainer>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -243,4 +245,4 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
   },
-})
+});

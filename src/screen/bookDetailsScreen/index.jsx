@@ -27,6 +27,7 @@ import {booksService} from '../../_services/book.service';
 import {useAppContext} from '../../_customContext/AppProvider';
 import NoDataFound from '../../components/NoDataFound';
 import LinearGradient from 'react-native-linear-gradient';
+import {useTranslation} from 'react-i18next';
 
 function BookDetailsScreen({navigation, route}) {
   const [chapters, setChapters] = useState([]);
@@ -37,6 +38,7 @@ function BookDetailsScreen({navigation, route}) {
   const [reviewText, setReviewText] = useState('');
   const [showModel, setShowModel] = useState(false);
   const {showToast, showLoader, hideLoader} = useAppContext();
+  const {t} = useTranslation();
   const {params} = route;
   const {bookId, bookItem} = params;
   const {
@@ -133,7 +135,7 @@ function BookDetailsScreen({navigation, route}) {
 
   const handleAddReview = () => {
     if (ratingStar == 0 && reviewText == '') {
-      showToast('Please select stars and enter review', 'error');
+      showToast(t('screens.review.warning'), 'error');
       return;
     }
     showLoader();
@@ -173,8 +175,7 @@ function BookDetailsScreen({navigation, route}) {
                 style={styles.addButton}
                 onPress={() => setShowModel(true)}>
                 <CustomText style={{fontSize: 15, fontWeight: 600}}>
-                  {' '}
-                  Add Review
+                  {t('screens.bookDetails.addReview')}
                 </CustomText>
                 <Icons name={'plus-circle'} size={15} color={Colors.white} />
               </GradientView>
@@ -216,7 +217,7 @@ function BookDetailsScreen({navigation, route}) {
                   </View>
                 ))}
             {rating && rating.length == 0 && (
-              <NoDataFound description={'No comments added yet'} />
+              <NoDataFound description={t('screens.reading.noComment')} />
             )}
           </View>
         );
@@ -247,7 +248,7 @@ function BookDetailsScreen({navigation, route}) {
                         fontWeight: 600,
                         marginBottom: 5,
                       }}>
-                      Chapter {index + 1}
+                      {t('screens.bookDetails.chapter')} {index + 1}
                     </Text>
                     {chapter.unlock != 1 && (
                       <Icons name={'lock'} size={15} color={Colors.secondary} />
@@ -259,7 +260,7 @@ function BookDetailsScreen({navigation, route}) {
                 </View>
               ))
             ) : (
-              <NoDataFound description={'No chapter added yet'} />
+              <NoDataFound description={t('screens.bookDetails.noChapter')} />
             )}
           </View>
         );
@@ -271,12 +272,12 @@ function BookDetailsScreen({navigation, route}) {
   const tabs = [
     {
       key: 'Reviews',
-      title: 'Reviews',
+      title: t('screens.bookDetails.reviews'),
       content: renderTabContent('Reviews'),
     },
     {
       key: 'Chapters',
-      title: 'Chapters',
+      title: t('screens.bookDetails.chapters'),
       content: renderTabContent('Chapters'),
     },
   ];
@@ -311,19 +312,18 @@ function BookDetailsScreen({navigation, route}) {
     setReviewText(text);
   };
 
-
-  const routeReadingScreen = () =>{
-    if( !chapters || chapters?.length == 0 && !BookDetails){
-      showToast('There no any chapter added in this book.', 'error')
-      return 
+  const routeReadingScreen = () => {
+    if (!chapters || (chapters?.length == 0 && !BookDetails)) {
+      showToast(t('screens.bookDetails.noChapterAdded'), 'error');
+      return;
     }
     navigation.navigate('Reading', {
       bookId: bookId,
       chapters: chapters,
       BookDetails: BookDetails,
       categories: categories,
-    })
-  }
+    });
+  };
 
   return (
     <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
@@ -407,7 +407,7 @@ function BookDetailsScreen({navigation, route}) {
             </Text>
             <Text
               style={{color: Colors.darkGray, fontWeight: '400', fontSize: 12}}>
-              Author: {BookDetails?.author}
+              {t('screens.bookDetails.bookAuthor')}: {BookDetails?.author}
             </Text>
 
             {!rating_average ? null : (
@@ -430,13 +430,14 @@ function BookDetailsScreen({navigation, route}) {
                   <CustomStarRating rate={ratingAverage} />
                 </View>
                 <CustomText style={{color: Colors.darkGray, fontSize: 16}}>
-                  Based on {ratings?.length} ratings
+                  {t('screens.bookDetails.based')} {ratings?.length}{' '}
+                  {t('screens.bookDetails.rating')}
                 </CustomText>
               </View>
             )}
 
             <View>
-              <CustomText> Following Tags</CustomText>
+              <CustomText>{t('screens.bookDetails.tags')}</CustomText>
               <View style={styles.categoryContainer}>
                 {categories &&
                   categories.map(tag => {
@@ -455,23 +456,21 @@ function BookDetailsScreen({navigation, route}) {
                   }}
                   textStyle={{color: Colors.secondary, fontWeight: '400'}}
                   gradient={false}
-                  title={'Start Reading'}
-                  onPress={() =>
-                  routeReadingScreen()
-                  }
+                  title={t('screens.bookDetails.reading')}
+                  onPress={() => routeReadingScreen()}
                 />
               </View>
               <View style={{width: '50%', paddingHorizontal: 5}}>
                 {!isInLibrary ? (
                   <Button
                     style={{paddingVertical: 10, paddingHorizontal: 10}}
-                    title={'Add Library'}
+                    title={t('screens.bookDetails.addLibrary')}
                     onPress={() => handleAddToLibrary(BookDetails?.book_id)}
                   />
                 ) : (
                   <Button
                     style={{paddingVertical: 10, paddingHorizontal: 10}}
-                    title={'Remove Library'}
+                    title={t('screens.bookDetails.removeLibrary')}
                     onPress={() =>
                       handleRemoveFromLibrary(BookDetails?.book_id)
                     }
@@ -504,11 +503,11 @@ function BookDetailsScreen({navigation, route}) {
       <BottomDrawer
         visible={showModel}
         onClose={() => setShowModel(false)}
-        title={'Add Book Review'}>
+        title={t('screens.review.addBookReview')}>
         <View style={styles.footerContainer}>
           <View style={styles.reviewInputContainer}>
             <View style={styles.starView}>
-              <CustomText> Add your Star :</CustomText>
+              {/* <CustomText> Add your Star :</CustomText> */}
               <CustomStarRating
                 size={30}
                 onRatingChange={handleRatingChange}
@@ -516,17 +515,20 @@ function BookDetailsScreen({navigation, route}) {
                 isDisable={false}
               />
             </View>
-            <CustomText> Add your Star :</CustomText>
+            {/* <CustomText> Add your Star :</CustomText> */}
             <TextInput
               multiline
               style={styles.inputView}
-              placeholder="Enter your review here..."
+              placeholder={t('screens.bookDetails.reviewPlaceholder')}
               onChangeText={handleChange}
               value={reviewText}
               placeholderTextColor={Colors.white}
             />
           </View>
-          <Button title={'Submit'} onPress={handleAddReview} />
+          <Button
+            title={t('screens.bookDetails.submit')}
+            onPress={handleAddReview}
+          />
         </View>
       </BottomDrawer>
     </RowContainer>

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // src/components/DrawerContent.js
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image, Share} from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import logo from '../images/logo.png';
@@ -11,16 +11,25 @@ import {
   CustomDrawerItem,
   GradientView,
 } from '../components';
-import {useDispatch} from 'react-redux';
-import {logout} from '../_store/_reducers/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {getLanguage, logout} from '../_store/_reducers/auth';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
-
+import {getLanguageCode, languageMap} from '../_helpers';
+import {useTranslation} from 'react-i18next';
 const DrawerContent = props => {
   const [show, setShow] = useState(false);
   const toggleModel = () => setShow(prev => !prev);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const language = useSelector(getLanguage);
+  const {t, i18n} = useTranslation();
+
+  useEffect(() => {
+    const local = languageMap[language];
+    console.log(language, '================ test', local);
+    i18n.changeLanguage(local);
+  }, [language]);
   const logoutAction = async () => {
     dispatch(logout());
     toggleModel();
@@ -61,49 +70,49 @@ const DrawerContent = props => {
         </View>
 
         <CustomDrawerItem
-          title="Discover"
+          title={t('screens.sideBar.discover')}
           icon={'explore'}
           isActive={props.state.index == 0}
           onPress={() => props.navigation.navigate('Discover')}
         />
 
         <CustomDrawerItem
-          title="Recharge"
+          title={t('screens.sideBar.recharge')}
           icon={'refresh'}
           isActive={props.state.index == 1}
           onPress={() => props.navigation.navigate('Recharge')}
         />
 
         <CustomDrawerItem
-          title="Recharge History"
+          title={t('screens.sideBar.rechargeHistory')}
           icon={'history'}
           isActive={props.state.index == 2}
           onPress={() => props.navigation.navigate('RechargeHistory')}
         />
 
         <CustomDrawerItem
-          title="Reviews"
+          title={t('screens.sideBar.reviews')}
           icon={'rate-review'}
           isActive={props.state.index == 3}
           onPress={() => props.navigation.navigate('Review')}
         />
 
         <CustomDrawerItem
-          title="Language"
+          title={t('screens.sideBar.languages')}
           icon={'language'}
           isActive={props.state.index == 4}
           onPress={() => props.navigation.navigate('Language')}
         />
 
         <CustomDrawerItem
-          title="Settings"
+          title={t('screens.sideBar.setting')}
           icon={'settings'}
           isActive={props.state.index == 5}
           onPress={() => props.navigation.navigate('Settings')}
         />
 
         <CustomDrawerItem
-          title="Share with Friend"
+          title={t('screens.sideBar.shareFriend')}
           icon={'share'}
           onPress={handleShare}
         />
@@ -111,8 +120,8 @@ const DrawerContent = props => {
       <AlertModal
         visible={show}
         image={logo}
-        title={'Alert!'}
-        description={'Are you sure you want to logout?'}
+        title={t('screens.sideBar.alert')}
+        description={t('screens.sideBar.logoutModelHeader')}
         onOkay={logoutAction}
         onCancel={toggleModel}
       />
@@ -128,7 +137,9 @@ const DrawerContent = props => {
           padding: 20,
           backgroundColor: Colors.primary,
         }}>
-        <Button title="Logout" onPress={() => toggleModel()}></Button>
+        <Button
+          title={t('screens.sideBar.logout')}
+          onPress={() => toggleModel()}></Button>
       </View>
     </>
   );

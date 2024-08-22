@@ -18,6 +18,7 @@ import {useSelector} from 'react-redux';
 import {useAppContext} from '../../_customContext/AppProvider';
 import {useFocusEffect} from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useTranslation} from 'react-i18next';
 export default function LibraryScreen({navigation}) {
   const {showToast, showLoader, hideLoader} = useAppContext();
   const language = useSelector(getLanguage);
@@ -25,6 +26,7 @@ export default function LibraryScreen({navigation}) {
   const [editMode, setEditMode] = useState(false);
   const [selectedBooks, setSelectedBooks] = useState({});
   const [allSelected, setAllSelected] = useState(false);
+  const {t} = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
@@ -77,7 +79,7 @@ export default function LibraryScreen({navigation}) {
       bookId => selectedBooks[bookId],
     );
     if (booksToDelete.length === 0) {
-      showToast('Please select at least one book to delete.', 'error');
+      showToast(t('screens.library.selectBook'), 'error');
       return;
     }
     const selectAll = allSelected ? 1 : 0;
@@ -90,11 +92,11 @@ export default function LibraryScreen({navigation}) {
         setSelectedBooks({});
         setAllSelected(false);
         setEditMode(false);
-        showToast('Selected books have been deleted successfully.');
+        showToast(t('screens.library.deleteToast'));
       })
       .catch(error => {
         console.log(error);
-        showToast('An error occurred while deleting the books.', 'error');
+        showToast(t('screens.library.errorDeleteToast'), 'error');
       });
   };
 
@@ -120,29 +122,35 @@ export default function LibraryScreen({navigation}) {
   return (
     <RowContainer>
       <View style={styles.headerRow}>
-        <HeadingText>Library Books</HeadingText>
-        <View style={{ justifyContent:'center', flexDirection: 'row', gap: 10}}>
-        {editMode && (
-          <>
-            <GradientView
-              style={styles.editModeButton}
-              onPress={handleSelectAll}>
-              <Icons name={'check-all'} size={20} color={'white'} />
+        <HeadingText>{t('screens.library.library')}</HeadingText>
+        <View style={{justifyContent: 'center', flexDirection: 'row', gap: 10}}>
+          {editMode && (
+            <>
+              <GradientView
+                style={styles.editModeButton}
+                onPress={handleSelectAll}>
+                <Icons name={'check-all'} size={20} color={'white'} />
+              </GradientView>
+              <GradientView
+                style={styles.editModeButton}
+                onPress={handleDelete}>
+                <Icons
+                  name={'book-remove-multiple'}
+                  size={20}
+                  color={'white'}
+                />
+              </GradientView>
+            </>
+          )}
+          {libraryBooks && libraryBooks?.length !== 0 && (
+            <GradientView style={styles.editModeButton} onPress={handleEdit}>
+              <Icons
+                name={!editMode ? 'book-edit' : 'close'}
+                size={20}
+                color={'white'}
+              />
             </GradientView>
-            <GradientView style={styles.editModeButton} onPress={handleDelete}>
-              <Icons name={'book-remove-multiple'} size={20} color={'white'} />
-            </GradientView>
-          </>
-        )}
-        {libraryBooks && libraryBooks?.length !== 0 && (
-          <GradientView style={styles.editModeButton} onPress={handleEdit}>
-            <Icons
-              name={!editMode ? 'book-edit' : 'close'}
-              size={20}
-              color={'white'}
-            />
-          </GradientView>
-        )}
+          )}
         </View>
       </View>
 
@@ -154,12 +162,9 @@ export default function LibraryScreen({navigation}) {
             source={require('../../images/no-book.png')}
             style={styles.imgData}
           />
-          <CustomText>
-            You have no books in your library yet. Let's embark together on the
-            journey...
-          </CustomText>
+          <CustomText>{t('screens.library.textLib')}</CustomText>
           <Button
-            title={'Discover'}
+            title={t('screens.library.discover')}
             onPress={() => navigation.navigate('Home')}
             style={{width: '100%', paddingHorizontal: 50, marginTop: 20}}
           />
@@ -186,6 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 15,
+    borderRadius: 20,
   },
   imgData: {
     height: '60%',

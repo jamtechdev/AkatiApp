@@ -42,10 +42,11 @@ import jwtDecode from 'jwt-decode';
 import {useDispatch} from 'react-redux';
 import {login} from '../../_store/_reducers/auth.js';
 import {useAppContext} from '../../_customContext/AppProvider.js';
+import {useTranslation} from 'react-i18next';
 
 export default function LoginScreen({navigation}) {
   const {showToast, showLoader, hideLoader} = useAppContext();
-
+  const {t, i18n} = useTranslation();
   const dispatch = useDispatch();
   GoogleSignin.configure({
     androidClientId:
@@ -96,6 +97,7 @@ export default function LoginScreen({navigation}) {
       ...data,
       device_token: 'teststs',
     };
+    console.log(modify);
     authService
       .signIn(modify)
       .then(res => {
@@ -103,8 +105,8 @@ export default function LoginScreen({navigation}) {
         navigation.replace('Main');
       })
       .catch(error => {
-        console.log(error.response.data, 'network');
-        showToast(error.response.data.message, 'error');
+        console.log(error, 'network');
+        showToast(error.message, 'error');
       });
   };
 
@@ -207,24 +209,30 @@ export default function LoginScreen({navigation}) {
     }
   };
 
+  const handleChangeLanguage = lng => {
+    i18n.changeLanguage(lng); // Change language
+  };
+
   return (
     <ContainerCenter>
       <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
       <View style={{gap: 8}}>
-        <CustomText style={styles.signInHeading}>Sign In</CustomText>
+        <CustomText style={styles.signInHeading}>
+          {t('screens.login.title')}
+        </CustomText>
         <CustomText style={styles.signInSubHeading}>
-          Please fill the below details
+          {t('screens.login.loginDescription')}
         </CustomText>
       </View>
       <View style={{gap: 15, paddingTop: 20}}>
         <Input
-          placeholder="Enter Email Address"
+          placeholder={t('screens.login.emailPlaceholder')}
           control={control}
           errors={errors}
           name="email"
         />
         <Input
-          placeholder="Enter your Password"
+          placeholder={t('screens.login.passwordPlaceholder')}
           control={control}
           errors={errors}
           name="password"
@@ -244,7 +252,7 @@ export default function LoginScreen({navigation}) {
           defaultValue={false}
           render={({field: {onChange, value}}) => (
             <Checkbox
-              label="Remember Me"
+              label={t('screens.login.rememberMe')}
               checked={value}
               onChange={() => onChange(!value)}
             />
@@ -253,11 +261,14 @@ export default function LoginScreen({navigation}) {
         <TouchableText
           style={styles.forgetText}
           onPress={() => navigation.navigate('forgot')}>
-          Forgot Password?{' '}
+          {t('screens.login.forgotPassword')}{' '}
         </TouchableText>
       </View>
-      <Button title="Login" onPress={handleSubmit(handleFormSubmit)} />
-      <Divider title={'OR'} />
+      <Button
+        title={t('screens.login.login')}
+        onPress={handleSubmit(handleFormSubmit)}
+      />
+      <Divider title={t('screens.login.or')} />
       <View style={{gap: 20, flexDirection: 'row', justifyContent: 'center'}}>
         <Button
           title={<Icon size={25} name={'logo-google'} />}
@@ -290,8 +301,7 @@ export default function LoginScreen({navigation}) {
         <TouchableText
           style={styles.forgetText}
           onPress={() => navigation.navigate('signup')}>
-          {' '}
-          Create an account{' '}
+          {t('screens.login.create')}
         </TouchableText>
       </View>
     </ContainerCenter>

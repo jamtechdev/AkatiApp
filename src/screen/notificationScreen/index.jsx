@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
-import { Colors } from '../../_utils/GlobalStyle';
-import { commonServices } from '../../_services/common.service';
-import { useAppContext } from '../../_customContext/AppProvider';
-import { CustomText, HeadingText, RowContainer, Skeleton } from '../../components';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, FlatList} from 'react-native';
+import {Colors} from '../../_utils/GlobalStyle';
+import {commonServices} from '../../_services/common.service';
+import {useAppContext} from '../../_customContext/AppProvider';
+import {
+  CustomText,
+  HeadingText,
+  RowContainer,
+  Skeleton,
+} from '../../components';
 import NoDataFound from '../../components/NoDataFound';
+import {useTranslation} from 'react-i18next';
 
 export default function NotificationScreen() {
-  const { hideLoader } = useAppContext();
+  const {hideLoader} = useAppContext();
   const [notifications, setNotifications] = useState();
+  const {t} = useTranslation();
 
   useEffect(() => {
     // showLoader();
@@ -21,12 +28,10 @@ export default function NotificationScreen() {
       .finally(() => hideLoader());
   }, []);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <View style={styles.listView}>
-      <CustomText style={{ fontSize: 18 }}>
-        {item.description}
-      </CustomText>
-      <CustomText style={{ color: Colors.darkGray }}>
+      <CustomText style={{fontSize: 18}}>{item.description}</CustomText>
+      <CustomText style={{color: Colors.darkGray}}>
         {new Date(item.created_at).toLocaleString()}
       </CustomText>
     </View>
@@ -34,15 +39,19 @@ export default function NotificationScreen() {
 
   return (
     <RowContainer>
-      <HeadingText>Notifications</HeadingText>
+      <HeadingText>{t('screens.topBar.notificationTitle')}</HeadingText>
       <FlatList
         data={notifications}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         ListEmptyComponent={
-          !notifications ? <Skeleton isLoading={true} isList /> : <NoDataFound description={'No Notification data found!'} />
+          !notifications ? (
+            <Skeleton isLoading={true} isList />
+          ) : (
+            <NoDataFound description={t('screens.topBar.noNotificationText')} />
+          )
         }
-        contentContainerStyle={{ marginVertical: 15 }}
+        contentContainerStyle={{marginVertical: 15}}
         showsVerticalScrollIndicator={false}
       />
     </RowContainer>
