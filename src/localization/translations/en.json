@@ -101,7 +101,9 @@
       "cancel": "Cancel",
       "edit": "Edit",
       "textLib": "You have no books in your library yet. Let's embark together on the journey...",
-      "discover": "Discover"
+      "discover": "Discover",
+      "warning": "Please select at least one book to delete.",
+      "success": "Selected books have been deleted successfully."
     },
     "profile": {
       "profile": "Profile",
@@ -146,6 +148,7 @@
     "review": {
       "reviewrating": "App Reviews & Ratings",
       "addReview": "Add Review",
+      "addBookReview": "Add Book Review",
       "reviewPlaceholder": "Enter your review here....",
       "submit": "Submit",
       "based": "Based on",
@@ -281,7 +284,9 @@
     },
     "commentSection": {
       "view": "View",
-      "reply": "Reply"
+      "hide": "Hide",
+      "reply": "Reply",
+      "replies": "Replies"
     },
     "footer": {
       "question": "Have more questions",
@@ -369,6 +374,11 @@
       "confirmPasswordRequired": "Confirm Password is required",
       "confirmPasswordRequiredMatch": "Confirm Password must match with new password",
       "termsRequired": "Must check the terms & condition field"
+    },
+    "alert": {
+      "okay": "Okay",
+      "cancel": "Cancel",
+      "languageChange": "Language Change Successfully"
     }
   }
 }

@@ -2,8 +2,10 @@ import React from 'react';
 import {View, Modal, Image, StyleSheet} from 'react-native';
 import {Colors} from '../../_utils/GlobalStyle';
 import {Button, CustomText} from '../../components';
+import {useTranslation} from 'react-i18next';
 
 const AlertModal = ({visible, image, title, description, onCancel, onOkay}) => {
+  const {t} = useTranslation();
   return (
     <Modal
       animationType="slide"
@@ -19,12 +21,16 @@ const AlertModal = ({visible, image, title, description, onCancel, onOkay}) => {
           </CustomText>
           <View style={styles.buttonContainer}>
             {onOkay && (
-              <Button style={styles.button} title={'Okay'} onPress={onOkay} />
+              <Button
+                style={styles.button}
+                title={t('screens.alert.okay')}
+                onPress={onOkay}
+              />
             )}
             {onCancel && (
               <Button
                 style={styles.button}
-                title={'Cancel'}
+                title={t('screens.alert.cancel')}
                 onPress={onCancel}
               />
             )}

@@ -79,7 +79,7 @@
       "bookAuthor": "Autor",
       "based": "Basierend auf",
       "rating": "Bewertungen",
-      "tags": "Tags",
+      "tags": "Schlagwörter",
       "reading": "Lesen beginnen",
       "addLibrary": "Zur Bibliothek hinzufügen",
       "removeLibrary": "Aus der Bibliothek entfernen",
@@ -99,7 +99,9 @@
       "cancel": "Abbrechen",
       "edit": "Bearbeiten",
       "textLib": "Sie haben noch keine Bücher in Ihrer Bibliothek. Lassen Sie uns gemeinsam auf die Reise gehen...",
-      "discover": "Entdecken"
+      "discover": "Entdecken",
+      "success": "Ausgewählte Bücher wurden erfolgreich gelöscht.",
+      "warning": "Bitte wählen Sie mindestens ein Buch zum Löschen aus."
     },
     "profile": {
       "profile": "Profil",
@@ -144,6 +146,7 @@
     "review": {
       "reviewrating": "App-Bewertungen und -Beurteilungen",
       "addReview": "Bewertung hinzufügen",
+      "addBookReview": "Buchbesprechung hinzufügen",
       "reviewPlaceholder": "Geben Sie hier Ihre Bewertung ein....",
       "submit": "Absenden",
       "based": "Basierend auf",
@@ -261,7 +264,9 @@
     },
     "commentSection": {
       "view": "Ansehen",
-      "reply": "Antworten"
+      "hide": "Verstecken",
+      "reply": "Antwort",
+      "replies": "Antworten"
     },
     "footer": {
       "question": "Haben Sie weitere Fragen?",
@@ -367,6 +372,11 @@
       "termsRequired": "Das Feld für die Bedingungen muss angekreuzt sein",
       "yes": "ja",
       "no": "nein"
+    },
+    "alert": {
+      "okay": "Okay",
+      "cancel": "Abbrechen",
+      "languageChange": "Sprachwechsel erfolgreich"
     }
   }
 }

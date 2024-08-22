@@ -12,12 +12,14 @@ import user_icon from '../../images/avtar.png';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../_utils/GlobalStyle';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 // import moment from 'moment';
 
 const Comment = ({comment, onReply, onLike, textSettings}) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [showReplies, setShowReplies] = useState(false); // Local state for showing replies
+  const {t} = useTranslation();
 
   const handleReply = () => {
     if (replyText.trim()) {
@@ -41,12 +43,6 @@ const Comment = ({comment, onReply, onLike, textSettings}) => {
             color: textSettings?.color,
           },
         ]}>
-        {/* <Avatar
-          rounded
-          source={user_icon}
-          size="small"
-          containerStyle={styles.avatar}
-        /> */}
         <View style={styles.commentContent}>
           <Text style={[styles.username, {color: textSettings?.color}]}>
             {comment?.user?.first_name} {comment?.user?.last_name}
@@ -61,14 +57,21 @@ const Comment = ({comment, onReply, onLike, textSettings}) => {
             <View style={styles.footer}>
               <TouchableOpacity
                 onPress={() => setShowReplyInput(!showReplyInput)}>
-                <Text style={styles.replyButton}>Reply</Text>
+                <Text style={styles.replyButton}>
+                  {t('screens.commentSection.reply')}
+                </Text>
               </TouchableOpacity>
             </View>
             {comment.all_replies && comment.all_replies.length > 0 && (
               <TouchableOpacity onPress={toggleReplies}>
                 <Text style={styles.replyListButton}>
-                  {showReplies ? 'Hide' : 'View'} {comment?.all_replies.length}{' '}
-                  {comment?.all_replies.length == 1 ? 'reply' : 'replies'}
+                  {showReplies
+                    ? t('screens.commentSection.hide')
+                    : t('screens.commentSection.view')}{' '}
+                  {comment?.all_replies.length}{' '}
+                  {comment?.all_replies.length == 1
+                    ? t('screens.commentSection.reply')
+                    : t('screens.commentSection.replies')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -82,7 +85,7 @@ const Comment = ({comment, onReply, onLike, textSettings}) => {
               <TextInput
                 style={[styles.input, {color: textSettings?.color}]}
                 placeholderTextColor={textSettings?.color}
-                placeholder="Write a reply..."
+                placeholder={t('screens.reading.commentPlaceholder')}
                 value={replyText}
                 onChangeText={setReplyText}
               />

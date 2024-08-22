@@ -79,7 +79,7 @@
       "bookAuthor": "Auteur",
       "based": "Basé sur",
       "rating": "évaluations",
-      "tags": "Tags",
+      "tags": "Mots clés",
       "reading": "Commencer à Lire",
       "addLibrary": "Ajouter à la Bibliothèque",
       "removeLibrary": "Retirer de la Bibliothèque",
@@ -99,7 +99,9 @@
       "cancel": "Annuler",
       "edit": "Éditer",
       "textLib": "Vous n'avez pas encore de livres dans votre bibliothèque. Commençons ensemble cette aventure...",
-      "discover": "Découvrir"
+      "discover": "Découvrir",
+      "warning": "Veuillez sélectionner au moins un livre à supprimer.",
+      "success": "Les livres sélectionnés ont été supprimés avec succès."
     },
     "profile": {
       "profile": "Profil",
@@ -144,6 +146,7 @@
     "review": {
       "reviewrating": "Notes et avis sur les applications",
       "addReview": "Ajouter un Avis",
+      "addBookReview": "Ajouter une critique de livre",
       "reviewPlaceholder": "Entrez votre avis ici....",
       "submit": "Soumettre",
       "based": "Basé sur",
@@ -261,7 +264,9 @@
     },
     "commentSection": {
       "view": "Voir",
-      "reply": "Répondre"
+      "hide": "Cacher",
+      "reply": "Répondre",
+      "replies": "Réponses"
     },
     "footer": {
       "question": "Vous avez d'autres questions ?",
@@ -365,6 +370,11 @@
       "confirmPasswordRequired": "La confirmation du mot de passe est requise",
       "confirmPasswordRequiredMatch": "La confirmation du mot de passe doit correspondre au nouveau mot de passe",
       "termsRequired": "Vous devez cocher le champ des termes et conditions"
+    },
+    "alert": {
+      "okay": "Ok",
+      "cancel": "Annuler",
+      "languageChange": "Changement de langue réussi"
     }
   }
 }

@@ -39,18 +39,17 @@ export default function LanguageScreen() {
       language: id,
     };
     const local = getLanguageCode(language_title);
-    console.log(local, 'local');
     commonServices
       .setLanguage(data)
       .then(res => {
         if (res.data.success) {
           dispatch(languageSet(id));
-          showToast('Language Change Successfully', 'success');
+          showToast(t('screens.alert.languageChange'), 'success');
         }
       })
       .catch(err => {
         console.log(err);
-        showToast('SomeThing went wrong!', 'error');
+        showToast(err, 'error');
       })
       .finally(() => hideLoader());
   };

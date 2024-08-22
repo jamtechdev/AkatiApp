@@ -135,7 +135,7 @@ function BookDetailsScreen({navigation, route}) {
 
   const handleAddReview = () => {
     if (ratingStar == 0 && reviewText == '') {
-      showToast('Please select stars and enter review', 'error');
+      showToast(t('screens.review.warning'), 'error');
       return;
     }
     showLoader();
@@ -217,7 +217,7 @@ function BookDetailsScreen({navigation, route}) {
                   </View>
                 ))}
             {rating && rating.length == 0 && (
-              <NoDataFound description={'No comments added yet'} />
+              <NoDataFound description={t('screens.reading.noComment')} />
             )}
           </View>
         );
@@ -260,7 +260,7 @@ function BookDetailsScreen({navigation, route}) {
                 </View>
               ))
             ) : (
-              <NoDataFound description={'No chapter added yet'} />
+              <NoDataFound description={t('screens.bookDetails.noChapter')} />
             )}
           </View>
         );
@@ -314,7 +314,7 @@ function BookDetailsScreen({navigation, route}) {
 
   const routeReadingScreen = () => {
     if (!chapters || (chapters?.length == 0 && !BookDetails)) {
-      showToast('There no any chapter added in this book.', 'error');
+      showToast(t('screens.bookDetails.noChapterAdded'), 'error');
       return;
     }
     navigation.navigate('Reading', {
@@ -503,7 +503,7 @@ function BookDetailsScreen({navigation, route}) {
       <BottomDrawer
         visible={showModel}
         onClose={() => setShowModel(false)}
-        title={'Add Book Review'}>
+        title={t('screens.review.addBookReview')}>
         <View style={styles.footerContainer}>
           <View style={styles.reviewInputContainer}>
             <View style={styles.starView}>

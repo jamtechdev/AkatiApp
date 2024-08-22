@@ -156,7 +156,7 @@ const CommentsList = ({token, chapterDetails, textSettings}) => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Write a comment..."
+          placeholder={t('screens.reading.commentPlaceholder')}
           value={newComment}
           placeholderTextColor={textSettings?.color}
           onChangeText={setNewComment}

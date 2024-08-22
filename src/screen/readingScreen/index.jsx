@@ -211,9 +211,10 @@ function ReadingScreen({navigation, route}) {
       <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
         <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
           <>
-            <HeadingText style={{color: textSettings.color}}>{`Chapter ${
-              currentChapterIndex + 1
-            } - ${currentChapter?.chapter_details?.title}`}</HeadingText>
+            <HeadingText style={{color: textSettings.color}}>
+              {t('screens.reading.chapter')} {currentChapterIndex + 1}-{' '}
+              {currentChapter?.chapter_details?.title}
+            </HeadingText>
             {currentChapter && currentChapter.unlock === 1 ? (
               <View style={{marginVertical: 10}}>
                 <Text

@@ -97,6 +97,7 @@ export default function LoginScreen({navigation}) {
       ...data,
       device_token: 'teststs',
     };
+    console.log(modify);
     authService
       .signIn(modify)
       .then(res => {
@@ -104,8 +105,8 @@ export default function LoginScreen({navigation}) {
         navigation.replace('Main');
       })
       .catch(error => {
-        console.log(error.response.data, 'network');
-        showToast(error.response.data.message, 'error');
+        console.log(error, 'network');
+        showToast(error.message, 'error');
       });
   };
 

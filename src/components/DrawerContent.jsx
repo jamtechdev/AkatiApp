@@ -121,7 +121,7 @@ const DrawerContent = props => {
         visible={show}
         image={logo}
         title={t('screens.sideBar.alert')}
-        description={t('screens.sideBar.logoutModalHeader')}
+        description={t('screens.sideBar.logoutModelHeader')}
         onOkay={logoutAction}
         onCancel={toggleModel}
       />
