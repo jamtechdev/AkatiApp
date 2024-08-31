@@ -20,6 +20,7 @@ export {default as Divider} from './Divider';
 export {default as ContainerCenter} from './ContainerCenter';
 export {default as RowContainer} from './RowContainer';
 export {default as CustomTabBar} from './CustomTabBar';
+export {default as PublicCustomTabBar} from './PublicCustomTabBar';
 export {default as CustomHeader} from './CustomHeader';
 export {default as DrawerContent} from './DrawerContent';
 export {default as CustomDrawerItem} from './CustomDrawerItem';

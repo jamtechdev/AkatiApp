@@ -17,3 +17,4 @@ export {default as ProfileScreen} from './profileScreen';
 export {default as ReadingScreen} from './readingScreen';
 export {default as CinetPaymentScreen} from './rechargeScreen/_screen/cinetPaymentScreen';
 export {default as PaypalPayment} from './rechargeScreen/_screen/paypalPayment';
+export {default as PublicBookScreen} from './publicBookScreen';

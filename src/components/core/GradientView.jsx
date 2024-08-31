@@ -5,6 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 export default function GradientView({
   children,
   style,
+  gradient = true,
   onPress = () => console.log('hii'),
 }) {
   return (
@@ -21,13 +22,23 @@ export default function GradientView({
           marginVertical: 0,
         },
       ]}>
-      <LinearGradient
+      {gradient ?
+        <LinearGradient
         colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
         style={[style]}>
         {children}
       </LinearGradient>
+      :
+      <LinearGradient
+        colors={['#fff', '#fff']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
+        style={[style]}>
+        {children}
+      </LinearGradient>
+      }
     </TouchableOpacity>
   );
 }

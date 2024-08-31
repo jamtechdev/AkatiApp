@@ -3,7 +3,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import StackNavigator from './StackNavigator';
+import AuthNavigator from './AuthNavigator';
 import TabNavigator from './TabNavigator';
 import {StatusBar} from 'react-native';
 import {CustomHeader, DrawerContent} from '../components';
@@ -11,6 +11,7 @@ import DrawerNavigator from './DrawerNavigator';
 import {
   BookDetailsScreen,
   CinetPaymentScreen,
+  ForgotScreen,
   NotificationScreen,
   PaypalPayment,
   PrivacyScreen,
@@ -36,7 +37,7 @@ const AppNavigator = () => {
         initialRouteName={loggedIn && token ? 'Main' : 'Auth'}>
         <Stack.Screen
           name="Auth"
-          component={StackNavigator}
+          component={AuthNavigator}
           options={{headerShown: false}}
         />
         <Stack.Screen
@@ -44,6 +45,7 @@ const AppNavigator = () => {
           component={DrawerNavigator}
           options={{headerShown: false}}
         />
+         <Stack.Screen name="forgot" component={ForgotScreen} />
         <Stack.Screen name="Terms" component={TermsScreen} />
         <Stack.Screen name="Privacy" component={PrivacyScreen} />
         <Stack.Screen name="notification" component={NotificationScreen} />

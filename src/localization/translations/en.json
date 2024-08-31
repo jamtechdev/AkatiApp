@@ -321,7 +321,9 @@
       "Recharge History": "Recharge History",
       "Reviews": "Reviews",
       "Languages": "Languages",
-      "Setting": "Setting"
+      "Setting": "Setting",
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
     },
 
     "topBar": {

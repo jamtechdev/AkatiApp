@@ -86,7 +86,7 @@ export default function SignupScreen({navigation}) {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: Colors.primary}}>
       <ContainerCenter>
         <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
         <View style={{gap: 8}}>
@@ -180,7 +180,7 @@ export default function SignupScreen({navigation}) {
           }}>
           <TouchableText
             style={styles.forgetText}
-            onPress={() => navigation.navigate('login')}>
+            onPress={() => navigation.navigate('signIn')}>
             {t('screens.signUp.existacc')}
           </TouchableText>
         </View>
@@ -191,7 +191,7 @@ export default function SignupScreen({navigation}) {
           description={t('screens.signUp.check')}
           onOkay={() => {
             setModalVisible(false);
-            navigation.navigate('login');
+            navigation.navigate('signIn');
           }}
           // onCancel={() => console.log('canel')}
         />

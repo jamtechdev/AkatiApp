@@ -128,13 +128,13 @@ export default function ForgotScreen({navigation}) {
 
   return (
     <ContainerCenter>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           marginVertical: 20,
         }}
         onPress={() => navigation.navigate('login')}>
         <BackButton />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Image style={GlobalStyles.logo} source={logo} resizeMode="contain" />
       <View style={{gap: 8}}>
         <CustomText style={styles.signInHeading}>

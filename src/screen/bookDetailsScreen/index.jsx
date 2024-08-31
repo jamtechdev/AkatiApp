@@ -28,8 +28,12 @@ import {useAppContext} from '../../_customContext/AppProvider';
 import NoDataFound from '../../components/NoDataFound';
 import LinearGradient from 'react-native-linear-gradient';
 import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
+import {getAuth} from '../../_store/_reducers/auth';
+import {publicService} from '../../_services/public.service';
 
 function BookDetailsScreen({navigation, route}) {
+  const {loggedIn} = useSelector(getAuth);
   const [chapters, setChapters] = useState([]);
   const [rating, setRating] = useState([]);
   const [ratingAverage, setRatingAverage] = useState(0);
@@ -49,12 +53,26 @@ function BookDetailsScreen({navigation, route}) {
     rating_average,
     ratings,
   } = bookItem;
+  // console.log(bookItem)
   useEffect(() => {
     if (BookDetails) {
       const bookData = {
         book_id: bookId,
         language: BookDetails?.lng_id,
       };
+      if (!loggedIn) {
+        setRating(ratings);
+        publicService
+          .getPublicBookChapters(bookId)
+          .then(response => {
+            setChapters(response.data.chapters);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        return;
+      }
+      getLibraryBooks();
       fetchBookReview();
       booksService
         .getBookChapters(bookData)
@@ -65,7 +83,6 @@ function BookDetailsScreen({navigation, route}) {
           console.log(error);
         });
     }
-    getLibraryBooks();
     setRatingAverage(rating_average);
   }, [BookDetails, route]);
 
@@ -171,14 +188,16 @@ function BookDetailsScreen({navigation, route}) {
                 justifyContent: 'flex-end',
                 marginBottom: 10,
               }}>
-              <GradientView
-                style={styles.addButton}
-                onPress={() => setShowModel(true)}>
-                <CustomText style={{fontSize: 15, fontWeight: 600}}>
-                  {t('screens.bookDetails.addReview')}
-                </CustomText>
-                <Icons name={'plus-circle'} size={15} color={Colors.white} />
-              </GradientView>
+              {loggedIn && (
+                <GradientView
+                  style={styles.addButton}
+                  onPress={() => setShowModel(true)}>
+                  <CustomText style={{fontSize: 15, fontWeight: 600}}>
+                    {t('screens.bookDetails.addReview')}
+                  </CustomText>
+                  <Icons name={'plus-circle'} size={15} color={Colors.white} />
+                </GradientView>
+              )}
             </View>
             {rating &&
               rating.length > 0 &&
@@ -445,39 +464,68 @@ function BookDetailsScreen({navigation, route}) {
                   })}
               </View>
             </View>
-
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <View style={{width: '50%', paddingHorizontal: 5}}>
-                <Button
-                  style={{
-                    paddingVertical: 10,
-                    paddingHorizontal: 10,
-                    backgroundColor: Colors.white,
-                  }}
-                  textStyle={{color: Colors.secondary, fontWeight: '400'}}
-                  gradient={false}
-                  title={t('screens.bookDetails.reading')}
-                  onPress={() => routeReadingScreen()}
-                />
-              </View>
-              <View style={{width: '50%', paddingHorizontal: 5}}>
-                {!isInLibrary ? (
+            {loggedIn && (
+              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                <View style={{width: '50%', paddingHorizontal: 5}}>
                   <Button
-                    style={{paddingVertical: 10, paddingHorizontal: 10}}
-                    title={t('screens.bookDetails.addLibrary')}
-                    onPress={() => handleAddToLibrary(BookDetails?.book_id)}
+                    style={{
+                      paddingVertical: 10,
+                      paddingHorizontal: 10,
+                      backgroundColor: Colors.white,
+                    }}
+                    textStyle={{color: Colors.secondary, fontWeight: '400'}}
+                    gradient={false}
+                    title={t('screens.bookDetails.reading')}
+                    onPress={() => routeReadingScreen()}
                   />
-                ) : (
-                  <Button
-                    style={{paddingVertical: 10, paddingHorizontal: 10}}
-                    title={t('screens.bookDetails.removeLibrary')}
-                    onPress={() =>
-                      handleRemoveFromLibrary(BookDetails?.book_id)
-                    }
-                  />
-                )}
+                </View>
+                <View style={{width: '50%', paddingHorizontal: 5}}>
+                  {!isInLibrary ? (
+                    <Button
+                      style={{paddingVertical: 10, paddingHorizontal: 10}}
+                      title={t('screens.bookDetails.addLibrary')}
+                      onPress={() => handleAddToLibrary(BookDetails?.book_id)}
+                    />
+                  ) : (
+                    <Button
+                      style={{paddingVertical: 10, paddingHorizontal: 10}}
+                      title={t('screens.bookDetails.removeLibrary')}
+                      onPress={() =>
+                        handleRemoveFromLibrary(BookDetails?.book_id)
+                      }
+                    />
+                  )}
+                </View>
               </View>
-            </View>
+            )}
+            {!loggedIn && (
+              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                <View style={{width: '80%', paddingHorizontal: 5}}>
+                  <Button
+                     style={{paddingVertical: 10, paddingHorizontal: 10}}
+                    title={t('screens.bookDetails.reading')}
+                    onPress={() => routeReadingScreen()}
+                  />
+                </View>
+                {/* <View style={{width: '100%', paddingHorizontal: 5}}>
+                  {!isInLibrary ? (
+                    <Button
+                      style={{paddingVertical: 10, paddingHorizontal: 10}}
+                      title={t('screens.bookDetails.addLibrary')}
+                      onPress={() => handleAddToLibrary(BookDetails?.book_id)}
+                    />
+                  ) : (
+                    <Button
+                      style={{paddingVertical: 10, paddingHorizontal: 10}}
+                      title={t('screens.bookDetails.removeLibrary')}
+                      onPress={() =>
+                        handleRemoveFromLibrary(BookDetails?.book_id)
+                      }
+                    />
+                  )}
+                </View> */}
+              </View>
+            )}
             <View
               style={{
                 borderTopWidth: 1,

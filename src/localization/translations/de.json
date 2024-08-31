@@ -301,7 +301,9 @@
       "Recharge History": "Aufladeverlauf",
       "Reviews": "Bewertungen",
       "Languages": "Sprache",
-      "Setting": "Einstellungen"
+      "Setting": "Einstellungen",
+      "signIn": "anmelden",
+      "signUp": "Melden Sie sich an"
     },
     "searching": {
       "searchPlaceholder": "Welches Buch möchten Sie heute lesen...",

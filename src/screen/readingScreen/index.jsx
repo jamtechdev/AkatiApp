@@ -38,7 +38,7 @@ import CommentsBottomDrawer from './_components/CommentBottomDrawer';
 function ReadingScreen({navigation, route}) {
   const {params} = route;
   const {bookId, chapters, BookDetails, categories} = params;
-  const {coins} = useSelector(getAuth);
+  const {coins, loggedIn} = useSelector(getAuth);
   const {t} = useTranslation();
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [showComments, setShowComments] = useState([]);
@@ -67,6 +67,7 @@ function ReadingScreen({navigation, route}) {
   }, []);
 
   useEffect(() => {
+    if(loggedIn){
     booksService
       .getMustReadBooks()
       .then(res => {
@@ -75,6 +76,7 @@ function ReadingScreen({navigation, route}) {
       .catch(error => {
         console.log(error);
       });
+    }
   }, [params]);
 
   const getChapterData = bookData => {
@@ -122,6 +124,10 @@ function ReadingScreen({navigation, route}) {
   }, [currentChapter]);
 
   const handleUnlockChapter = () => {
+    if(!loggedIn){
+      showToast('you need to login first for read this book', 'info')
+      navigation.navigate('signIn')
+    }
     const formData = {
       book_id: currentChapter.book_id,
       chapter_id: currentChapter.id,
@@ -183,9 +189,11 @@ function ReadingScreen({navigation, route}) {
           </GradientView> */}
         {showOptions && (
           <View style={{flexDirection: 'row', gap: 15}}>
+          {loggedIn && (
             <TouchableText onPress={() => setShowComments(true)}>
               <MIcons name={'chat'} size={20} color={textSettings.color} />
             </TouchableText>
+          )}
             <TouchableText onPress={() => setFilterVisible(true)}>
               <MCIcons
                 name={'format-font'}
@@ -310,6 +318,7 @@ function ReadingScreen({navigation, route}) {
                 </CustomText>
               </View>
             )}
+            {loggedIn && (
             <View>
               <HeadingText style={{color: textSettings.color}}>
                 {t('screens.reading.mustRead')}
@@ -319,6 +328,7 @@ function ReadingScreen({navigation, route}) {
               )}
               <HorizontalScrollView data={mustReadBooks} />
             </View>
+            )}
           </>
         </Pressable>
       </ScrollView>

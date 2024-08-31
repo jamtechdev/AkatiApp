@@ -300,7 +300,7 @@ export default function LoginScreen({navigation}) {
         }}>
         <TouchableText
           style={styles.forgetText}
-          onPress={() => navigation.navigate('signup')}>
+          onPress={() => navigation.navigate('signUp')}>
           {t('screens.login.create')}
         </TouchableText>
       </View>
