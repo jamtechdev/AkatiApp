@@ -6,6 +6,7 @@ const initialState = {
   email: "",
   user: "",
   token: "",
+  language: 1,
   timestamp: new Date().getTime(),
 };
 
