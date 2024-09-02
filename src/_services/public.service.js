@@ -6,7 +6,7 @@ export const publicService = {
     getPublicBookChapters
 };
 
-async function getPublicBooks(lang) {
+async function getPublicBooks(lang=1) {
     return await axios.get(`${API_URL}/get-Book-Details-By-Category`, {
         headers: {
             language: lang,
@@ -14,7 +14,7 @@ async function getPublicBooks(lang) {
     });
 }
 
-async function getPublicBookById(id, lang) {
+async function getPublicBookById(id, lang=1) {
     return await axios.get(`${API_URL}/books/book-details?book_id=${id}`, {
         headers: {
             language: lang,
@@ -22,7 +22,7 @@ async function getPublicBookById(id, lang) {
     });
 }
 
-async function getPublicBookChapters(id, lang) {
+async function getPublicBookChapters(id, lang=1) {
     return await axios.get(`${API_URL}/books/all-chapters?book_id=${id}`, {
         headers: {
             language: lang,
