@@ -33,7 +33,7 @@ const authSlice = createSlice({
       (state.email = ""), (state.user = ""), (state.token = "");
       state.tokenExpire = "";
       state.library_count = "";
-      state.language = "";
+      state.language = 1;
       state.avatar = "";
       state.coins = "";
     },

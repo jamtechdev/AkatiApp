@@ -141,6 +141,10 @@ export default function LoginScreen({navigation}) {
           Profile.getCurrentProfile().then(function (currentProfile) {
             if (currentProfile) {
               console.log('The current logged user is: ', currentProfile);
+              if(!currentProfile.email){
+                showToast("Email not available. Please try to another login method.", 'error')
+                return;
+              }
               const data = {
                 fb_id: currentProfile.userID,
                 email: currentProfile.email,
@@ -164,6 +168,10 @@ export default function LoginScreen({navigation}) {
       .then(response => {
         response.json().then(currentProfile => {
           console.log('facebook currentProfile', currentProfile);
+          if(!currentProfile.email){
+            showToast("Email not available. Please try to another login method.", 'error')
+            return;
+          }
           const data = {
             fb_id: currentProfile.id,
             email: currentProfile.email,
