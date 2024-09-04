@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  AlertModal,
   BottomDrawer,
   Button,
   CustomText,
@@ -47,6 +48,7 @@ function ReadingScreen({navigation, route}) {
   const [modalData, setModalData] = useState([]);
   const [mustReadBooks, setMustReadBooks] = useState();
   const [showOptions, setShowOptions] = useState(true);
+  const [show, setShow] = useState(false);
   const {showToast, showLoader, hideLoader} = useAppContext();
   const scrollViewRef = useRef(null); // Reference for ScrollView
 
@@ -67,15 +69,15 @@ function ReadingScreen({navigation, route}) {
   }, []);
 
   useEffect(() => {
-    if(loggedIn){
-    booksService
-      .getMustReadBooks()
-      .then(res => {
-        setMustReadBooks(res.data.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    if (loggedIn) {
+      booksService
+        .getMustReadBooks()
+        .then(res => {
+          setMustReadBooks(res.data.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }, [params]);
 
@@ -124,9 +126,10 @@ function ReadingScreen({navigation, route}) {
   }, [currentChapter]);
 
   const handleUnlockChapter = () => {
-    if(!loggedIn){
-      showToast('you need to login first for read this book', 'info')
-      navigation.navigate('signIn')
+    if (!loggedIn) {
+      setShow(true);
+      // showToast('you need to login first for read this book', 'info');
+      // navigation.navigate('signIn');
     }
     const formData = {
       book_id: currentChapter.book_id,
@@ -189,11 +192,11 @@ function ReadingScreen({navigation, route}) {
           </GradientView> */}
         {showOptions && (
           <View style={{flexDirection: 'row', gap: 15}}>
-          {loggedIn && (
-            <TouchableText onPress={() => setShowComments(true)}>
-              <MIcons name={'chat'} size={20} color={textSettings.color} />
-            </TouchableText>
-          )}
+            {loggedIn && (
+              <TouchableText onPress={() => setShowComments(true)}>
+                <MIcons name={'chat'} size={20} color={textSettings.color} />
+              </TouchableText>
+            )}
             <TouchableText onPress={() => setFilterVisible(true)}>
               <MCIcons
                 name={'format-font'}
@@ -319,15 +322,15 @@ function ReadingScreen({navigation, route}) {
               </View>
             )}
             {loggedIn && (
-            <View>
-              <HeadingText style={{color: textSettings.color}}>
-                {t('screens.reading.mustRead')}
-              </HeadingText>
-              {!mustReadBooks && (
-                <Skeleton isLoading={true} count={3} numColumns={3} />
-              )}
-              <HorizontalScrollView data={mustReadBooks} />
-            </View>
+              <View>
+                <HeadingText style={{color: textSettings.color}}>
+                  {t('screens.reading.mustRead')}
+                </HeadingText>
+                {!mustReadBooks && (
+                  <Skeleton isLoading={true} count={3} numColumns={3} />
+                )}
+                <HorizontalScrollView data={mustReadBooks} />
+              </View>
             )}
           </>
         </Pressable>
@@ -387,6 +390,12 @@ function ReadingScreen({navigation, route}) {
           />
         </View>
       </CommentsBottomDrawer>
+      <AlertModal
+        visible={show}
+        description={'You need to login first for read this book'}
+        onOkay={() => navigation.navigate('signIn')}
+        onCancel={() => setShow(false)}
+      />
     </RowContainer>
   );
 }
