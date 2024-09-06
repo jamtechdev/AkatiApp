@@ -105,6 +105,35 @@ export default function RechargeScreen({navigation}) {
     }
   };
 
+  savePaymentDetails = async (paymentResponse, item) => {
+    console.log('...paymentResponse', paymentResponse);
+    console.log('...item', item);
+    const body = {
+      coins: item?.coin_balance,
+      transaction_id: paymentResponse?.transactionId,
+      amount: item?.recharge_amount,
+      currency: 'EUR',
+      status: 'VERIFIED',
+      json: JSON.stringify(paymentResponse),
+    };
+
+    const {data} = await axiosInstance
+      .post('PaypalTransactionHistory', body)
+      .catch(err => {
+        console.log('Error when updating payment history api:', err);
+      });
+    console.log('updating payment history', data);
+    if (data.success) {
+      Alert.alert('Your Payment is done');
+      setTimeout(() => {
+        navigation.goBack();
+      }, 2000);
+    } else {
+      Alert.alert('Something went wrong.');
+      navigation.goBack();
+    }
+  };
+
   const _requestSubscription = async (sku, item) => {
     try {
       await clearTransactionIOS();

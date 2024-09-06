@@ -317,7 +317,7 @@ function ReadingScreen({navigation, route}) {
                     color={Colors.secondary}
                     style={{textAlign: 'center'}}
                   />{' '}
-                  {currentChapter?.chapter_reading_cost}
+                  {BookDetails.book_coin}
                 </CustomText>
               </View>
             )}
