@@ -23,6 +23,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
@@ -35,6 +36,7 @@ import CommentsList from '../../components/comment/CommentsList';
 import LinearGradient from 'react-native-linear-gradient';
 import {useTranslation} from 'react-i18next';
 import CommentsBottomDrawer from './_components/CommentBottomDrawer';
+import RenderHtml from 'react-native-render-html';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
@@ -51,7 +53,7 @@ function ReadingScreen({navigation, route}) {
   const [show, setShow] = useState(false);
   const {showToast, showLoader, hideLoader} = useAppContext();
   const scrollViewRef = useRef(null); // Reference for ScrollView
-
+  const {width} = useWindowDimensions();
   const [filterVisible, setFilterVisible] = useState(false); // State for filter modal
   const [textSettings, setTextSettings] = useState({
     textAlign: 'left',
@@ -161,6 +163,16 @@ function ReadingScreen({navigation, route}) {
 
   const handleToggleOptions = () => setShowOptions(!showOptions);
 
+  const baseTextStyle = {
+    textAlign: textSettings.textAlign,
+    fontWeight: textSettings.fontWeight,
+    lineHeight: textSettings.lineHeight,
+    fontFamily: textSettings.fontFamily,
+    color: textSettings.color,
+    fontSize: textSettings.fontSize,
+    backgroundColor: textSettings.backgroundColor,
+  };
+
   return (
     <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
       <View style={{position: 'absolute', top: 15, zIndex: 999}}>
@@ -241,7 +253,20 @@ function ReadingScreen({navigation, route}) {
                       backgroundColor: textSettings.backgroundColor,
                     },
                   ]}>
-                  {currentChapter?.chapter_details?.content}
+                  <RenderHtml
+                    contentWidth={width}
+                    source={{
+                      html: currentChapter?.chapter_details?.content,
+                    }}
+                    tagsStyles={{
+                      div: baseTextStyle,
+                      h1: baseTextStyle,
+                      h2: baseTextStyle,
+                      h3: baseTextStyle,
+                      p: baseTextStyle,
+                      span: baseTextStyle,
+                    }}
+                  />
                 </Text>
                 <View
                   style={{

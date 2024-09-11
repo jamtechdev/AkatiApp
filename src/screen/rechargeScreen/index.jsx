@@ -31,6 +31,7 @@ import {
   clearTransactionIOS,
 } from 'react-native-iap';
 import {useTranslation} from 'react-i18next';
+import axiosInstance from '../../_services/axiosInstance';
 
 export default function RechargeScreen({navigation}) {
   const [rechargePlans, setRechargePlans] = useState();
@@ -93,8 +94,9 @@ export default function RechargeScreen({navigation}) {
         rechargeAmount: selectedPlan.recharge_amount,
       });
     } else if (type == 'apple') {
+      console.log(selectedPlan.ios_device_id)
       _requestSubscription(
-        `com.akati.ebook.${selectedPlan.coin_balance}.coin`,
+        `${selectedPlan.ios_device_id}`,
         selectedPlan,
       );
     } else {
@@ -102,6 +104,32 @@ export default function RechargeScreen({navigation}) {
         coins: selectedPlan.coin_balance,
         rechargeAmount: selectedPlan.recharge_amount,
       });
+    }
+  };
+
+  const savePaymentDetails = async (paymentResponse, item) => {
+    console.log('...paymentResponse', paymentResponse);
+    console.log('...item', item);
+    const body = {
+      coins: item?.coin_balance,
+      transaction_id: paymentResponse?.transactionId,
+      amount: item?.recharge_amount,
+      currency: 'EUR',
+      status: 'VERIFIED',
+      json: JSON.stringify(paymentResponse),
+    };
+
+    console.log('body', JSON.stringify(body));
+    const {data} = await axiosInstance
+      .post('PaypalTransactionHistory', body)
+      .catch(err => {
+        console.log('Error when updating payment history api:', err);
+      });
+    console.log('updating payment history', data);
+    if (data.success) {
+      showToast('Your Payment is done');
+    } else {
+      showToast('Something went wrong.', 'error');
     }
   };
 
