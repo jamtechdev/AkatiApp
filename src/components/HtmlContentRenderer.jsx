@@ -4,6 +4,8 @@ import RenderHtml from 'react-native-render-html';
 
 const HtmlContentRenderer = ({ htmlContent, textSettings }) => {
   const { width } = useWindowDimensions();
+  
+  // Define base text styles from the textSettings prop
   const baseTextStyle = {
     textAlign: textSettings.textAlign,
     fontWeight: textSettings.fontWeight,
@@ -14,11 +16,23 @@ const HtmlContentRenderer = ({ htmlContent, textSettings }) => {
     backgroundColor: textSettings.backgroundColor,
   };
 
+  // Function to clean HTML content and wrap plain text in <p> tags
   const cleanHtmlContent = (content) => {
     if (!content) return '';
-    return content
-      .replace(/background-color\s*:\s*[^;]+;?/gi, '') // Remove background-color styles
-      .replace(/color\s*:\s*[^;]+;?/gi, ''); // Remove color styles
+    
+    // Remove unwanted inline styles (example: background-color, color)
+    let cleanedContent = content
+      .replace(/background-color\s*:\s*[^;]+;?/gi, '') 
+      .replace(/color\s*:\s*[^;]+;?/gi, '');
+
+    // Check if the content is plain text (i.e., it doesn't contain any HTML tags)
+    const hasHtmlTags = /<[^>]+>/.test(cleanedContent);
+    if (!hasHtmlTags) {
+      // Wrap plain text in <p> tags
+      cleanedContent = `<p>${cleanedContent}</p>`;
+    }
+    
+    return cleanedContent;
   };
 
   return (
@@ -36,6 +50,8 @@ const HtmlContentRenderer = ({ htmlContent, textSettings }) => {
           strong: baseTextStyle,
           li: baseTextStyle,
           ol: baseTextStyle,
+          ul: baseTextStyle,
+          '*': baseTextStyle
         }}
       />
     </View>
