@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AlertModal,
   BottomDrawer,
@@ -7,14 +7,15 @@ import {
   GradientView,
   HeadingText,
   HorizontalScrollView,
+  HtmlContentRenderer,
   RowContainer,
   Skeleton,
   TouchableText,
-} from '../../components'
-import {booksService} from '../../_services/book.service'
-import {useSelector} from 'react-redux'
-import {getAuth} from '../../_store/_reducers/auth'
-import {commonServices} from '../../_services/common.service'
+} from '../../components';
+import {booksService} from '../../_services/book.service';
+import {useSelector} from 'react-redux';
+import {getAuth} from '../../_store/_reducers/auth';
+import {commonServices} from '../../_services/common.service';
 import {
   LogBox,
   Pressable,
@@ -24,37 +25,36 @@ import {
   TouchableWithoutFeedback,
   View,
   useWindowDimensions,
-} from 'react-native'
-import GlobalStyles, {Colors} from '../../_utils/GlobalStyle'
-import Icons from 'react-native-vector-icons/FontAwesome'
-import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import MIcons from 'react-native-vector-icons/MaterialIcons'
-import {useAppContext} from '../../_customContext/AppProvider'
-import ChapterBottomDrawer from './_components/ChapterBottomDrawer'
-import FilterBottomDrawer from './_components/FilterBottomDrawer'
-import CommentsList from '../../components/comment/CommentsList'
-import LinearGradient from 'react-native-linear-gradient'
-import {useTranslation} from 'react-i18next'
-import CommentsBottomDrawer from './_components/CommentBottomDrawer'
-import RenderHtml from 'react-native-render-html'
+} from 'react-native';
+import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
+import Icons from 'react-native-vector-icons/FontAwesome';
+import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MIcons from 'react-native-vector-icons/MaterialIcons';
+import {useAppContext} from '../../_customContext/AppProvider';
+import ChapterBottomDrawer from './_components/ChapterBottomDrawer';
+import FilterBottomDrawer from './_components/FilterBottomDrawer';
+import CommentsList from '../../components/comment/CommentsList';
+import LinearGradient from 'react-native-linear-gradient';
+import {useTranslation} from 'react-i18next';
+import CommentsBottomDrawer from './_components/CommentBottomDrawer';
 
-function ReadingScreen ({navigation, route}) {
-  const {params} = route
-  const {bookId, chapters, BookDetails, categories} = params
-  const {coins, loggedIn} = useSelector(getAuth)
-  const {t} = useTranslation()
-  const [currentChapterIndex, setCurrentChapterIndex] = useState(0)
-  const [showComments, setShowComments] = useState([])
-  const [autoUnlock, setAutoUnlock] = useState(false)
-  const [visible, setVisible] = useState(false)
-  const [modalData, setModalData] = useState([])
-  const [mustReadBooks, setMustReadBooks] = useState()
-  const [showOptions, setShowOptions] = useState(true)
-  const [show, setShow] = useState(false)
-  const {showToast, showLoader, hideLoader} = useAppContext()
-  const scrollViewRef = useRef(null) // Reference for ScrollView
-  const {width} = useWindowDimensions()
-  const [filterVisible, setFilterVisible] = useState(false) // State for filter modal
+function ReadingScreen({navigation, route}) {
+  const {params} = route;
+  const {bookId, chapters, BookDetails, categories} = params;
+  const {coins, loggedIn} = useSelector(getAuth);
+  const {t} = useTranslation();
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
+  const [showComments, setShowComments] = useState([]);
+  const [autoUnlock, setAutoUnlock] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [modalData, setModalData] = useState([]);
+  const [mustReadBooks, setMustReadBooks] = useState();
+  const [showOptions, setShowOptions] = useState(true);
+  const [show, setShow] = useState(false);
+  const {showToast, showLoader, hideLoader} = useAppContext();
+  const scrollViewRef = useRef(null); // Reference for ScrollView
+  const {width} = useWindowDimensions();
+  const [filterVisible, setFilterVisible] = useState(false); // State for filter modal
   const [textSettings, setTextSettings] = useState({
     textAlign: 'left',
     fontWeight: 'normal',
@@ -64,123 +64,104 @@ function ReadingScreen ({navigation, route}) {
     color: '#fff',
     backgroundColorSecondary: Colors.tertiary,
     backgroundColor: Colors.primary,
-  })
+  });
 
   useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
-  }, [])
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   useEffect(() => {
     if (loggedIn) {
       booksService
         .getMustReadBooks()
         .then(res => {
-          setMustReadBooks(res.data.data)
+          setMustReadBooks(res.data.data);
         })
         .catch(error => {
-          console.log(error)
-        })
+          console.log(error);
+        });
     }
-  }, [params])
+  }, [loggedIn]);
 
   const getChapterData = bookData => {
     booksService
       .getBookChapters(bookData)
       .then(response => {
-        setChapters(response.data.chapters)
+        setChapters(response.data.chapters);
       })
       .catch(error => {
-        console.log(error)
-      })
-  }
+        console.log(error);
+      });
+  };
 
-  const currentChapter = chapters[currentChapterIndex]
+  const currentChapter = chapters[currentChapterIndex];
 
   useEffect(() => {
     if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({y: 0, animated: true}) // Auto scroll to top
+      scrollViewRef.current.scrollTo({y: 0, animated: true}); // Auto scroll to top
     }
-  }, [currentChapterIndex])
+  }, [currentChapterIndex]);
 
   const handleNextChapter = () => {
     if (currentChapterIndex < chapters.length - 1) {
-      setCurrentChapterIndex(currentChapterIndex + 1)
+      setCurrentChapterIndex(currentChapterIndex + 1);
     }
     if (autoUnlock && currentChapter.unlock !== 1) {
-      handleUnlockChapter()
+      handleUnlockChapter();
     }
-  }
+  };
 
   const handlePrevChapter = () => {
     if (currentChapterIndex > 0) {
-      setCurrentChapterIndex(currentChapterIndex - 1)
+      setCurrentChapterIndex(currentChapterIndex - 1);
     }
-  }
+  };
   const handleSelectChapter = index => {
     if (currentChapterIndex !== index) {
-      setCurrentChapterIndex(index)
+      setCurrentChapterIndex(index);
     }
-  }
+  };
   useEffect(() => {
     if (autoUnlock && currentChapter && currentChapter?.unlock !== 1) {
-      handleUnlockChapter()
+      handleUnlockChapter();
     }
-  }, [currentChapter])
+  }, [autoUnlock, currentChapter, handleUnlockChapter]);
 
   const handleUnlockChapter = () => {
     if (!loggedIn) {
-      setShow(true)
+      setShow(true);
       // showToast('you need to login first for read this book', 'info');
       // navigation.navigate('signIn');
     }
     const formData = {
       book_id: currentChapter.book_id,
       chapter_id: currentChapter.id,
-    }
+    };
 
     booksService
       .unlockChapter(formData)
       .then(res => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.code == 201) {
-          setVisible(false)
-          showToast(res.data.message, 'error')
-          return
+          setVisible(false);
+          showToast(res.data.message, 'error');
+          return;
         }
 
         const bookData = {
           book_id: bookId,
           language: BookDetails.lng_id,
-        }
-        getChapterData(bookData)
-        showToast(res.data.message)
-        dispatch(updateCoins(coins - currentChapter.chapter_reading_cost))
+        };
+        getChapterData(bookData);
+        showToast(res.data.message);
+        dispatch(updateCoins(coins - currentChapter.chapter_reading_cost));
       })
       .catch(error => {
-        console.log(error, 'error')
-      })
-  }
+        console.log(error, 'error');
+      });
+  };
 
-  const handleToggleOptions = () => setShowOptions(!showOptions)
-
-  const baseTextStyle = {
-    textAlign: textSettings.textAlign,
-    fontWeight: textSettings.fontWeight,
-    lineHeight: textSettings.lineHeight,
-    fontFamily: textSettings.fontFamily,
-    color: textSettings.color,
-    fontSize: textSettings.fontSize,
-    backgroundColor: textSettings.backgroundColor,
-  }
-
-  const cleanHtmlContent = htmlContent => {
-    if (!htmlContent) return ''
-
-    // Use regex to remove 'background-color' and 'color' inline styles
-    return htmlContent
-      .replace(/background-color\s*:\s*[^;]+;?/gi, '') // Remove background-color styles
-      .replace(/color\s*:\s*[^;]+;?/gi, '') // Remove color styles
-  }
+  const handleToggleOptions = () => setShowOptions(!showOptions);
 
   return (
     <RowContainer style={{backgroundColor: textSettings.backgroundColor}}>
@@ -227,8 +208,8 @@ function ReadingScreen ({navigation, route}) {
             </TouchableText>
             <TouchableText
               onPress={() => {
-                setVisible(true)
-                setModalData(chapters)
+                setVisible(true);
+                setModalData(chapters);
               }}>
               <MIcons
                 name={'library-books'}
@@ -249,34 +230,10 @@ function ReadingScreen ({navigation, route}) {
             </HeadingText>
             {currentChapter && currentChapter.unlock === 1 ? (
               <View style={{marginVertical: 10}}>
-                <View
-                  style={[
-                    styles.chapterContent,
-                    {
-                      textAlign: textSettings.textAlign,
-                      fontWeight: textSettings.fontWeight,
-                      lineHeight: textSettings.lineHeight,
-                      fontFamily: textSettings.fontFamily,
-                      color: textSettings.color,
-                      fontSize: textSettings.fontSize,
-                      backgroundColor: textSettings.backgroundColor,
-                    },
-                  ]}>
-                  <RenderHtml
-                    contentWidth={width}
-                    source={{
-                      html: cleanHtmlContent(currentChapter?.chapter_details?.content),
-                    }}
-                    tagsStyles={{
-                      div: baseTextStyle,
-                      h1: baseTextStyle,
-                      h2: baseTextStyle,
-                      h3: baseTextStyle,
-                      p: baseTextStyle,
-                      span: baseTextStyle,
-                    }}
-                  />
-                </View>
+                <HtmlContentRenderer
+                  htmlContent={currentChapter?.chapter_details?.content}
+                  textSettings={textSettings}
+                />
                 <View
                   style={{
                     paddingTop: 60,
@@ -431,10 +388,10 @@ function ReadingScreen ({navigation, route}) {
         onCancel={() => setShow(false)}
       />
     </RowContainer>
-  )
+  );
 }
 
-export default ReadingScreen
+export default ReadingScreen;
 
 const styles = StyleSheet.create({
   chapterNum: {
@@ -455,4 +412,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 50,
   },
-})
+});
