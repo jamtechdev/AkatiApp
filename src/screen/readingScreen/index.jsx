@@ -249,7 +249,7 @@ function ReadingScreen ({navigation, route}) {
             </HeadingText>
             {currentChapter && currentChapter.unlock === 1 ? (
               <View style={{marginVertical: 10}}>
-                <Text
+                <View
                   style={[
                     styles.chapterContent,
                     {
@@ -276,7 +276,7 @@ function ReadingScreen ({navigation, route}) {
                       span: baseTextStyle,
                     }}
                   />
-                </Text>
+                </View>
                 <View
                   style={{
                     paddingTop: 60,
