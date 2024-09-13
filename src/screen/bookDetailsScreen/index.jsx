@@ -29,11 +29,12 @@ import NoDataFound from '../../components/NoDataFound';
 import LinearGradient from 'react-native-linear-gradient';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
-import {getAuth} from '../../_store/_reducers/auth';
+import {getAuth, getLanguage} from '../../_store/_reducers/auth';
 import {publicService} from '../../_services/public.service';
 
 function BookDetailsScreen({navigation, route}) {
   const {loggedIn} = useSelector(getAuth);
+  const language = useSelector(getLanguage);
   const [chapters, setChapters] = useState([]);
   const [rating, setRating] = useState([]);
   const [ratingAverage, setRatingAverage] = useState(0);
@@ -53,7 +54,7 @@ function BookDetailsScreen({navigation, route}) {
     rating_average,
     ratings,
   } = bookItem;
-  // console.log(bookItem)
+  console.log(language)
   useEffect(() => {
     if (BookDetails) {
       const bookData = {
@@ -63,7 +64,7 @@ function BookDetailsScreen({navigation, route}) {
       if (!loggedIn) {
         setRating(ratings);
         publicService
-          .getPublicBookChapters(bookId)
+          .getPublicBookChapters(bookId, language)
           .then(response => {
             setChapters(response.data.chapters);
           })

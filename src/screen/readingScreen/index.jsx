@@ -7,6 +7,7 @@ import {
   GradientView,
   HeadingText,
   HorizontalScrollView,
+  HtmlContentRenderer,
   RowContainer,
   Skeleton,
   TouchableText,
@@ -23,6 +24,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
@@ -51,7 +53,7 @@ function ReadingScreen({navigation, route}) {
   const [show, setShow] = useState(false);
   const {showToast, showLoader, hideLoader} = useAppContext();
   const scrollViewRef = useRef(null); // Reference for ScrollView
-
+  const {width} = useWindowDimensions();
   const [filterVisible, setFilterVisible] = useState(false); // State for filter modal
   const [textSettings, setTextSettings] = useState({
     textAlign: 'left',
@@ -79,7 +81,7 @@ function ReadingScreen({navigation, route}) {
           console.log(error);
         });
     }
-  }, [params]);
+  }, [loggedIn]);
 
   const getChapterData = bookData => {
     booksService
@@ -123,7 +125,7 @@ function ReadingScreen({navigation, route}) {
     if (autoUnlock && currentChapter && currentChapter?.unlock !== 1) {
       handleUnlockChapter();
     }
-  }, [currentChapter]);
+  }, [autoUnlock, currentChapter, handleUnlockChapter]);
 
   const handleUnlockChapter = () => {
     if (!loggedIn) {
@@ -223,26 +225,14 @@ function ReadingScreen({navigation, route}) {
         <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
           <>
             <HeadingText style={{color: textSettings.color}}>
-              {t('screens.reading.chapter')} {currentChapterIndex + 1}-{' '}
               {currentChapter?.chapter_details?.title}
             </HeadingText>
             {currentChapter && currentChapter.unlock === 1 ? (
               <View style={{marginVertical: 10}}>
-                <Text
-                  style={[
-                    styles.chapterContent,
-                    {
-                      textAlign: textSettings.textAlign,
-                      fontWeight: textSettings.fontWeight,
-                      lineHeight: textSettings.lineHeight,
-                      fontFamily: textSettings.fontFamily,
-                      color: textSettings.color,
-                      fontSize: textSettings.fontSize,
-                      backgroundColor: textSettings.backgroundColor,
-                    },
-                  ]}>
-                  {currentChapter?.chapter_details?.content}
-                </Text>
+                <HtmlContentRenderer
+                  htmlContent={currentChapter?.chapter_details?.content}
+                  textSettings={textSettings}
+                />
                 <View
                   style={{
                     paddingTop: 60,

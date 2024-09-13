@@ -31,6 +31,7 @@ import {
   clearTransactionIOS,
 } from 'react-native-iap';
 import {useTranslation} from 'react-i18next';
+import axiosInstance from '../../_services/axiosInstance';
 
 export default function RechargeScreen({navigation}) {
   const [rechargePlans, setRechargePlans] = useState();
@@ -93,10 +94,8 @@ export default function RechargeScreen({navigation}) {
         rechargeAmount: selectedPlan.recharge_amount,
       });
     } else if (type == 'apple') {
-      _requestSubscription(
-        `com.akati.ebook.${selectedPlan.coin_balance}.coin`,
-        selectedPlan,
-      );
+      console.log(selectedPlan.ios_device_id);
+      _requestSubscription(selectedPlan.ios_device_id, selectedPlan);
     } else {
       navigation.navigate('CinetPaymentScreen', {
         coins: selectedPlan.coin_balance,
@@ -105,7 +104,7 @@ export default function RechargeScreen({navigation}) {
     }
   };
 
-  savePaymentDetails = async (paymentResponse, item) => {
+  const savePaymentDetails = async (paymentResponse, item) => {
     console.log('...paymentResponse', paymentResponse);
     console.log('...item', item);
     const body = {
@@ -117,6 +116,7 @@ export default function RechargeScreen({navigation}) {
       json: JSON.stringify(paymentResponse),
     };
 
+    console.log('body', JSON.stringify(body));
     const {data} = await axiosInstance
       .post('PaypalTransactionHistory', body)
       .catch(err => {
@@ -124,13 +124,9 @@ export default function RechargeScreen({navigation}) {
       });
     console.log('updating payment history', data);
     if (data.success) {
-      Alert.alert('Your Payment is done');
-      setTimeout(() => {
-        navigation.goBack();
-      }, 2000);
+      showToast('Your Payment is done');
     } else {
-      Alert.alert('Something went wrong.');
-      navigation.goBack();
+      showToast('Something went wrong.', 'error');
     }
   };
 

@@ -16,7 +16,7 @@ const Card = ({item, style}) => {
           <FastImage
             source={{uri: IMAGE_API_URL + item.cover_image}}
             style={styles.image}
-            resizeMode={FastImage.resizeMode.cover}
+            resizeMode={FastImage.resizeMode.stretch}
           />
         )}
       </View>
