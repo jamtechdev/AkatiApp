@@ -225,7 +225,6 @@ function ReadingScreen({navigation, route}) {
         <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
           <>
             <HeadingText style={{color: textSettings.color}}>
-              {t('screens.reading.chapter')} {currentChapterIndex + 1}-{' '}
               {currentChapter?.chapter_details?.title}
             </HeadingText>
             {currentChapter && currentChapter.unlock === 1 ? (

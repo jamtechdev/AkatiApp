@@ -96,7 +96,7 @@ export default function RechargeScreen({navigation}) {
     } else if (type == 'apple') {
       console.log(selectedPlan.ios_device_id)
       _requestSubscription(
-        `${selectedPlan.ios_device_id}`,
+        selectedPlan.ios_device_id,
         selectedPlan,
       );
     } else {
