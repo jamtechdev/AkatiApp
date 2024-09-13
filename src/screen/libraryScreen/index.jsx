@@ -99,7 +99,10 @@ export default function LibraryScreen({navigation}) {
         showToast(t('screens.library.errorDeleteToast'), 'error');
       });
   };
-
+  
+  const filterBooksByStatus = (books, statusToFilterOut= 0) => {
+    return books.filter(book => book?.status !== statusToFilterOut);
+  };
   const renderItem = ({item}) => {
     return (
       <View style={styles.cardContainer}>
@@ -171,7 +174,7 @@ export default function LibraryScreen({navigation}) {
         </View>
       ) : (
         <FlatList
-          data={libraryBooks}
+          data={filterBooksByStatus(libraryBooks)}
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
           numColumns={2}
