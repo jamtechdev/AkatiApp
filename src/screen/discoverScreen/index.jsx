@@ -89,29 +89,32 @@ export default function DiscoverScreen() {
       <HorizontalScrollView data={data} isCircle={isCircle} />
     );
 
+    const filterBooksByStatus = (books, statusToFilterOut= 0) => {
+      return books.filter(book => book?.status !== statusToFilterOut);
+    };
   return (
     <RowContainer>
       <FlatList
         data={[
           {
             title: t('screens.dashboardPage.fromLibrary'),
-            data: libraryBooks,
+            data: filterBooksByStatus(libraryBooks),
             key: 'libraryBooks',
             isCircle: true,
           },
           {
             title: t('screens.dashboardPage.new'),
-            data: newBooks,
+            data: filterBooksByStatus(newBooks),
             key: 'newBooks',
           },
           {
             title: t('screens.dashboardPage.must'),
-            data: mustReadBooks,
+            data: filterBooksByStatus(mustReadBooks),
             key: 'mustReadBooks',
           },
           {
             title: t('screens.dashboardPage.like'),
-            data: alsoLikeBooks,
+            data: filterBooksByStatus(alsoLikeBooks),
             key: 'alsoLikeBooks',
           },
         ]}

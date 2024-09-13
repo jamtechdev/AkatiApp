@@ -50,6 +50,10 @@ useEffect(()=>{
     );
   };
 
+   const filterBooksByStatus = (books, statusToFilterOut= 0) => {
+    return books.filter(book => book?.status !== statusToFilterOut);
+  };
+
   return (
     <RowContainer>
       <View style={styles.headerRow}>
@@ -68,7 +72,7 @@ useEffect(()=>{
         </View>
       ) : (
         <FlatList
-          data={publicBooks}
+          data={filterBooksByStatus(publicBooks)}
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
           numColumns={2}
