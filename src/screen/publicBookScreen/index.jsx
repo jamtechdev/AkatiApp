@@ -50,7 +50,7 @@ useEffect(()=>{
     );
   };
 
-   const filterBooksByStatus = (books, statusToFilterOut= 0) => {
+  const filterBooksByStatus = (books, statusToFilterOut = 0) => {
     return books.filter(book => book?.status !== statusToFilterOut);
   };
 

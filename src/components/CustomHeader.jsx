@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Colors} from '../_utils/GlobalStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -29,6 +29,15 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
       code: 'de'
     }
   ];
+  useEffect(() => {
+    if(language !==undefined ){
+      const langCode = languageMap[language];
+      if(langCode){
+      i18n.changeLanguage(langCode);
+      }
+    }
+  }, [ ]);
+
   const handleLanguageClick = lang => {
     dispatch(languageSet(lang.value));
     i18n.changeLanguage(lang.code);
