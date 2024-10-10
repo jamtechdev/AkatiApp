@@ -54,7 +54,7 @@ function BookDetailsScreen({navigation, route}) {
     rating_average,
     ratings,
   } = bookItem;
-  console.log(language)
+  // console.log(language)
   useEffect(() => {
     if (BookDetails) {
       const bookData = {
