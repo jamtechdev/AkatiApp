@@ -89,7 +89,12 @@
       "reviews": "Bewertungen",
       "reviewPlaceholder": "Geben Sie hier Ihre Bewertung ein....",
       "noChapter": "Keine Kapitel!",
-      "noChapterAdded": "Dem Buch wurden keine Kapitel hinzugefügt."
+      "noChapterAdded": "Dem Buch wurden keine Kapitel hinzugefügt.",
+      "warning1": "Dieser Abschnitt des Buches kann Material enthalten, das für Leser unter 16 Jahren ungeeignet ist. Er enthält Themen oder Inhalte, die explizit oder heikel sein können. Dem Leser wird Diskretion angeraten.",
+      "warning2": "Bitte bestätigen Sie, dass Sie mindestens 16 Jahre alt sind, um fortzufahren. Wenn Sie unter 16 sind, empfehlen wir, diesen Abschnitt zu überspringen oder einen Elternteil oder Erziehungsberechtigten zu konsultieren.",
+      "ageDec": "Ich bin mindestens 16 Jahre alt.",
+      "checkBox": "Bitte aktivieren Sie das Kontrollkästchen",
+      "caution": "Vorsicht"
     },
     "library": {
       "library": "Bibliothek",
@@ -130,7 +135,7 @@
       "recharge": "Aufladen",
       "coin": "Münzen",
       "voucher": "200 Gutschein gratis erhalten",
-      "addCoin": "Münzen hinzufügen",
+      "addCoin": "hinzufügen",
       "completePayment": "Zahlung abschließen",
       "withPaypal": "Mit PayPal",
       "withCinetpay": "Mit CinetPay",
@@ -222,7 +227,7 @@
       "thanksForReading": "Danke fürs Lesen!",
       "stayTuned": "Bleiben Sie dran, weitere Kapitel kommen bald...",
       "nextChapter": "Nächstes Kapitel",
-      "unlockThisChapter": "Dieses Kapitel freischalten",
+      "unlockThisChapter": "Schalte dieses Buch frei",
       "price": "Preis:",
       "story": "Die Geschichte dieses Kapitels ist voller Überraschungen. Viel Spaß beim Lesen.",
       "chapters": "Kapitel",

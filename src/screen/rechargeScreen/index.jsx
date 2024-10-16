@@ -22,7 +22,7 @@ import {getAuth, getLanguage, languageSet} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
 import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
-import coin from '../../images/coin.png';
+import coin from '../../images/coin-img.png';
 import {
   initConnection,
   requestPurchase,
@@ -32,6 +32,7 @@ import {
 } from 'react-native-iap';
 import {useTranslation} from 'react-i18next';
 import axiosInstance from '../../_services/axiosInstance';
+import {moderateVerticalScale} from 'react-native-size-matters';
 
 export default function RechargeScreen({navigation}) {
   const [rechargePlans, setRechargePlans] = useState();
@@ -90,18 +91,15 @@ export default function RechargeScreen({navigation}) {
   const handleGetItem = type => {
     if (type == 'paypal') {
       navigation.navigate('PayPalPaymentScreen', {
-        coins: selectedPlan.coin_balance,
+        coins: selectedPlan.coin_balance / 10,
         rechargeAmount: selectedPlan.recharge_amount,
       });
     } else if (type == 'apple') {
-      console.log(selectedPlan.ios_device_id)
-      _requestSubscription(
-        selectedPlan.ios_device_id,
-        selectedPlan,
-      );
+      console.log(selectedPlan.ios_device_id);
+      _requestSubscription(selectedPlan.ios_device_id, selectedPlan);
     } else {
       navigation.navigate('CinetPaymentScreen', {
-        coins: selectedPlan.coin_balance,
+        coins: selectedPlan.coin_balance / 10,
         rechargeAmount: selectedPlan.recharge_amount,
       });
     }
@@ -111,7 +109,7 @@ export default function RechargeScreen({navigation}) {
     console.log('...paymentResponse', paymentResponse);
     console.log('...item', item);
     const body = {
-      coins: item?.coin_balance,
+      coins: item?.coin_balance / 10,
       transaction_id: paymentResponse?.transactionId,
       amount: item?.recharge_amount,
       currency: 'EUR',
@@ -164,18 +162,21 @@ export default function RechargeScreen({navigation}) {
         <View>
           <CustomText
             style={{fontWeight: 700, fontSize: 16, color: Colors.secondary}}>
-            {item?.coin_balance} {t('screens.recharge.coin')}
+            {item?.coin_balance / 10} Coin
           </CustomText>
         </View>
         <CustomText style={{fontWeight: 500, fontSize: 14}}>
-          €{item?.recharge_amount}
+          € {item?.recharge_amount}
+        </CustomText>
+        <CustomText style={{fontWeight: 500, fontSize: 14}}>
+          {item?.recharge_amount * 600} FCFA
         </CustomText>
         <Button
           onPress={() => {
             setSelectedPlan(item);
             setShowModal(true);
           }}
-          title={t('screens.recharge.addCoin')}
+          title={t('screens.recharge.addCoin') + ' Coin'}
           style={{
             paddingHorizontal: 15,
             paddingVertical: 5,
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   card: {
     marginRight: 10,
     width: '45%',
-    height: 180,
+    height: 190,
     borderWidth: 1,
     borderRadius: 10,
     alignItems: 'center',
@@ -265,12 +266,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.secondary,
     backgroundColor: Colors.tertiary,
     marginVertical: 10,
+    paddingTop: moderateVerticalScale(15),
   },
   row: {
     justifyContent: 'space-between',
   },
   image: {
-    width: 70,
-    height: 70,
+    width: 40,
+    height: 40,
   },
 });

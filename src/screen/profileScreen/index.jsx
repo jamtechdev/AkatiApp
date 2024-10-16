@@ -50,7 +50,7 @@ function ProfileScreen() {
               borderRadius: 50,
             }}>
             <Text style={{color: Colors.white}}>
-              {t('screens.profile.coin')} : {userDetails?.coins}
+              Coins : {userDetails?.coins}
             </Text>
           </GradientView>
         </View>

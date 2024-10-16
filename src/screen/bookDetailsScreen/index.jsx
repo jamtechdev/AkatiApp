@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   BottomDrawer,
   Button,
+  Checkbox,
   CustomStarRating,
   CustomText,
   GradientView,
@@ -19,6 +20,7 @@ import {
   Animated,
   TextInput,
   Pressable,
+  Modal,
 } from 'react-native';
 import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
@@ -31,6 +33,7 @@ import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {getAuth, getLanguage} from '../../_store/_reducers/auth';
 import {publicService} from '../../_services/public.service';
+import {moderateVerticalScale} from 'react-native-size-matters';
 
 function BookDetailsScreen({navigation, route}) {
   const {loggedIn} = useSelector(getAuth);
@@ -42,6 +45,8 @@ function BookDetailsScreen({navigation, route}) {
   const [ratingStar, setRatingStar] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [showModel, setShowModel] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isCheck, setIsCheck] = useState(false);
   const {showToast, showLoader, hideLoader} = useAppContext();
   const {t} = useTranslation();
   const {params} = route;
@@ -333,6 +338,10 @@ function BookDetailsScreen({navigation, route}) {
   };
 
   const routeReadingScreen = () => {
+    if (!isCheck) {
+      showToast(t('screens.bookDetails.checkBox'), 'info');
+      return;
+    }
     if (!chapters || (chapters?.length == 0 && !BookDetails)) {
       showToast(t('screens.bookDetails.noChapterAdded'), 'error');
       return;
@@ -343,6 +352,8 @@ function BookDetailsScreen({navigation, route}) {
       BookDetails: BookDetails,
       categories: categories,
     });
+    setIsCheck(false);
+    setIsVisible(false);
   };
 
   return (
@@ -477,7 +488,7 @@ function BookDetailsScreen({navigation, route}) {
                     textStyle={{color: Colors.secondary, fontWeight: '400'}}
                     gradient={false}
                     title={t('screens.bookDetails.reading')}
-                    onPress={() => routeReadingScreen()}
+                    onPress={() => setIsVisible(prev => !prev)}
                   />
                 </View>
                 <View style={{width: '50%', paddingHorizontal: 5}}>
@@ -503,9 +514,11 @@ function BookDetailsScreen({navigation, route}) {
               <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                 <View style={{width: '80%', paddingHorizontal: 5}}>
                   <Button
-                     style={{paddingVertical: 10, paddingHorizontal: 10}}
+                    style={{paddingVertical: 10, paddingHorizontal: 10}}
                     title={t('screens.bookDetails.reading')}
-                    onPress={() => routeReadingScreen()}
+                    onPress={() => {
+                      setIsVisible(prev => !prev);
+                    }}
                   />
                 </View>
                 {/* <View style={{width: '100%', paddingHorizontal: 5}}>
@@ -580,6 +593,68 @@ function BookDetailsScreen({navigation, route}) {
           />
         </View>
       </BottomDrawer>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isVisible}
+        onRequestClose={() => setIsVisible(prev => !prev)}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text
+              style={{
+                color: Colors.gradient,
+                borderBottomWidth: 3,
+                borderBottomColor: Colors.gradientReverse,
+                fontSize: 32,
+                marginBottom: moderateVerticalScale(10),
+              }}>
+              {t('screens.bookDetails.caution')}
+            </Text>
+            <Text
+              style={{
+                color: Colors.white,
+                textAlign: 'justify',
+              }}>
+              {t('screens.bookDetails.warning1')}
+              {'\n'}
+              {t('screens.bookDetails.warning2')}
+            </Text>
+            <View
+              style={{
+                alignItems: 'flex-start',
+              }}>
+              <Checkbox
+                checked={isCheck}
+                onChange={() => setIsCheck(prev => !prev)}
+                label={t('screens.bookDetails.ageDec')}
+                containerStyle={{
+                  marginVertical: moderateVerticalScale(10),
+                }}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 10,
+              }}>
+              <Button
+                title={t('screens.action.ok')}
+                gradient={true}
+                style={{paddingHorizontal: '20%'}}
+                onPress={() => {
+                  routeReadingScreen();
+                }}
+              />
+              <Button
+                title={t('screens.action.cancel')}
+                gradient={true}
+                style={{paddingHorizontal: '15%'}}
+                onPress={() => setIsVisible(false)}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </RowContainer>
   );
 }
@@ -710,6 +785,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 10,
     backgroundColor: Colors.tertiary,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 25,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+  },
+  modalView: {
+    width: '90%',
+    margin: 20,
+    backgroundColor: Colors.primary,
+    borderRadius: 20,
+    padding: 30,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
 

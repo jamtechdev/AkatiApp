@@ -91,7 +91,12 @@
       "noChapter": "No Chapters!",
       "noChapterAdded": "There are no chapters added in book.",
       "submit": "Submit",
-      "noData": "No Reviews!"
+      "noData": "No Reviews!",
+      "warning1": "This section of the book may contain material that is inappropriate for readers under 16 years of age. It includes themes or content that could be explicit or sensitive. Viewer discretion is advised.",
+      "warning2": "Please confirm that you are at least 16 years old to proceed. If you are under 16, we recommend skipping this section or consulting with a parent or guardian.",
+      "ageDec": "I am at least 16 years old.",
+      "checkBox": "Please check the box",
+      "caution": "Caution"
     },
     "library": {
       "library": "Library",
@@ -132,7 +137,7 @@
       "recharge": "Recharge",
       "coin": "Coins",
       "voucher": "GET 200 Voucher Free",
-      "addCoin": "Add coin",
+      "addCoin": "Add",
       "completePayment": "Complete Your Payment",
       "withPaypal": "With PayPal",
       "withCinetpay": "With CinetPay",
@@ -242,7 +247,7 @@
       "thanksForReading": "Thanks for reading!",
       "stayTuned": "Stay Tuned, more chapters are coming soon...",
       "nextChapter": "Next Chapter",
-      "unlockThisChapter": "Unlock This Chapter",
+      "unlockThisChapter": "Unlock This Book",
       "price": "Price:",
       "story": " The story of this chapter is full of surprises. May you enjoy your time when reading it.",
       "chapters": "Chapters",

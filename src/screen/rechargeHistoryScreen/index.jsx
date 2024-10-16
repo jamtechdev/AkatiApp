@@ -14,7 +14,7 @@ import {getAuth, getLanguage, languageSet} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
 import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
-import coin from '../../images/coin.png';
+import coin from '../../images/coin-img.png';
 import {useFocusEffect} from '@react-navigation/native';
 import NoDataFound from '../../components/NoDataFound';
 import {useTranslation} from 'react-i18next';
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   image: {
-    width: 70,
-    height: 70,
+    width: 40,
+    height: 40,
   },
 });

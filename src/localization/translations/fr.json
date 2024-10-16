@@ -89,7 +89,12 @@
       "reviews": "Avis",
       "reviewPlaceholder": "Entrez votre avis ici....",
       "noChapter": "Pas de chapitres!",
-      "noChapterAdded": "Il n'y a aucun chapitre ajouté au livre."
+      "noChapterAdded": "Il n'y a aucun chapitre ajouté au livre.",
+      "warning1": "Cette section du livre peut contenir des éléments qui ne sont pas appropriés aux lecteurs de moins de 16 ans. Elle comprend des thèmes ou du contenu qui pourraient être explicites ou sensibles. La discrétion du lecteur est conseillée.",
+      "warning2": "Veuillez confirmer que vous avez au moins 16 ans pour continuer. Si vous avez moins de 16 ans, nous vous recommandons de sauter cette section ou de consulter un parent ou un tuteur.",
+      "ageDec": "J'ai au moins 16 ans.",
+      "checkBox": "Veuillez cocher la case",
+      "caution": "Prudence"
     },
     "library": {
       "library": "Bibliothèque",
@@ -130,7 +135,7 @@
       "recharge": "Recharger",
       "coin": "Pièces",
       "voucher": "Obtenez un Bon de 200 Gratuit",
-      "addCoin": "Ajouter des Pièces",
+      "addCoin": "Ajouter des",
       "completePayment": "Finaliser le Paiement",
       "withPaypal": "Avec PayPal",
       "withCinetpay": "Avec CinetPay",
@@ -222,7 +227,7 @@
       "thanksForReading": "Merci pour votre lecture !",
       "stayTuned": "Restez à l'écoute, d'autres chapitres arrivent bientôt...",
       "nextChapter": "Chapitre Suivant",
-      "unlockThisChapter": "Déverrouiller ce Chapitre",
+      "unlockThisChapter": "Déverrouiller ce livre",
       "price": "prix :",
       "story": "L'histoire de ce chapitre est pleine de surprises. Profitez de votre lecture.",
       "chapters": "Chapitres",

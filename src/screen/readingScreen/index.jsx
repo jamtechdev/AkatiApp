@@ -37,6 +37,9 @@ import CommentsList from '../../components/comment/CommentsList';
 import LinearGradient from 'react-native-linear-gradient';
 import {useTranslation} from 'react-i18next';
 import CommentsBottomDrawer from './_components/CommentBottomDrawer';
+import FastImage from 'react-native-fast-image';
+import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
+import coinImg from '../../images/coin-img.png';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
@@ -291,24 +294,42 @@ function ReadingScreen({navigation, route}) {
                   onPress={handleUnlockChapter}
                   style={{marginTop: 50}}
                 />
-
-                <CustomText
+                <View
                   style={{
-                    fontSize: 15,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    marginVertical: 30,
-                    color: textSettings.color,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 5,
+                    marginTop: moderateVerticalScale(30),
                   }}>
-                  {t('screens.reading.price')}{' '}
-                  <Icons
-                    name={'dollar'}
-                    size={15}
-                    color={Colors.secondary}
-                    style={{textAlign: 'center'}}
-                  />{' '}
-                  {currentChapter?.chapter_reading_cost}
-                </CustomText>
+                  <CustomText
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      // marginVertical: 30,
+                      color: textSettings.color,
+                    }}>
+                    {t('screens.reading.price')}
+                  </CustomText>
+                  <FastImage
+                    source={coinImg}
+                    style={{
+                      width: moderateScale(20),
+                      height: moderateVerticalScale(20),
+                    }}
+                  />
+                  <CustomText
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      // marginVertical: 30,
+                      color: textSettings.color,
+                    }}>
+                    {BookDetails?.coin}
+                  </CustomText>
+                </View>
               </View>
             )}
             {loggedIn && (
