@@ -15,6 +15,7 @@ export {default as TextBadge} from './core/Badge';
 export {default as HorizontalScrollView} from './core/HorizontalScrollView';
 export {default as VerticalScrollView} from './core/VerticalScrollView';
 export {default as GradientView} from './core/GradientView';
+export {default as CustomSwitch} from './core/Switch';
 
 export {default as Divider} from './Divider';
 export {default as ContainerCenter} from './ContainerCenter';
@@ -30,4 +31,4 @@ export {default as CustomStarRating} from './CustomStarRating';
 export {default as TabSwitcher} from './TabSwitcher';
 export {default as BottomDrawer} from './BottomDrawer';
 export {default as TextInputWithIcon} from './TextInputWithIcon';
-export {default as HtmlContentRenderer} from './HtmlContentRenderer'
+export {default as HtmlContentRenderer} from './HtmlContentRenderer';

@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance"; // Adjust the path as needed
+import axiosInstance from './axiosInstance'; // Adjust the path as needed
 
 export const booksService = {
   getMustReadBooks,
@@ -18,23 +18,23 @@ export const booksService = {
 };
 
 async function getMustReadBooks() {
-  return await axiosInstance.get("/discover/MustreadBooks");
+  return await axiosInstance.get('/discover/MustreadBooks');
 }
 
 async function searchBooks(terms, category) {
   return await axiosInstance.get(
-    `/discover/books?search_term=${terms == null ? "" : terms}&category=${
-      category == null ? "" : category
-    }`
+    `/discover/books?search_term=${terms == null ? '' : terms}&category=${
+      category == null ? '' : category
+    }`,
   );
 }
 
 async function getNewBooksList() {
-  return await axiosInstance.get("/new-books-list");
+  return await axiosInstance.get('/new-books-list');
 }
 
 async function getLibraryBooks() {
-  return await axiosInstance.get("/library/books");
+  return await axiosInstance.get('/library/books');
 }
 
 async function getAlsoLikeBooks(terms) {
@@ -42,7 +42,7 @@ async function getAlsoLikeBooks(terms) {
 }
 
 async function getPopularBooks() {
-  return await axiosInstance.get("/discover/PopularBooks");
+  return await axiosInstance.get('/discover/PopularBooks');
 }
 
 async function getBookById(id) {
@@ -50,11 +50,11 @@ async function getBookById(id) {
 }
 
 async function getBookChapters(data) {
-  return await axiosInstance.post("/books/chapters", data);
+  return await axiosInstance.post('/books/chapters', data);
 }
 
 async function addReview(data) {
-  return await axiosInstance.post("/books/review-rating-add", data);
+  return await axiosInstance.post('/books/review-rating-add', data);
 }
 
 async function getBookReview(book_id) {
@@ -62,18 +62,17 @@ async function getBookReview(book_id) {
 }
 
 async function addToLibrary(data) {
-  return await axiosInstance.post("/library/books/add-new", data);
+  return await axiosInstance.post('/library/books/add-new', data);
 }
 
 async function removeFromLibrary(data) {
-  return await axiosInstance.post("/library/books/remove", data);
+  return await axiosInstance.post('/library/books/remove', data);
 }
 
 async function unlockChapter(data) {
-  return await axiosInstance.post("/chapterUnlockCoins", data);
+  return await axiosInstance.post('/chapterUnlockCoins', data);
 }
 
-
 async function getBookCategory() {
-  return await axiosInstance.get("/getBookByCategory");
+  return await axiosInstance.get('/getBookByCategory');
 }

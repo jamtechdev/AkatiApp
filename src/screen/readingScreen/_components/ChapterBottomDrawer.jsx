@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../../../_utils/GlobalStyle';
-import {GradientView, HeadingText} from '../../../components';
+import {CustomSwitch, GradientView, HeadingText} from '../../../components';
 import {useTranslation} from 'react-i18next';
 
 const {height: screenHeight} = Dimensions.get('window');
@@ -24,6 +24,8 @@ const ChapterBottomDrawer = ({
   onPress,
   title,
   textSettings,
+  autoUnlock,
+  setAutoUnlock,
 }) => {
   const translateY = useRef(new Animated.Value(screenHeight)).current;
   const {t} = useTranslation();
@@ -95,6 +97,19 @@ const ChapterBottomDrawer = ({
               )}
             </View>
           </ScrollView>
+          <View
+            style={{
+              marginBottom: 20,
+              paddingVertical: 10,
+              width: '100%',
+              paddingHorizontal: 20,
+            }}>
+            <CustomSwitch
+              onChange={setAutoUnlock}
+              autoUnlock={autoUnlock}
+              textSettings={textSettings}
+            />
+          </View>
         </Animated.View>
       </View>
     </Modal>
@@ -108,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   modal: {
-    height: '50%',
+    height: '60%',
     backgroundColor: 'transparent',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
