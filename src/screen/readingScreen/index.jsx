@@ -380,6 +380,8 @@ function ReadingScreen({navigation, route}) {
         onPress={index => setCurrentChapterIndex(index)}
         title={BookDetails?.title}
         textSettings={textSettings}
+        autoUnlock={autoUnlock}
+        setAutoUnlock={setAutoUnlock}
       />
       <FilterBottomDrawer
         visible={filterVisible}
