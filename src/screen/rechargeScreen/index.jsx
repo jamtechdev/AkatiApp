@@ -42,18 +42,19 @@ export default function RechargeScreen({navigation}) {
   const {t} = useTranslation();
 
   const itemSubs = [
-    'com.akati.ebook.60.coin',
+    'com.akati.ebook.3000.coin',
     'com.akati.ebook.300.coin',
     'com.akati.ebook.200.coin',
     'com.akati.ebook.100.coin',
   ];
 
   useEffect(() => {
-    if (Platform.OS == 'ios') {
+    if (Platform.OS == 'ios' && rechargePlans) {
       initConnection()
         .then(() => {
           // console.log('IAP connection established');
-          getItems();
+          const itemSku = rechargePlans.map(plan => plan.ios_device_id)
+          getItems(itemSku);
         })
         .catch(err => console.log('Error in establishing IAP connection', err));
     }
@@ -63,7 +64,7 @@ export default function RechargeScreen({navigation}) {
         endConnection();
       }
     };
-  }, []);
+  }, [rechargePlans]);
 
   useEffect(() => {
     commonServices
@@ -76,9 +77,9 @@ export default function RechargeScreen({navigation}) {
       });
   }, []);
 
-  const getItems = async () => {
+  const getItems = async sku => {
     try {
-      getProducts({skus: itemSubs})
+      getProducts({skus: sku})
         .then(res => {
           // console.log('result', res);
         })
@@ -95,7 +96,7 @@ export default function RechargeScreen({navigation}) {
         rechargeAmount: selectedPlan.recharge_amount,
       });
     } else if (type == 'apple') {
-      console.log(selectedPlan.ios_device_id);
+      console.log(typeof selectedPlan.ios_device_id, typeof itemSubs[0]);
       _requestSubscription(selectedPlan.ios_device_id, selectedPlan);
     } else {
       navigation.navigate('CinetPaymentScreen', {
