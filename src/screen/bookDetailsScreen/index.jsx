@@ -47,6 +47,7 @@ function BookDetailsScreen({navigation, route}) {
   const [showModel, setShowModel] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
+  const [errorText, setErrorText] = useState('');
   const {showToast, showLoader, hideLoader} = useAppContext();
   const {t} = useTranslation();
   const {params} = route;
@@ -339,7 +340,7 @@ function BookDetailsScreen({navigation, route}) {
 
   const routeReadingScreen = () => {
     if (!isCheck) {
-      showToast(t('screens.bookDetails.checkBox'), 'info');
+      setErrorText(t('screens.bookDetails.checkBox'));
       return;
     }
     if (!chapters || (chapters?.length == 0 && !BookDetails)) {
@@ -625,13 +626,26 @@ function BookDetailsScreen({navigation, route}) {
               }}>
               <Checkbox
                 checked={isCheck}
-                onChange={() => setIsCheck(prev => !prev)}
+                onChange={() => {
+                  setIsCheck(prev => !prev);
+                  setErrorText('');
+                }}
                 label={t('screens.bookDetails.ageDec')}
                 containerStyle={{
                   marginVertical: moderateVerticalScale(10),
                 }}
               />
             </View>
+            {errorText && (
+              <Text
+                style={{
+                  color: Colors.danger,
+                  textAlign: 'justify',
+                }}>
+                {' '}
+                {errorText}
+              </Text>
+            )}
             <View
               style={{
                 flexDirection: 'row',
@@ -790,7 +804,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 25,
     backgroundColor: 'rgba(0,0,0,0.8)',
   },
   modalView: {
