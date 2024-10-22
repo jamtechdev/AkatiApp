@@ -48,6 +48,7 @@ function BookDetailsScreen({navigation, route}) {
   const [isVisible, setIsVisible] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [isErotic, setIsErotic] = useState(false);
   const {showToast, showLoader, hideLoader} = useAppContext();
   const {t} = useTranslation();
   const {params} = route;
@@ -60,7 +61,15 @@ function BookDetailsScreen({navigation, route}) {
     rating_average,
     ratings,
   } = bookItem;
-  // console.log(language)
+
+  useEffect(() => {
+    if (categories) {
+      // Check if there is a category with name 'Erotic'
+      const isCategoryErotic = categories.find(cat => cat.name === 'Erotic');
+      setIsErotic(!!isCategoryErotic); // Set to true or false based on the presence of the category
+    }
+  }, [categories]);
+
   useEffect(() => {
     if (BookDetails) {
       const bookData = {
@@ -339,7 +348,7 @@ function BookDetailsScreen({navigation, route}) {
   };
 
   const routeReadingScreen = () => {
-    if (!isCheck) {
+    if (!isCheck && isErotic) {
       setErrorText(t('screens.bookDetails.checkBox'));
       return;
     }
@@ -489,7 +498,11 @@ function BookDetailsScreen({navigation, route}) {
                     textStyle={{color: Colors.secondary, fontWeight: '400'}}
                     gradient={false}
                     title={t('screens.bookDetails.reading')}
-                    onPress={() => setIsVisible(prev => !prev)}
+                    onPress={() =>
+                      isErotic
+                        ? setIsVisible(prev => !prev)
+                        : routeReadingScreen()
+                    }
                   />
                 </View>
                 <View style={{width: '50%', paddingHorizontal: 5}}>
@@ -517,9 +530,11 @@ function BookDetailsScreen({navigation, route}) {
                   <Button
                     style={{paddingVertical: 10, paddingHorizontal: 10}}
                     title={t('screens.bookDetails.reading')}
-                    onPress={() => {
-                      setIsVisible(prev => !prev);
-                    }}
+                    onPress={() =>
+                      isErotic
+                        ? setIsVisible(prev => !prev)
+                        : routeReadingScreen()
+                    }
                   />
                 </View>
                 {/* <View style={{width: '100%', paddingHorizontal: 5}}>
