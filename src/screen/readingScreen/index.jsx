@@ -109,7 +109,7 @@ function ReadingScreen({navigation, route}) {
     if (currentChapterIndex < chapters.length - 1) {
       setCurrentChapterIndex(currentChapterIndex + 1);
     }
-    if (autoUnlock && currentChapter.unlock !== 1) {
+    if (autoUnlock && currentChapter?.unlock !== 1) {
       handleUnlockChapter();
     }
   };
@@ -137,10 +137,11 @@ function ReadingScreen({navigation, route}) {
       // navigation.navigate('signIn');
     }
     const formData = {
-      book_id: currentChapter.book_id,
-      chapter_id: currentChapter.id,
+      book_id: currentChapter?.book_id,
+      chapter_id: currentChapter?.id,
     };
 
+    console.log(formData, 'formdata buy book');
     booksService
       .unlockChapter(formData)
       .then(res => {
@@ -157,7 +158,7 @@ function ReadingScreen({navigation, route}) {
         };
         getChapterData(bookData);
         showToast(res.data.message);
-        dispatch(updateCoins(coins - currentChapter.chapter_reading_cost));
+        dispatch(updateCoins(coins - currentChapter?.chapter_reading_cost));
       })
       .catch(error => {
         console.log(error, 'error');
@@ -230,7 +231,7 @@ function ReadingScreen({navigation, route}) {
             <HeadingText style={{color: textSettings.color}}>
               {currentChapter?.chapter_details?.title}
             </HeadingText>
-            {currentChapter && currentChapter.unlock === 1 ? (
+            {currentChapter && currentChapter?.unlock === 1 ? (
               <View style={{marginVertical: 10}}>
                 <HtmlContentRenderer
                   htmlContent={currentChapter?.chapter_details?.content}
