@@ -163,7 +163,7 @@ export default function RechargeScreen({navigation}) {
         <View>
           <CustomText
             style={{fontWeight: 700, fontSize: 16, color: Colors.secondary}}>
-            {item?.coin_balance / 10} Coin
+            {item?.coin_balance / 10} Coins
           </CustomText>
         </View>
         <CustomText style={{fontWeight: 500, fontSize: 14}}>
