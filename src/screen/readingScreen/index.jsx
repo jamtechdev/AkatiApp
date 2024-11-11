@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-undef */
 import React, {useEffect, useRef, useState} from 'react';
 import {
   AlertModal,
@@ -43,9 +46,12 @@ import coinImg from '../../images/coin-img.png';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
-  const {bookId, chapters, BookDetails, categories} = params;
+  const {bookId, BookDetails, categories} = params;
   const {coins, loggedIn} = useSelector(getAuth);
   const {t} = useTranslation();
+  const [chapters, setChapters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentChapter, setCurrentChapter] = useState({});
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [showComments, setShowComments] = useState([]);
   const [autoUnlock, setAutoUnlock] = useState(false);
@@ -85,19 +91,37 @@ function ReadingScreen({navigation, route}) {
         });
     }
   }, [loggedIn]);
+  useEffect(() => {
+    if (bookId && BookDetails) {
+      const bookData = {
+        book_id: bookId,
+        language: bookId.lng_id,
+      };
+      getChapterData(bookData);
+    }
+  }, [bookId, bookId]);
+  useEffect(() => {
+    if (chapters) {
+      const current = chapters[currentChapterIndex];
+      setCurrentChapter(current);
+    }
+  }, [currentChapterIndex]);
 
   const getChapterData = bookData => {
     booksService
       .getBookChapters(bookData)
       .then(response => {
         setChapters(response.data.chapters);
+        const current = response.data.chapters[currentChapterIndex];
+        setCurrentChapter(current);
       })
       .catch(error => {
         console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
-
-  const currentChapter = chapters[currentChapterIndex];
 
   useEffect(() => {
     if (scrollViewRef.current) {
@@ -106,7 +130,7 @@ function ReadingScreen({navigation, route}) {
   }, [currentChapterIndex]);
 
   const handleNextChapter = () => {
-    if (currentChapterIndex < chapters.length - 1) {
+    if (currentChapterIndex < chapters?.length - 1) {
       setCurrentChapterIndex(currentChapterIndex + 1);
     }
     if (autoUnlock && currentChapter?.unlock !== 1) {
@@ -231,106 +255,114 @@ function ReadingScreen({navigation, route}) {
             <HeadingText style={{color: textSettings.color}}>
               {currentChapter?.chapter_details?.title}
             </HeadingText>
-            {currentChapter && currentChapter?.unlock === 1 ? (
-              <View style={{marginVertical: 10}}>
-                <HtmlContentRenderer
-                  htmlContent={currentChapter?.chapter_details?.content}
-                  textSettings={textSettings}
-                />
-                <View
-                  style={{
-                    paddingTop: 60,
-                    paddingVertical: 20,
-                  }}>
-                  <Icons
-                    name={'heart'}
-                    size={100}
-                    color={Colors.secondary}
-                    style={{textAlign: 'center'}}
-                  />
-                  <CustomText
-                    style={{
-                      paddingVertical: 30,
-                      fontWeight: 'bold',
-                      fontSize: 14,
-                      textAlign: 'center',
-                      color: textSettings.color,
-                    }}>
-                    {t('screens.reading.thanksForReading')}
-                  </CustomText>
-                </View>
-                <View style={{paddingVertical: 10, paddingBottom: 50}}>
-                  {currentChapterIndex === chapters.length - 1 ? (
-                    BookDetails.is_complete == 0 && (
-                      <CustomText
-                        style={{
-                          color: Colors.secondary,
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                        }}>
-                        {t('screens.reading.stayTuned')}
-                      </CustomText>
-                    )
-                  ) : (
-                    <Button
-                      title={t('screens.reading.nextChapter')}
-                      onPress={handleNextChapter}
-                    />
-                  )}
-                </View>
+            {loading ? (
+              <View style={{marginVertical: 20}}>
+                <Skeleton isLoading={true} count={25} isLine={true} />
               </View>
             ) : (
-              <View style={{paddingVertical: 50, paddingHorizontal: 20}}>
-                <CustomText
-                  style={{
-                    fontSize: 14,
-                    textAlign: 'center',
-                    color: textSettings.color,
-                  }}>
-                  {t('screens.reading.story')}
-                </CustomText>
-                <Button
-                  title={t('screens.reading.unlockThisChapter')}
-                  onPress={handleUnlockChapter}
-                  style={{marginTop: 50}}
-                />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 5,
-                    marginTop: moderateVerticalScale(30),
-                  }}>
-                  <CustomText
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 'bold',
-                      textAlign: 'center',
-                      // marginVertical: 30,
-                      color: textSettings.color,
-                    }}>
-                    {t('screens.reading.price')}
-                  </CustomText>
-                  <FastImage
-                    source={coinImg}
-                    style={{
-                      width: moderateScale(20),
-                      height: moderateVerticalScale(20),
-                    }}
-                  />
-                  <CustomText
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 'bold',
-                      textAlign: 'center',
-                      // marginVertical: 30,
-                      color: textSettings.color,
-                    }}>
-                    {BookDetails?.coin}
-                  </CustomText>
-                </View>
+              <View>
+                {currentChapter && currentChapter?.unlock === 1 ? (
+                  <View style={{marginVertical: 10}}>
+                    <HtmlContentRenderer
+                      htmlContent={currentChapter?.chapter_details?.content}
+                      textSettings={textSettings}
+                    />
+                    <View
+                      style={{
+                        paddingTop: 60,
+                        paddingVertical: 20,
+                      }}>
+                      <Icons
+                        name={'heart'}
+                        size={100}
+                        color={Colors.secondary}
+                        style={{textAlign: 'center'}}
+                      />
+                      <CustomText
+                        style={{
+                          paddingVertical: 30,
+                          fontWeight: 'bold',
+                          fontSize: 14,
+                          textAlign: 'center',
+                          color: textSettings.color,
+                        }}>
+                        {t('screens.reading.thanksForReading')}
+                      </CustomText>
+                    </View>
+                    <View style={{paddingVertical: 10, paddingBottom: 50}}>
+                      {currentChapterIndex === chapters?.length - 1 ? (
+                        BookDetails.is_complete == 0 && (
+                          <CustomText
+                            style={{
+                              color: Colors.secondary,
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              textAlign: 'center',
+                            }}>
+                            {t('screens.reading.stayTuned')}
+                          </CustomText>
+                        )
+                      ) : (
+                        <Button
+                          title={t('screens.reading.nextChapter')}
+                          onPress={handleNextChapter}
+                        />
+                      )}
+                    </View>
+                  </View>
+                ) : (
+                  <View style={{paddingVertical: 50, paddingHorizontal: 20}}>
+                    <CustomText
+                      style={{
+                        fontSize: 14,
+                        textAlign: 'center',
+                        color: textSettings.color,
+                      }}>
+                      {t('screens.reading.story')}
+                    </CustomText>
+                    <Button
+                      title={t('screens.reading.unlockThisChapter')}
+                      onPress={handleUnlockChapter}
+                      style={{marginTop: 50}}
+                    />
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 5,
+                        marginTop: moderateVerticalScale(30),
+                      }}>
+                      <CustomText
+                        style={{
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          // marginVertical: 30,
+                          color: textSettings.color,
+                        }}>
+                        {t('screens.reading.price')}
+                      </CustomText>
+                      <FastImage
+                        source={coinImg}
+                        style={{
+                          width: moderateScale(20),
+                          height: moderateVerticalScale(20),
+                        }}
+                      />
+                      <CustomText
+                        style={{
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          // marginVertical: 30,
+                          color: textSettings.color,
+                        }}>
+                        {currentChapter?.coin}
+                      </CustomText>
+                    </View>
+                  </View>
+                )}
               </View>
             )}
             {loggedIn && (
@@ -360,9 +392,9 @@ function ReadingScreen({navigation, route}) {
           </TouchableText>
           <CustomText style={{color: textSettings.color}}>
             {t('screens.reading.chapter')} {currentChapterIndex + 1} of{' '}
-            {chapters.length}
+            {chapters?.length}
           </CustomText>
-          {currentChapterIndex + 1 !== chapters.length ? (
+          {currentChapterIndex + 1 !== chapters?.length ? (
             <TouchableText
               style={{color: textSettings.color}}
               onPress={handleNextChapter}>
