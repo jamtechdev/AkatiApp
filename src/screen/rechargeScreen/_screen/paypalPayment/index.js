@@ -43,6 +43,7 @@ const PaypalPayment = ({route, navigation}) => {
       currency: paymentResponse.data.transactions[0].amount.currency,
       status: JSON.stringify(paymentResponse.data.payer.status),
       json: JSON.stringify(paymentResponse),
+      payment_method: 'PAYPAL'
     };
 
     // console.log('body', JSON.stringify(body));
@@ -127,8 +128,8 @@ const PaypalPayment = ({route, navigation}) => {
         {
           intent: 'sale',
           redirect_urls: {
-            return_url: 'https://feupsontec.com/payment/success',
-            cancel_url: 'https://feupsontec.com/payment/failed',
+            return_url: 'https://akatibird.com/payment/success',
+            cancel_url: 'https://akatibird.com/payment/failed',
           },
           transactions: [
             {
@@ -174,7 +175,7 @@ const PaypalPayment = ({route, navigation}) => {
     if (webViewState.url.includes(`${RETURN_URL}failed`)) {
       return navigation.goBack();
     }
-    if (webViewState.url.includes(`https://feupsontec.com/payment/success`)) {
+    if (webViewState.url.includes(`https://akatibird.com/payment/success`)) {
       setPaypalUrl(null);
       const urlArr = webViewState.url.split(/(=|&)/);
       const paymentId = urlArr[2];

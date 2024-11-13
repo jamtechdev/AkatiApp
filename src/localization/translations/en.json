@@ -153,7 +153,13 @@
       "history": "Recharge History",
       "notfound": "Data not found!",
       "coin": "Coins",
-      "transactionid": "Transaction ID"
+      "transactionid": "Transaction ID",
+      "close": "Close",
+      "status": "Status",
+      "paymentMethod": "Payment Method",
+      "date": "date",
+      "amount": "Amount",
+      "transactionDetails": "Transaction Details"
     },
     "review": {
       "reviewrating": "App Reviews & Ratings",

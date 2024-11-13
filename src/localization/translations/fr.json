@@ -150,8 +150,14 @@
     "history": {
       "history": "Historique de rechargement",
       "notfound": "Données non trouvées !",
-      "coin": "Pièces",
-      "transactionid": "ID de Transaction"
+      "coin": "Pièces", 
+      "transactionid": "ID de Transaction",
+      "close": "Fermer",
+      "status": "Statut",
+      "paymentMethod": "Mode de paiement",
+      "date": "date",
+      "amount": "Montant",
+      "transactionDetails": "Détails de la transaction"
     },
     "review": {
       "reviewrating": "Notes et avis sur les applications",

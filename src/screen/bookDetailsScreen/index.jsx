@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BottomDrawer,
   Button,
@@ -22,21 +22,21 @@ import {
   Pressable,
   Modal,
 } from 'react-native';
-import GlobalStyles, {Colors} from '../../_utils/GlobalStyle';
+import GlobalStyles, { Colors } from '../../_utils/GlobalStyle';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import {IMAGE_API_URL} from '../../_constant';
-import {booksService} from '../../_services/book.service';
-import {useAppContext} from '../../_customContext/AppProvider';
+import { IMAGE_API_URL } from '../../_constant';
+import { booksService } from '../../_services/book.service';
+import { useAppContext } from '../../_customContext/AppProvider';
 import NoDataFound from '../../components/NoDataFound';
 import LinearGradient from 'react-native-linear-gradient';
-import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import {getAuth, getLanguage} from '../../_store/_reducers/auth';
-import {publicService} from '../../_services/public.service';
-import {moderateVerticalScale} from 'react-native-size-matters';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getAuth, getLanguage } from '../../_store/_reducers/auth';
+import { publicService } from '../../_services/public.service';
+import { moderateVerticalScale } from 'react-native-size-matters';
 
-function BookDetailsScreen({navigation, route}) {
-  const {loggedIn} = useSelector(getAuth);
+function BookDetailsScreen({ navigation, route }) {
+  const { loggedIn } = useSelector(getAuth);
   const language = useSelector(getLanguage);
   const [chapters, setChapters] = useState([]);
   const [rating, setRating] = useState([]);
@@ -49,10 +49,10 @@ function BookDetailsScreen({navigation, route}) {
   const [isCheck, setIsCheck] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [isErotic, setIsErotic] = useState(false);
-  const {showToast, showLoader, hideLoader} = useAppContext();
-  const {t} = useTranslation();
-  const {params} = route;
-  const {bookId, bookItem} = params;
+  const { showToast, showLoader, hideLoader } = useAppContext();
+  const { t } = useTranslation();
+  const { params } = route;
+  const { bookId, bookItem } = params;
   const {
     BookDetails,
     categories,
@@ -127,7 +127,7 @@ function BookDetailsScreen({navigation, route}) {
   };
   const handleAddToLibrary = bookId => {
     booksService
-      .addToLibrary({book_id: bookId})
+      .addToLibrary({ book_id: bookId })
       .then(res => {
         setIsInLibrary(true);
         showToast(res.data.message);
@@ -150,11 +150,11 @@ function BookDetailsScreen({navigation, route}) {
 
   const handleShare = book => {
     const title = BookDetails.title;
-    const message = `Book Name : ${title}  \n\nCheck out this page for reading "${BookDetails.title}" by "${BookDetails.author}". For more books, please download and explore thousands of titles. \n\nFor Android, check this: https://play.google.com/store/apps/details?id=com.akati \nFor iOS, check this: https://apps.apple.com/in/app/akati/id1633617962 \nFor web, visit: https://app.feupsontec.com`;
+    const message = `Book Name : ${title}  \n\nCheck out this page for reading "${BookDetails.title}" by "${BookDetails.author}". For more books, please download and explore thousands of titles. \n\nFor Android, check this: https://play.google.com/store/apps/details?id=com.akati \nFor iOS, check this: https://apps.apple.com/in/app/akati/id1633617962 \nFor web, visit: https://app.akatibird.com`;
     Share.share({
       title: title,
       message: message,
-      url: 'https://app.feupsontec.com',
+      url: 'https://app.akatibird.com',
     })
       .then(result => {
         if (result.action === Share.sharedAction) {
@@ -208,7 +208,7 @@ function BookDetailsScreen({navigation, route}) {
                 <GradientView
                   style={styles.addButton}
                   onPress={() => setShowModel(true)}>
-                  <CustomText style={{fontSize: 15, fontWeight: 600}}>
+                  <CustomText style={{ fontSize: 15, fontWeight: 600 }}>
                     {t('screens.bookDetails.addReview')}
                   </CustomText>
                   <Icons name={'plus-circle'} size={15} color={Colors.white} />
@@ -232,7 +232,7 @@ function BookDetailsScreen({navigation, route}) {
                     <View style={styles.reviewHeader}>
                       <Image
                         style={styles.reviewImage}
-                        source={{uri: item?.user?.profile_image_url_web}}
+                        source={{ uri: item?.user?.profile_image_url_web }}
                         resizeMode="stretch"
                       />
                       <View style={styles.reviewHeaderTextContainer}>
@@ -358,7 +358,7 @@ function BookDetailsScreen({navigation, route}) {
     }
     navigation.navigate('Reading', {
       bookId: bookId,
-      chapters: chapters,
+      chaptersDetails: chapters,
       BookDetails: BookDetails,
       categories: categories,
     });
@@ -367,18 +367,18 @@ function BookDetailsScreen({navigation, route}) {
   };
 
   return (
-    <RowContainer style={{paddingHorizontal: 0, paddingTop: 0, flex: 1}}>
-      <View style={{flex: 1}}>
+    <RowContainer style={{ paddingHorizontal: 0, paddingTop: 0, flex: 1 }}>
+      <View style={{ flex: 1 }}>
         {/* <GradientView
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
           <Icons name={'long-arrow-left'} size={20} color={'white'} />
         </GradientView> */}
-        <View style={{position: 'absolute', top: 15}}>
+        <View style={{ position: 'absolute', top: 15 }}>
           <LinearGradient
             colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 1}}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={GlobalStyles.backButton}>
             <Pressable
               onPress={() => navigation.goBack()}
@@ -387,11 +387,11 @@ function BookDetailsScreen({navigation, route}) {
             </Pressable>
           </LinearGradient>
         </View>
-        <View style={{position: 'absolute', top: 15, right: 60}}>
+        <View style={{ position: 'absolute', top: 15, right: 60 }}>
           <LinearGradient
             colors={['rgba(255, 81, 47, 1)', 'rgba(221, 36, 118, 1)']}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 1}}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={GlobalStyles.rightButton}>
             <Pressable onPress={handleShare} style={GlobalStyles.rightButton}>
               <Icons name={'share-alt'} size={20} color={'white'} />
@@ -403,10 +403,10 @@ function BookDetailsScreen({navigation, route}) {
         <GradientView style={styles.shareButton} onPress={handleShare}>
           <Icons name={'share-alt'} size={20} color={'white'} />
         </GradientView> */}
-        <Animated.View style={{height: headerHeight, zIndex: -1}}>
+        <Animated.View style={{ height: headerHeight, zIndex: -1 }}>
           <Image
-            source={{uri: IMAGE_API_URL + cover_image}}
-            style={{width: '100%', height: '100%'}}
+            source={{ uri: IMAGE_API_URL + cover_image }}
+            style={{ width: '100%', height: '100%' }}
             resizeMode="cover"
           />
           <View
@@ -427,32 +427,32 @@ function BookDetailsScreen({navigation, route}) {
           <Animated.Image
             style={[
               styles.scrollMainImage,
-              {width: imageSize, height: imageSize, marginBottom: imagePadding},
+              { width: imageSize, height: imageSize, marginBottom: imagePadding },
             ]}
-            source={{uri: IMAGE_API_URL + cover_image}}
+            source={{ uri: IMAGE_API_URL + cover_image }}
             resizeMode="stretch"
           />
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: scrollY}}}],
-            {useNativeDriver: false},
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: false },
           )}
           scrollEventThrottle={16}>
-          <View style={{paddingVertical: 20, gap: 10, paddingHorizontal: 10}}>
+          <View style={{ paddingVertical: 20, gap: 10, paddingHorizontal: 10 }}>
             <Text
-              style={{color: Colors.white, fontWeight: '600', fontSize: 22}}>
+              style={{ color: Colors.white, fontWeight: '600', fontSize: 22 }}>
               {BookDetails?.title}
             </Text>
             <Text
-              style={{color: Colors.darkGray, fontWeight: '400', fontSize: 12}}>
+              style={{ color: Colors.darkGray, fontWeight: '400', fontSize: 12 }}>
               {t('screens.bookDetails.bookAuthor')}: {BookDetails?.author}
             </Text>
 
             {!rating_average ? null : (
-              <View style={{marginVertical: 10, gap: 5}}>
+              <View style={{ marginVertical: 10, gap: 5 }}>
                 <View
                   style={{
                     color: Colors.secondary,
@@ -470,7 +470,7 @@ function BookDetailsScreen({navigation, route}) {
                   </Text>
                   <CustomStarRating rate={ratingAverage} />
                 </View>
-                <CustomText style={{color: Colors.darkGray, fontSize: 16}}>
+                <CustomText style={{ color: Colors.darkGray, fontSize: 16 }}>
                   {t('screens.bookDetails.based')} {ratings?.length}{' '}
                   {t('screens.bookDetails.rating')}
                 </CustomText>
@@ -487,15 +487,15 @@ function BookDetailsScreen({navigation, route}) {
               </View>
             </View>
             {loggedIn && (
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                <View style={{width: '50%', paddingHorizontal: 5}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <View style={{ width: '50%', paddingHorizontal: 5 }}>
                   <Button
                     style={{
                       paddingVertical: 10,
                       paddingHorizontal: 10,
                       backgroundColor: Colors.white,
                     }}
-                    textStyle={{color: Colors.secondary, fontWeight: '400'}}
+                    textStyle={{ color: Colors.secondary, fontWeight: '400' }}
                     gradient={false}
                     title={t('screens.bookDetails.reading')}
                     onPress={() =>
@@ -505,16 +505,16 @@ function BookDetailsScreen({navigation, route}) {
                     }
                   />
                 </View>
-                <View style={{width: '50%', paddingHorizontal: 5}}>
+                <View style={{ width: '50%', paddingHorizontal: 5 }}>
                   {!isInLibrary ? (
                     <Button
-                      style={{paddingVertical: 10, paddingHorizontal: 10}}
+                      style={{ paddingVertical: 10, paddingHorizontal: 10 }}
                       title={t('screens.bookDetails.addLibrary')}
                       onPress={() => handleAddToLibrary(BookDetails?.book_id)}
                     />
                   ) : (
                     <Button
-                      style={{paddingVertical: 10, paddingHorizontal: 10}}
+                      style={{ paddingVertical: 10, paddingHorizontal: 10 }}
                       title={t('screens.bookDetails.removeLibrary')}
                       onPress={() =>
                         handleRemoveFromLibrary(BookDetails?.book_id)
@@ -525,10 +525,10 @@ function BookDetailsScreen({navigation, route}) {
               </View>
             )}
             {!loggedIn && (
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                <View style={{width: '80%', paddingHorizontal: 5}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <View style={{ width: '80%', paddingHorizontal: 5 }}>
                   <Button
-                    style={{paddingVertical: 10, paddingHorizontal: 10}}
+                    style={{ paddingVertical: 10, paddingHorizontal: 10 }}
                     title={t('screens.bookDetails.reading')}
                     onPress={() =>
                       isErotic
@@ -667,19 +667,29 @@ function BookDetailsScreen({navigation, route}) {
                 gap: 10,
               }}>
               <Button
-                title={t('screens.action.ok')}
-                gradient={true}
-                style={{paddingHorizontal: '20%'}}
-                onPress={() => {
-                  routeReadingScreen();
-                }}
-              />
-              <Button
                 title={t('screens.action.cancel')}
                 gradient={true}
-                style={{paddingHorizontal: '15%'}}
+                style={{ paddingHorizontal: '15%' }}
                 onPress={() => setIsVisible(false)}
               />
+              {isCheck &&
+                <Button
+                  title={t('screens.action.ok')}
+                  gradient={true}
+                  style={{ paddingHorizontal: '20%' }}
+                  onPress={() => {
+                    routeReadingScreen();
+                  }}
+                />
+              }
+              {!isCheck &&
+                <Button
+                  title={t('screens.action.ok')}
+                  gradient={false}
+                  style={{ paddingHorizontal: '20%', backgroundColor: Colors.darkGray }}
+                
+                />
+              }
             </View>
           </View>
         </View>

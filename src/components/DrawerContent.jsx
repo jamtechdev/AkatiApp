@@ -41,8 +41,8 @@ const DrawerContent = props => {
   const handleShare = () => {
     Share.share({
       title: 'Akati',
-      text: `Check out this site for read more interesting book with multiple language. for more book please download and explore thousands of books.for android please check this: https://play.google.com/store/apps/details?id=com.akati, and for iOS please check this : https://apps.apple.com/in/app/akati/id1633617962  or for web please check the https://app.feupsontec.com`,
-      url: 'https://app.feupsontec.com',
+      text: `Check out this site for read more interesting book with multiple language. for more book please download and explore thousands of books.for android please check this: https://play.google.com/store/apps/details?id=com.akati, and for iOS please check this : https://apps.apple.com/in/app/akati/id1633617962  or for web please check the https://app.akatibird.com`,
+      url: 'https://app.akatibird.com',
     })
       .then(() => console.log('Successfully shared'))
       .catch(error => console.log('Error sharing', error));

@@ -149,9 +149,15 @@
     },
     "history": {
       "history": "Aufladeverlauf",
-      "notfound": "Daten nicht gefunden!",
-      "coin": "Münzen",
-      "transactionid": "Transaktions-ID"
+    "notfound": "Daten nicht gefunden!",
+    "coin": "Münzen", 
+    "transactionid": "Transaktions-ID",
+    "close": "Schließen",
+    "status": "Status",
+    "paymentMethod": "Zahlungsmethode",
+    "date": "Datum",
+    "amount": "Betrag",
+    "transactionDetails": "Transaktionsdetails"
     },
     "review": {
       "reviewrating": "App-Bewertungen und -Beurteilungen",

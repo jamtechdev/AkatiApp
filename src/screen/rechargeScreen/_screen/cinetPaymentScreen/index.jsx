@@ -101,6 +101,7 @@ const CinetPaymentScreen = ({route, navigation}) => {
       currency: paymentResponse?.data?.currency,
       status: paymentResponse?.data?.status,
       json: JSON.stringify(paymentResponse),
+      payment_method:'CINET_PAY'
     };
 
     // console.log('body', JSON.stringify(body));

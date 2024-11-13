@@ -16,7 +16,7 @@ import {
   TouchableText,
 } from '../../components';
 import {booksService} from '../../_services/book.service';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {getAuth} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
 import {
@@ -46,9 +46,10 @@ import coinImg from '../../images/coin-img.png';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
-  const {bookId, BookDetails, categories} = params;
+  const {bookId, BookDetails, categories, chaptersDetails } = params;
   const {coins, loggedIn} = useSelector(getAuth);
   const {t} = useTranslation();
+  const dispatch = useDispatch()
   const [chapters, setChapters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentChapter, setCurrentChapter] = useState({});
@@ -108,6 +109,7 @@ function ReadingScreen({navigation, route}) {
   }, [currentChapterIndex]);
 
   const getChapterData = bookData => {
+    if (loggedIn) {
     booksService
       .getBookChapters(bookData)
       .then(response => {
@@ -121,6 +123,12 @@ function ReadingScreen({navigation, route}) {
       .finally(() => {
         setLoading(false);
       });
+    }else{
+      setChapters(chaptersDetails);
+      const current = chaptersDetails[currentChapterIndex];
+      setCurrentChapter(current);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

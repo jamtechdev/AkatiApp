@@ -52,7 +52,6 @@ export default function RechargeScreen({navigation}) {
     if (Platform.OS == 'ios' && rechargePlans) {
       initConnection()
         .then(() => {
-          // console.log('IAP connection established');
           const itemSku = rechargePlans.map(plan => plan.ios_device_id)
           getItems(itemSku);
         })
@@ -92,7 +91,7 @@ export default function RechargeScreen({navigation}) {
   const handleGetItem = type => {
     if (type == 'paypal') {
       navigation.navigate('PayPalPaymentScreen', {
-        coins: selectedPlan.coin_balance / 10,
+        coins: selectedPlan.coin_balance,
         rechargeAmount: selectedPlan.recharge_amount,
       });
     } else if (type == 'apple') {
@@ -100,7 +99,7 @@ export default function RechargeScreen({navigation}) {
       _requestSubscription(selectedPlan.ios_device_id, selectedPlan);
     } else {
       navigation.navigate('CinetPaymentScreen', {
-        coins: selectedPlan.coin_balance / 10,
+        coins: selectedPlan.coin_balance,
         rechargeAmount: selectedPlan.recharge_amount,
       });
     }
@@ -110,12 +109,13 @@ export default function RechargeScreen({navigation}) {
     console.log('...paymentResponse', paymentResponse);
     console.log('...item', item);
     const body = {
-      coins: item?.coin_balance / 10,
+      coins: item?.coin_balance,
       transaction_id: paymentResponse?.transactionId,
       amount: item?.recharge_amount,
       currency: 'EUR',
       status: 'VERIFIED',
       json: JSON.stringify(paymentResponse),
+      payment_method:'APPLE_PAY'
     };
 
     console.log('body', JSON.stringify(body));
@@ -163,7 +163,7 @@ export default function RechargeScreen({navigation}) {
         <View>
           <CustomText
             style={{fontWeight: 700, fontSize: 16, color: Colors.secondary}}>
-            {item?.coin_balance / 10} Coins
+            {item?.coin_balance} Coins
           </CustomText>
         </View>
         <CustomText style={{fontWeight: 500, fontSize: 14}}>
