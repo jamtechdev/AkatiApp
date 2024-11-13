@@ -43,10 +43,11 @@ import CommentsBottomDrawer from './_components/CommentBottomDrawer';
 import FastImage from 'react-native-fast-image';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import coinImg from '../../images/coin-img.png';
+import {publicService} from '../../_services/public.service';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
-  const {bookId, BookDetails, categories, chaptersDetails } = params;
+  const {bookId, BookDetails } = params;
   const {coins, loggedIn} = useSelector(getAuth);
   const {t} = useTranslation();
   const dispatch = useDispatch()
@@ -124,10 +125,18 @@ function ReadingScreen({navigation, route}) {
         setLoading(false);
       });
     }else{
-      setChapters(chaptersDetails);
-      const current = chaptersDetails[currentChapterIndex];
-      setCurrentChapter(current);
-      setLoading(false);
+        publicService
+          .getPublicBookChapters(bookData.book_id, bookData.language)
+          .then(response => {
+            setChapters(response.data.chapters);
+            const current = response.data.chapters[currentChapterIndex];
+            setCurrentChapter(current);
+          })
+          .catch(error => {
+            console.log(error, "error ");
+          }).finally(() => {
+            setLoading(false);
+          });
     }
   };
 

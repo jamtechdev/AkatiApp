@@ -358,9 +358,7 @@ function BookDetailsScreen({ navigation, route }) {
     }
     navigation.navigate('Reading', {
       bookId: bookId,
-      chaptersDetails: chapters,
       BookDetails: BookDetails,
-      categories: categories,
     });
     setIsCheck(false);
     setIsVisible(false);
