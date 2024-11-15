@@ -1,5 +1,13 @@
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Checkbox,
   CustomText,
@@ -9,23 +17,23 @@ import {
   TouchableText,
 } from '../../components';
 // import {Colors} from '../../_utils/GlobalStyle';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAuth, getLanguage, languageSet } from '../../_store/_reducers/auth';
-import { commonServices } from '../../_services/common.service';
-import { getLanguageCode } from '../../_helpers';
-import { useAppContext } from '../../_customContext/AppProvider';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAuth, getLanguage, languageSet} from '../../_store/_reducers/auth';
+import {commonServices} from '../../_services/common.service';
+import {getLanguageCode} from '../../_helpers';
+import {useAppContext} from '../../_customContext/AppProvider';
 import coin from '../../images/coin-img.png';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import NoDataFound from '../../components/NoDataFound';
-import { useTranslation } from 'react-i18next';
-import { Colors } from '../../_utils/GlobalStyle';
+import {useTranslation} from 'react-i18next';
+import {Colors} from '../../_utils/GlobalStyle';
 
 export default function RechargeHistoryScreen() {
-  const { showToast, showLoader, hideLoader } = useAppContext();
+  const {showToast, showLoader, hideLoader} = useAppContext();
   const [histories, setHistories] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedHistory, setSelectedHistory] = useState(null);
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
@@ -42,20 +50,23 @@ export default function RechargeHistoryScreen() {
       .catch(err => console.log(err.message));
   };
 
-  const renderHistoriesItem = ({ item }) => {
+  const renderHistoriesItem = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => {
-        setSelectedHistory(item);
-        setIsModalVisible(true);
-      }}>
+      <TouchableOpacity
+        onPress={() => {
+          setSelectedHistory(item);
+          setIsModalVisible(true);
+        }}>
         <View style={styles.ListContainer}>
           <View style={styles.innerContainer}>
             <Image source={coin} style={styles.image} />
             <View>
-              <CustomText style={{ fontWeight: 700 }}>
+              <CustomText style={{fontWeight: 700}}>
                 {item?.coins} {t('screens.history.coin')}
               </CustomText>
-              <CustomText>{new Date(item?.created_at).toLocaleString()}</CustomText>
+              <CustomText>
+                {new Date(item?.created_at).toLocaleString()}
+              </CustomText>
               {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <CustomText style={{fontSize: 12, color: Colors.gray}}>
                   TXN ID :{' '}
@@ -66,7 +77,7 @@ export default function RechargeHistoryScreen() {
               {/* </View> */}
             </View>
           </View>
-          <CustomText style={{ marginRight: 10, color: Colors.secondary }}>
+          <CustomText style={{marginRight: 10, color: Colors.secondary}}>
             €{item?.amount}
           </CustomText>
         </View>
@@ -76,7 +87,7 @@ export default function RechargeHistoryScreen() {
 
   return (
     <RowContainer>
-      <View style={{ paddingBottom: 20 }}>
+      <View style={{paddingBottom: 20}}>
         <HeadingText>{t('screens.history.history')}</HeadingText>
       </View>
       {!histories ? (
@@ -91,36 +102,64 @@ export default function RechargeHistoryScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-     <Modal
-  animationType="slide"
-  transparent={true}
-  visible={isModalVisible}
-  onRequestClose={() => setIsModalVisible(false)}
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContainer}>
-      <Text style={styles.title}>Transaction Details</Text>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.title}>Transaction Details</Text>
+              <TouchableOpacity 
+                style={styles.closeIconButton}
+                onPress={() => setIsModalVisible(false)}>
+                <Text style={styles.closeIcon}>×</Text>
+              </TouchableOpacity>
+            </View>
 
-      <View style={styles.detailsContainer}>
-        <Text style={styles.detailText}>{t('screens.history.amount')}: €{selectedHistory?.amount}</Text>
-        <Text style={styles.detailText}>{t('screens.history.coin')}: {selectedHistory?.coins}</Text>
-        <Text style={styles.detailText}>{t('screens.history.transactionid')}: {selectedHistory?.transaction_id}</Text>
-        <Text style={styles.detailText}>
-         {t('screens.history.date')}: {new Date(selectedHistory?.created_at).toLocaleString()}
-        </Text>
-        <Text style={styles.detailText}>{t('screens.history.paymentMethod')}: {selectedHistory?.payment_method}</Text>
-        <Text style={styles.detailText}>{t('screens.history.status')}: COMPLETED</Text>
-      </View>
+            <View style={styles.detailsContainer}>
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>{t('screens.history.status')}</Text>
+                <Text style={[styles.detailValue, styles.statusText]}>COMPLETED</Text>
+              </View>
 
-      <View style={styles.footer}>
-        <Text style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
-          Close
-        </Text>
-      </View>
-    </View>
-  </View>
-</Modal>
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>{t('screens.history.amount')}</Text>
+                <Text style={styles.detailValue}>€{selectedHistory?.amount}</Text>
+              </View>
+              
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>{t('screens.history.coin')}</Text>
+                <Text style={styles.detailValue}>{selectedHistory?.coins}</Text>
+              </View>
 
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>{t('screens.history.date')}</Text>
+                <Text style={styles.detailValue}>
+                  {new Date(selectedHistory?.created_at).toLocaleString()}
+                </Text>
+              </View>
+
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>{t('screens.history.paymentMethod')}</Text>
+                <Text style={styles.detailValue}>{selectedHistory?.payment_method}</Text>
+              </View>
+
+              <View style={[styles.detailRow, {flexDirection: 'column', alignItems: 'flex-start'}]}>
+                <Text style={styles.detailLabel}>{t('screens.history.transactionid')}</Text>
+                <Text style={[styles.detailValue, {marginTop: 5}]}>{selectedHistory?.transaction_id}</Text>
+              </View>
+            </View>
+
+            <TouchableOpacity 
+              style={styles.closeButton}
+              onPress={() => setIsModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </RowContainer>
   );
 }
@@ -152,49 +191,71 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   modalContainer: {
-    width: '80%',
+    width: '90%',
     backgroundColor: Colors.primary,
+    borderRadius: 15,
     padding: 20,
-    borderRadius: 10,
-    alignItems: 'flex-start', // aligns details to the left
+    elevation: 5,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   title: {
+    fontSize: 22,
     fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 10,
     color: Colors.white,
-    alignSelf: 'center', // centers title text
+  },
+  closeIconButton: {
+    padding: 5,
+  },
+  closeIcon: {
+    fontSize: 28,
+    color: Colors.white,
+    fontWeight: 'bold',
   },
   detailsContainer: {
-    alignSelf: 'stretch',
+    backgroundColor: Colors.tertiary,
+    borderRadius: 10,
+    padding: 15,
     marginBottom: 20,
-    marginVertical: 15,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    paddingVertical: 12,
-    borderColor: Colors.secondary
   },
-  detailText: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: Colors.white,
-  },
-  footer: {
+  detailRow: {
     flexDirection: 'row',
-    width: '100%',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.1)',
+  },
+  detailLabel: {
+    fontSize: 16,
+    color: Colors.gray,
+  },
+  detailValue: {
+    fontSize: 16,
+    color: Colors.white,
+    fontWeight: '500',
+  },
+  statusText: {
+    color: '#4CAF50',
+    fontWeight: 'bold',
   },
   closeButton: {
+    backgroundColor: Colors.secondary,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    alignSelf: 'center',
+  },
+  closeButtonText: {
+    color: Colors.white,
     fontSize: 16,
     fontWeight: 'bold',
-    color: Colors.white,
-    paddingVertical: 10, 
-    paddingHorizontal: 25,
-    borderRadius: 25,
-    backgroundColor: Colors.secondary
   },
 });
