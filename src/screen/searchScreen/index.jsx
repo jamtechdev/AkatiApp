@@ -245,7 +245,7 @@ export default function SearchScreen() {
 
   return (
     <RowContainer>
-      <View >
+      <View style={{ position: 'relative', zIndex: 999}}>
         <View
           style={{
             flexDirection: 'row',
