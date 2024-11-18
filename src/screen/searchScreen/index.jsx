@@ -293,6 +293,7 @@ export default function SearchScreen() {
                   setSearchTerms(item.title);
                   setSuggestion([]);
                   handleSearch();
+                  setOnFocus(false)
                 }}>
                 <Text style={styles.suggestionText}>{item.title}</Text>
               </TouchableOpacity>
