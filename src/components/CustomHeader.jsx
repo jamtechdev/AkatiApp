@@ -30,6 +30,8 @@ const CustomHeader = ({title, showDrawer, showBack, navigation}) => {
     }
   ];
   useEffect(() => {
+    console.log(language,"language");
+    
     if(language !==undefined ){
       const langCode = languageMap[language];
       if(langCode){

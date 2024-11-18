@@ -18,12 +18,12 @@ i18n.use(initReactI18next).init({
       translation: deTranslation,
     },
   },
-  fallbackLng: 'en',
+  fallbackLng: 'fr',
   detection: {
-    order: ['deviceLanguage'],
+    order: [''],
     caches: [],
   },
-  lng: RNLocalize.getLocales()[0].languageCode, // Use device locale
+  lng: 'fr', // Use device locale
   interpolation: {
     escapeValue: false,
   },

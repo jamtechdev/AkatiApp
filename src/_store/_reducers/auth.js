@@ -6,7 +6,7 @@ const initialState = {
   email: "",
   user: "",
   token: "",
-  language: 1,
+  language: 2,
   timestamp: new Date().getTime(),
 };
 
@@ -33,7 +33,7 @@ const authSlice = createSlice({
       (state.email = ""), (state.user = ""), (state.token = "");
       state.tokenExpire = "";
       state.library_count = "";
-      state.language = 1;
+      state.language = 2;
       state.avatar = "";
       state.coins = "";
     },
