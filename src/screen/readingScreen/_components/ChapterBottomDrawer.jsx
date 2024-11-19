@@ -67,7 +67,7 @@ const ChapterBottomDrawer = ({
                       index === currentChapter && styles.currentChapter,
                     ]}
                     key={index}
-                    onPress={() => onPress(index)}>
+                    onPress={() =>{ onPress(index); onClose();}}>
                     <View style={styles.chapterHeader}>
                       <Text
                         style={[
@@ -80,7 +80,7 @@ const ChapterBottomDrawer = ({
                         <Icons
                           name={'lock'}
                           size={15}
-                          color={Colors.secondary}
+                          color={index === currentChapter ? Colors.white: Colors.secondary}
                         />
                       )}
                     </View>
