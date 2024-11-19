@@ -18,6 +18,7 @@ import {
 import {booksService} from '../../_services/book.service';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAuth} from '../../_store/_reducers/auth';
+import {setLastReadingPosition, getBookProgress} from '../../_store/_reducers/books';
 import {commonServices} from '../../_services/common.service';
 import {
   LogBox,
@@ -47,14 +48,15 @@ import {publicService} from '../../_services/public.service';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
-  const {bookId, BookDetails } = params;
+  const {bookId, BookDetails} = params;
   const {coins, loggedIn} = useSelector(getAuth);
+  const bookProgress = useSelector(state => getBookProgress(state, bookId));
   const {t} = useTranslation();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [chapters, setChapters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentChapter, setCurrentChapter] = useState({});
-  const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(bookProgress?.lastChapter || 0);
   const [showComments, setShowComments] = useState([]);
   const [autoUnlock, setAutoUnlock] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -63,9 +65,9 @@ function ReadingScreen({navigation, route}) {
   const [showOptions, setShowOptions] = useState(true);
   const [show, setShow] = useState(false);
   const {showToast, showLoader, hideLoader} = useAppContext();
-  const scrollViewRef = useRef(null); // Reference for ScrollView
+  const scrollViewRef = useRef(null);
   const {width} = useWindowDimensions();
-  const [filterVisible, setFilterVisible] = useState(false); // State for filter modal
+  const [filterVisible, setFilterVisible] = useState(false);
   const [textSettings, setTextSettings] = useState({
     textAlign: 'left',
     fontWeight: 'normal',
@@ -106,45 +108,52 @@ function ReadingScreen({navigation, route}) {
     if (chapters) {
       const current = chapters[currentChapterIndex];
       setCurrentChapter(current);
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({y: 0, animated: true});
+      }
     }
   }, [currentChapterIndex]);
 
   const getChapterData = bookData => {
     if (loggedIn) {
-    booksService
-      .getBookChapters(bookData)
-      .then(response => {
-        setChapters(response.data.chapters);
-        const current = response.data.chapters[currentChapterIndex];
-        setCurrentChapter(current);
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-    }else{
-        publicService
-          .getPublicBookChapters(bookData.book_id, bookData.language)
-          .then(response => {
-            setChapters(response.data.chapters);
-            const current = response.data.chapters[currentChapterIndex];
-            setCurrentChapter(current);
-          })
-          .catch(error => {
-            console.log(error, "error ");
-          }).finally(() => {
-            setLoading(false);
-          });
+      booksService
+        .getBookChapters(bookData)
+        .then(response => {
+          setChapters(response.data.chapters);
+          const current = response.data.chapters[currentChapterIndex];
+          setCurrentChapter(current);
+          setTimeout(() => {
+            if (scrollViewRef.current) {
+              if (bookProgress?.lastScrollPosition && currentChapterIndex === bookProgress.lastChapter) {
+                scrollViewRef.current.scrollTo({y: bookProgress.lastScrollPosition, animated: false});
+              } else {
+                scrollViewRef.current.scrollTo({y: 0, animated: true}); 
+              }
+            }
+          }, 200);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      publicService
+        .getPublicBookChapters(bookData.book_id, bookData.language)
+        .then(response => {
+          setChapters(response.data.chapters);
+          const current = response.data.chapters[currentChapterIndex];
+          setCurrentChapter(current);
+        })
+        .catch(error => {
+          console.log(error, 'error ');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
-
-  useEffect(() => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({y: 0, animated: true}); // Auto scroll to top
-    }
-  }, [currentChapterIndex]);
 
   const handleNextChapter = () => {
     if (currentChapterIndex < chapters?.length - 1) {
@@ -266,7 +275,20 @@ function ReadingScreen({navigation, route}) {
         )}
       </View>
 
-      <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        ref={scrollViewRef}
+        showsVerticalScrollIndicator={false}
+        onScroll={e => {
+          const scrollPosition = e.nativeEvent.contentOffset.y;
+          dispatch(
+            setLastReadingPosition({
+              bookId,
+              chapter: currentChapterIndex,
+              scrollPosition: scrollPosition,
+            }),
+          );
+        }}
+        scrollEventThrottle={1000}>
         <Pressable onPress={handleToggleOptions} style={{flex: 1}}>
           <>
             <HeadingText style={{color: textSettings.color}}>
