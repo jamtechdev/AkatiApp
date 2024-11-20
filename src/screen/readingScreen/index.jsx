@@ -130,7 +130,7 @@ function ReadingScreen({navigation, route}) {
                 scrollViewRef.current.scrollTo({y: 0, animated: true}); 
               }
             }
-          }, 200);
+          }, 400);
         })
         .catch(error => {
           console.log(error);
