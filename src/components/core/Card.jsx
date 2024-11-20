@@ -40,7 +40,7 @@ const Card = ({item, style}) => {
 const styles = StyleSheet.create({
   card: {
     marginRight: 10,
-    width: '100%',
+    width: 160,
     height: 250,
     borderRadius: 10,
     overflow: 'hidden',
