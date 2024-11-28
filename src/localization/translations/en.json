@@ -81,6 +81,7 @@
       "rating": "ratings",
       "tags": "Tags",
       "reading": "Start Reading",
+      "continueReading": "Continue Reading",
       "addLibrary": "Add to Library",
       "removeLibrary": "Remove from Library",
       "chapters": "Chapters",

@@ -24,6 +24,8 @@ import {booksService} from '../../_services/book.service';
 import {commonServices} from '../../_services/common.service';
 import {useFocusEffect} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getAuth } from '../../_store/_reducers/auth';
 
 export default function SearchScreen() {
   const [searchTerms, setSearchTerms] = useState('');
@@ -35,11 +37,16 @@ export default function SearchScreen() {
   const [showCategories, setShowCategories] = useState(true);
   const [showVariant, setShowVariant] = useState(true);
   const [selectedCatName, setSelectedCatName] = useState('All');
+  const {loggedIn, language } = useSelector(getAuth)
+  const [bookSuggestions, setBookSuggestions] = useState([]);
+  const [suggestion, setSuggestion] = useState([])
+  const [onFocus, setOnFocus] = useState(false)
   const {t} = useTranslation();
 
   useEffect(() => {
     getBookCategories();
     handleGetHistory();
+    getBookSuggestions();
   }, []);
 
   useEffect(() => {
@@ -53,6 +60,20 @@ export default function SearchScreen() {
       handleSearch();
     }
   }, [selectedCatName]);
+
+  useEffect(() => {
+    if (searchTerms.length > 0) {
+      // Filter books based on search text
+       const filteredSuggestions = bookSuggestions.filter(book =>
+          book.title.toLowerCase().includes(searchTerms.toLowerCase()) &&
+          book.id == language
+        );
+        // Limit suggestions to first 5 matches
+        setSuggestion(filteredSuggestions.slice(0, 5));
+    } else {
+      setSuggestion([]);
+    }
+  }, [searchTerms, bookSuggestions]);
 
   useFocusEffect(
     useCallback(() => {
@@ -76,6 +97,15 @@ export default function SearchScreen() {
         setHotSearch(res.data.data.hotSearch);
       })
       .catch(err => console.log(err));
+  };
+
+  const getBookSuggestions = () => {
+    commonServices
+      .getBookSuggestions()
+      .then((res) => {
+        setBookSuggestions(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   const getBookCategories = () => {
@@ -108,6 +138,7 @@ export default function SearchScreen() {
       .catch(err => console.log(err));
     setShowVariant(false);
     setShowCategories(false);
+    setSuggestion([]); // Clear suggestions after search
   };
 
   const renderHeader = () => (
@@ -214,40 +245,61 @@ export default function SearchScreen() {
 
   return (
     <RowContainer>
-      <View
-        style={{
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 10,
-          paddingVertical: 10,
-        }}>
-        <TextInputWithIcon
-          iconName={'search'}
-          placeholder={t('screens.searching.searchPlaceholder')}
-          placeholderTextColor={Colors.darkGray}
-          onChangeText={setSearchTerms}
-          value={searchTerms}
-          // onIconPress={() => alert('test')}
-          style={{flex: 1}}
-          onIconPress={handleSearch}
-        />
-        <GradientView
-          onPress={handleSearch}
+      <View style={{ position: 'relative', zIndex: 999}}>
+        <View
           style={{
-            height: 35,
-            justifyContent: 'center',
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            borderRadius: 4,
+            gap: 10,
+            paddingVertical: 10,
           }}>
-          <Icon
-            size={30}
-            color={Colors.white}
-            name={showCategories ? 'filter' : 'filter-off'}
-            onPress={() => setShowCategories(prev => !prev)}
+          <TextInputWithIcon
+            iconName={'search'}
+            placeholder={t('screens.searching.searchPlaceholder')}
+            placeholderTextColor={Colors.darkGray}
+            onChangeText={setSearchTerms}
+            value={searchTerms}
+            style={{flex: 1}}
+            onIconPress={handleSearch}
+            onFocus={() =>  setOnFocus(true)}
+            onBlur={() =>  setOnFocus(false)}
           />
-        </GradientView>
+          <GradientView
+            onPress={handleSearch}
+            style={{
+              height: 35,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 4,
+            }}>
+            <Icon
+              size={30}
+              color={Colors.white}
+              name={showCategories ? 'filter' : 'filter-off'}
+              onPress={() => setShowCategories(prev => !prev)}
+            />
+          </GradientView>
+        </View>
+
+        {suggestion.length > 0 && onFocus && (
+          <View style={styles.suggestionContainer}>
+            {suggestion.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.suggestionItem}
+                onPress={() => {
+                  setSearchTerms(item.title);
+                  setSuggestion([]);
+                  handleSearch();
+                  setOnFocus(false)
+                }}>
+                <Text style={styles.suggestionText}>{item.title}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
 
       <FlatList
@@ -258,7 +310,6 @@ export default function SearchScreen() {
         numColumns={2}
         showsVerticalScrollIndicator={false}
         columnWrapperStyle={styles.row}
-        // ListEmptyComponent={<CustomText>No data found</CustomText>}
       />
     </RowContainer>
   );
@@ -332,5 +383,28 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 8,
     position: 'relative',
+  },
+  suggestionContainer: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    backgroundColor: Colors.tertiary,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor:Colors.secondary,
+    zIndex: 1000,
+    elevation: 5,
+    marginTop: 5,
+    paddingVertical: 10
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.darkGray,
+  },
+  suggestionText: {
+    color: Colors.white,
+    fontSize: 14,
   },
 });

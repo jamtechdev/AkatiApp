@@ -21,6 +21,7 @@ export const commonServices = {
   replayComments,
   favoriteComments,
   publishBook,
+  getBookSuggestions,
 };
 
 async function getLanguage() {
@@ -103,4 +104,8 @@ async function favoriteComments(commentId) {
 }
 async function publishBook(data) {
   return await axiosInstance.post('/publish-book', data);
+}
+
+async function getBookSuggestions() {
+  return await axiosInstance.post("/book-suggestions");
 }

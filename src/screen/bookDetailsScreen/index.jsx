@@ -34,6 +34,7 @@ import { useSelector } from 'react-redux';
 import { getAuth, getLanguage } from '../../_store/_reducers/auth';
 import { publicService } from '../../_services/public.service';
 import { moderateVerticalScale } from 'react-native-size-matters';
+import { getBookProgress } from '../../_store/_reducers/books';
 
 function BookDetailsScreen({ navigation, route }) {
   const { loggedIn } = useSelector(getAuth);
@@ -53,6 +54,10 @@ function BookDetailsScreen({ navigation, route }) {
   const { t } = useTranslation();
   const { params } = route;
   const { bookId, bookItem } = params;
+
+  const bookProgress = useSelector(state => getBookProgress(state, bookId));
+  console.log(bookProgress, ' book progress ');
+
   const {
     BookDetails,
     categories,
@@ -487,6 +492,23 @@ function BookDetailsScreen({ navigation, route }) {
             {loggedIn && (
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <View style={{ width: '50%', paddingHorizontal: 5 }}>
+                {bookProgress ? 
+                  <Button
+                    style={{
+                      paddingVertical: 10,
+                      paddingHorizontal: 10,
+                      backgroundColor: Colors.white,
+                    }}
+                    textStyle={{ color: Colors.secondary, fontWeight: '400' }}
+                    gradient={false}
+                    title={t('screens.bookDetails.continueReading')}
+                    onPress={() =>
+                      isErotic
+                        ? setIsVisible(prev => !prev)
+                        : routeReadingScreen()
+                    }
+                  />
+                :
                   <Button
                     style={{
                       paddingVertical: 10,
@@ -502,6 +524,8 @@ function BookDetailsScreen({ navigation, route }) {
                         : routeReadingScreen()
                     }
                   />
+                }
+            
                 </View>
                 <View style={{ width: '50%', paddingHorizontal: 5 }}>
                   {!isInLibrary ? (

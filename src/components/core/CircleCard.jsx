@@ -23,7 +23,7 @@ const CircleCard = ({item}) => {
             />
           )}
         </View>
-        <Text style={styles.title}>{item?.BookDetails?.title}</Text>
+        <Text numberOfLines={2} style={styles.title}>{item?.BookDetails?.title}</Text>
     </TouchableOpacity>
   );
 };
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
     color: Colors.white,
+    width: 115,
   },
 });
 
