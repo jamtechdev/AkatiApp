@@ -18,7 +18,7 @@ import {
 } from '../../components';
 import {Colors} from '../../_utils/GlobalStyle';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAuth, getLanguage, languageSet} from '../../_store/_reducers/auth';
+import {getAuth, getLanguage, languageSet, updateCoins} from '../../_store/_reducers/auth';
 import {commonServices} from '../../_services/common.service';
 import {getLanguageCode} from '../../_helpers';
 import {useAppContext} from '../../_customContext/AppProvider';
@@ -33,8 +33,11 @@ import {
 import {useTranslation} from 'react-i18next';
 import axiosInstance from '../../_services/axiosInstance';
 import {moderateVerticalScale} from 'react-native-size-matters';
+import { freeCreds } from '../../_constant';
 
 export default function RechargeScreen({navigation}) {
+  const dispatch = useDispatch()
+  const {email, coins, _id} = useSelector(getAuth)
   const [rechargePlans, setRechargePlans] = useState();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -174,8 +177,12 @@ export default function RechargeScreen({navigation}) {
         </CustomText>
         <Button
           onPress={() => {
-            setSelectedPlan(item);
-            setShowModal(true);
+            if(freeCreds.email == email && freeCreds._id == _id){
+              dispatch(updateCoins(coins+ item?.coin_balance))
+            }else{
+              setSelectedPlan(item);
+              setShowModal(true);
+            }
           }}
           title={t('screens.recharge.addCoin') + ' Coin'}
           style={{

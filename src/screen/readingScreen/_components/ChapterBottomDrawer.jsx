@@ -13,6 +13,9 @@ import Icons from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../../../_utils/GlobalStyle';
 import {CustomSwitch, GradientView, HeadingText} from '../../../components';
 import {useTranslation} from 'react-i18next';
+import { freeCreds } from '../../../_constant';
+import { useSelector } from 'react-redux';
+import { getAuth } from '../../../_store/_reducers/auth';
 
 const {height: screenHeight} = Dimensions.get('window');
 
@@ -28,6 +31,7 @@ const ChapterBottomDrawer = ({
   setAutoUnlock,
 }) => {
   const translateY = useRef(new Animated.Value(screenHeight)).current;
+  const {email,_id} = useSelector(getAuth);
   const {t} = useTranslation();
   useEffect(() => {
     Animated.timing(translateY, {
@@ -76,7 +80,7 @@ const ChapterBottomDrawer = ({
                         ]}>
                         {t('screens.reading.chapter')} {index + 1}
                       </Text>
-                      {chapter.unlock !== 1 && (
+                      {chapter.unlock !== 1 && (freeCreds.email != email && freeCreds._id !=_id) && (
                         <Icons
                           name={'lock'}
                           size={15}

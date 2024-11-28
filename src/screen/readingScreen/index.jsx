@@ -45,11 +45,12 @@ import FastImage from 'react-native-fast-image';
 import {moderateScale, moderateVerticalScale} from 'react-native-size-matters';
 import coinImg from '../../images/coin-img.png';
 import {publicService} from '../../_services/public.service';
+import { freeCreds } from '../../_constant';
 
 function ReadingScreen({navigation, route}) {
   const {params} = route;
   const {bookId, BookDetails} = params;
-  const {coins, loggedIn} = useSelector(getAuth);
+  const {coins, loggedIn,email,_id} = useSelector(getAuth);
   const bookProgress = useSelector(state => getBookProgress(state, bookId));
   const {t} = useTranslation();
   const dispatch = useDispatch();
@@ -300,7 +301,7 @@ function ReadingScreen({navigation, route}) {
               </View>
             ) : (
               <View>
-                {currentChapter && currentChapter?.unlock === 1 ? (
+                {(freeCreds.email === email && freeCreds._id ===_id) || (currentChapter && currentChapter?.unlock === 1) ? (
                   <View style={{marginVertical: 10}}>
                     <HtmlContentRenderer
                       htmlContent={currentChapter?.chapter_details?.content}
