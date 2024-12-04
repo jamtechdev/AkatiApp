@@ -22,6 +22,7 @@ import {
 import {useSelector} from 'react-redux';
 import {getAuth} from '../_store/_reducers/auth';
 import '../localization/i18n';
+import OffllineScreen from '../screen/offlineScreen';
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
@@ -65,7 +66,8 @@ const AppNavigator = () => {
           component={CinetPaymentScreen}
         />
         <Stack.Screen name="PayPalPaymentScreen" component={PaypalPayment} />
-      </Stack.Navigator>
+        <Stack.Screen name="Offline" component={OffllineScreen}/>
+      </Stack.Navigator> 
     </NavigationContainer>
   );
 };

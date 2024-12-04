@@ -8,14 +8,18 @@ import {
   CustomStarRating,
   HorizontalScrollView,
   Skeleton,
+  Button,
+  AlertModal,
 } from '../../components';
 import {booksService} from '../../_services/book.service';
 import {useFocusEffect} from '@react-navigation/native';
 import {getLanguage} from '../../_store/_reducers/auth';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import { useNetInfo } from "@react-native-community/netinfo";
 
-export default function DiscoverScreen() {
+export default function DiscoverScreen({navigation}) {
+  const { type, isConnected } = useNetInfo();
   const [loading, setLoading] = useState(true);
   const [newBooks, setNewBooks] = useState([]);
   const [mustReadBooks, setMustReadBooks] = useState([]);
@@ -94,6 +98,7 @@ export default function DiscoverScreen() {
     };
   return (
     <RowContainer>
+        {!isConnected && <AlertModal title={'Alert'} description={'It looks like you are offline. Please connect to the internet or enter offline mode'} onCancel={'Okay'} onOkay={()=>navigation.navigate('Offline')}/>}
       <FlatList
         data={[
           {
