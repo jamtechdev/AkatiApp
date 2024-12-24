@@ -23,6 +23,7 @@ import {useSelector} from 'react-redux';
 import {getAuth} from '../_store/_reducers/auth';
 import '../localization/i18n';
 import OffllineScreen from '../screen/offlineScreen';
+import PawaPayment from '../screen/rechargeScreen/_screen/pawaPayment';
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
@@ -64,6 +65,10 @@ const AppNavigator = () => {
         <Stack.Screen
           name="CinetPaymentScreen"
           component={CinetPaymentScreen}
+        />
+        <Stack.Screen
+          name="PawaPaymentScreen"
+          component={PawaPayment}
         />
         <Stack.Screen name="PayPalPaymentScreen" component={PaypalPayment} />
         <Stack.Screen name="Offline" component={OffllineScreen}/>
