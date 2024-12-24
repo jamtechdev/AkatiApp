@@ -16,6 +16,8 @@ const PaypalPayment = ({route, navigation}) => {
   const [isPayProgress, setispayprogress] = useState(true);
   const [accessToken, setAccessToken] = useState('');
   const [coin, setcoin] = useState('coins');
+  const [shouldShowWebViewLoading, setShouldShowWebviewLoading] =
+    useState(true);
   const {coins, rechargeAmount} = route.params;
   const ref = useRef();
 
@@ -66,9 +68,8 @@ const PaypalPayment = ({route, navigation}) => {
     }
   };
   // on payment success
-  const [shouldShowWebViewLoading, setShouldShowWebviewLoading] =
-    useState(true);
-  /*---Paypal checkout section---*/
+  
+  /*---Paypal checkout section ---*/
   const buyPlan = async ammount => {
     ammount = JSON.parse(ammount);
 
